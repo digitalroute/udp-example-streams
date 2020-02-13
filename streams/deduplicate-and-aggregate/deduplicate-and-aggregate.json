@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "name": "Deduplicate and Aggregation",
+  "name": "Deduplicate and Aggregate",
   "nodes": [
     {
       "partitionKey": null,
