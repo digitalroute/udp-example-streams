@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "name": "Deduplicate and Aggregation",
+  "nodes": [
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "df2d3300-4cbe-11ea-9014-2b24e4165af9",
+      "name": "Count",
+      "type": "readers/counter",
+      "params": {
+        "max": 5
+      },
+      "x": 450,
+      "y": 150
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
+      "name": "Script",
+      "type": "transforms/script",
+      "params": {
+        "transform": "/*\nA sample script that\n- simulate simple usage data\n- simulate duplicate data\n- sample usage of moment npm library\n*/\nlog.info (\"Receive input: \" + JSON.stringify(payload));\n\n// create sample usage event\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-10001\",\n    usage: 2 * payload.value,\n    dateTime: simDate(),    \n}\n\n// send the usage event to next function\nawait push(usageEvent)\n\n// send duplicate event\nif (payload.value % 2 === 0) {\n    await push(usageEvent);\n}\n\n// simulate different of date for each event\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add('days', payload.value);\n    return date.format('YYYY-MM-DD');\n}"
+      },
+      "x": 600,
+      "y": 150
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "ef581260-4ccb-11ea-9014-2b24e4165af9",
+      "name": "Deduplicate",
+      "type": "transforms/deduplicate",
+      "params": {
+        "key": "${}",
+        "lifeTimeDays": 1
+      },
+      "x": 750,
+      "y": 150
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "136fe100-4ccc-11ea-9014-2b24e4165af9",
+      "name": "Aggregate",
+      "type": "transforms/aggregate",
+      "params": {
+        "key": "${userId}",
+        "valueKey": "${usage}",
+        "dateKey": "${dateTime}",
+        "window": "month"
+      },
+      "x": 900,
+      "y": 150
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "a40549e0-4cd0-11ea-9014-2b24e4165af9",
+      "name": "No Operation",
+      "type": "writers/noop",
+      "params": {},
+      "x": 1050,
+      "y": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "afc74fb0-4cc3-11ea-9014-2b24e4165af9",
+      "from": "df2d3300-4cbe-11ea-9014-2b24e4165af9",
+      "to": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
+      "config": {}
+    },
+    {
+      "id": "f0952640-4ccb-11ea-9014-2b24e4165af9",
+      "from": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
+      "to": "ef581260-4ccb-11ea-9014-2b24e4165af9",
+      "config": {}
+    },
+    {
+      "id": "14c86c20-4ccc-11ea-9014-2b24e4165af9",
+      "from": "ef581260-4ccb-11ea-9014-2b24e4165af9",
+      "to": "136fe100-4ccc-11ea-9014-2b24e4165af9",
+      "config": {}
+    },
+    {
+      "id": "a5900890-4cd0-11ea-9014-2b24e4165af9",
+      "from": "136fe100-4ccc-11ea-9014-2b24e4165af9",
+      "to": "a40549e0-4cd0-11ea-9014-2b24e4165af9",
+      "config": {}
+    }
+  ]
+}

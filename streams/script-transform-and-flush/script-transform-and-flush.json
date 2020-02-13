@@ -1,0 +1,57 @@
+{
+    "schemaVersion": 1,
+    "name": "Script Transform and Flush",
+    "nodes": [
+      {
+        "partitionKey": null,
+        "schemaVersion": null,
+        "id": "694c76c0-3070-11e9-8a49-4d098e5b12c0",
+        "name": "Trigger",
+        "type": "readers/counter",
+        "params": {
+          "max": 6
+        },
+        "x": 450,
+        "y": 100
+      },
+      {
+        "partitionKey": null,
+        "schemaVersion": null,
+        "id": "3ac4aac0-4fab-11e9-b788-03260e2474e9",
+        "name": "Script",
+        "type": "transforms/script",
+        "params": {
+          "transform": "const tpsThreshold = 100;\nstate.node.counter = state.node.counter || 0;\nstate.node.recordBatch = state.node.recordBatch || [];\n\nconst data = {\n        customerId: \"jason\",\n        startTime: new Date().toISOString(),\n        endTime: new Date().toISOString(),\n\t\tstatType: \"ec1\",\n        throughput: Math.floor((Math.random() * 100) + 1),\n};\n\nvar out = {\n    ...data,\n    \"tpsThreshold\" : tpsThreshold,\n};\n//log.info(\"Power BI Data :: \", JSON.stringify(out));\n\nstate.node.recordBatch.push(out);\nstate.node.counter++;\nlog.info(`counter = ${state.node.counter}`)\n\nif (state.node.counter >= 5) {\n       push({ \n           data: state.node.recordBatch \n       });\n       state.node.counter = 0;\n       state.node.recordBatch = [];\n}\n",
+          "flush": "//Send any remaining data when stream terminates\nif (state.node.recordBatch) {\n   push({ \n       data: state.node.recordBatch \n   });\n}"
+        },
+        "x": 600,
+        "y": 100
+      },
+      {
+        "partitionKey": null,
+        "schemaVersion": null,
+        "id": "fd568280-4fb9-11e9-830e-8115d2bdd63a",
+        "name": "Log",
+        "type": "writers/log",
+        "params": {
+          "key": ""
+        },
+        "x": 750,
+        "y": 100
+      }
+    ],
+    "edges": [
+      {
+        "id": "3c6191e0-4fab-11e9-b788-03260e2474e9",
+        "from": "694c76c0-3070-11e9-8a49-4d098e5b12c0",
+        "to": "3ac4aac0-4fab-11e9-b788-03260e2474e9",
+        "config": {}
+      },
+      {
+        "id": "ff671300-4fb9-11e9-830e-8115d2bdd63a",
+        "from": "3ac4aac0-4fab-11e9-b788-03260e2474e9",
+        "to": "fd568280-4fb9-11e9-830e-8115d2bdd63a",
+        "config": {}
+      }
+    ]
+  }
