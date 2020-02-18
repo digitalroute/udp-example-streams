@@ -1,12 +1,12 @@
 {
     "schemaVersion": 1,
-    "name": "High Tech Imaging",
+    "name": "Managed Print Services",
     "nodes": [
       {
         "partitionKey": null,
         "schemaVersion": null,
         "id": "5c32a5b0-02b5-11e9-9f17-81651dddad53",
-        "name": "Trigger",
+        "name": "Count",
         "type": "readers/counter",
         "params": {
           "max": 10
@@ -18,7 +18,7 @@
         "partitionKey": null,
         "schemaVersion": null,
         "id": "7f60b090-02b5-11e9-9f17-81651dddad53",
-        "name": "Usage Data",
+        "name": "Simulate Usage",
         "type": "transforms/script",
         "params": {
           "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nconst timestamp = simDate();\nconst printerId = simPrinterId();\nconst model = simModel();\n\nconst simulatedPrinterEvent = {\n    eventId: (model + \"_\" + printerId + \"_\" + timestamp),\n    printerId,\n    brand: simBrand(),\n    model,\n    type: simType(),\n    paper: simPaper(),\n    sided: simSided(),\n    color: simColor(),\n    sheets: simSheets(),\n    inkLevel: simInkLevel(),\n    status: simStatus(),\n    timestamp,\n};\n\nstate.node.count++;\n\n// 20% duplicates\nif (state.node.count % 5 === 0) {\n    await push(simulatedPrinterEvent);\n}\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedPrinterEvent.printerId = \"invalidShouldBeInt\";\n    simulatedPrinterEvent.timestamp = \"UNKNOWN\";\n    simulatedPrinterEvent.paper = \"XYZ123\";\n}\n\nawait push(simulatedPrinterEvent);\n\nfunction simBrand() {\n    return \"Acme\";\n}\n\nfunction simModel() {\n    if (printerId % 3 === 0) {\n        return \"MPS-Super\";\n    } else if (printerId % 2 === 0) {\n        return \"MPS-Ultra\";\n    } \n    return \"MPS-Plus\";\n}\n\nfunction simType() {\n    return printerId % 2 === 0 ? \"Laser\" : \"Ink\";\n}\n\nfunction simPaper() {\n    return state.node.count % 5 === 0 ? \"A4\" : \"A3\";\n}\n\nfunction simSided() {\n    return state.node.count % 3 === 0 ? \"Two\" : \"One\";\n}\n\nfunction simColor() {\n    return state.node.count % 2 === 0 ? \"No\" : \"Yes\";\n}\n\n// simulate last month timestamp between 10th to 12th\nfunction simDate() {\n    const date = new Date();\n    date.setMonth(date.getMonth() - 1);\n    \n    if (state.node.count % 3 === 0) {\n        date.setDate(11);\n    } else if (state.node.count % 2 === 0) {\n        date.setDate(12);\n    } else {\n        date.setDate(10);\n    }\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}\n\nfunction simSheets() {\n    return Math.floor(payload.value * 3.55);\n}\n\n// simulate 5 unique printers\nfunction simPrinterId() {\n    return ((payload.value-1) % 5) + 101;\n}\n\nfunction simInkLevel() {\n    if (printerId % 4 === 0) {\n        return 15;\n    } if (printerId % 3 === 0) {\n        return 50;\n    } else {\n        return 45;\n    }\n}\n\nfunction simStatus() {\n    return printerId % 3 === 0 ? \"Needs service\" : \"Normal\";\n}"
