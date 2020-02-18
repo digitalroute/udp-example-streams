@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "name": "Data Quality with Deduplicate and Validation",
+  "nodes": [
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "20eee900-4cd3-11ea-9014-2b24e4165af9",
+      "name": "Count",
+      "type": "readers/counter",
+      "params": {
+        "max": 1
+      },
+      "x": 450,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "269fd1c0-4cd3-11ea-9014-2b24e4165af9",
+      "name": "Simulate Data",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const today = new Date();\n\n// Create 5 sample data\nconst usageEvent = [\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  }, \n  \n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n  // Simulate invalid data with missing kWhCharged\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"9aa641a2-361e-4027-bd49-5c0c3de7f54e\",\n    //\"kWhCharged\": 48,\n    \"chargingPlace\": \"Sorbonne_02\"\n  },\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"48053017-07b5-4d3b-ade4-e1183423453b\",\n    \"kWhCharged\": 52,\n    \"chargingPlace\": \"Grand_Hotel_Paris_01\"\n  },\n\n// Simulate invalid data with wrong userTechnicalId\n  {\n    \"date\": \"2020-01-01\",\n    \"userTechnicalId\": \"45f2389b-f8f6-4d1b-960a-19ab82b15b34-\",\n    \"kWhCharged\": 20,\n    \"chargingPlace\": \"Rue_Morgue_01\"\n  }\n]\n\nfor (var key in usageEvent) {\n    await push(usageEvent[key]);\n}\n"
+      },
+      "x": 600,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+      "name": "Validate",
+      "type": "transforms/validate",
+      "params": {
+        "schema": {
+          "required": [
+            "date",
+            "userTechnicalId",
+            "kWhCharged",
+            "chargingPlace"
+          ],
+          "properties": {
+            "userTechnicalId": {
+              "type": "string",
+              "minLength": 36,
+              "maxLength": 36
+            }
+          }
+        },
+        "suspenseManagement": {
+          "enabled": true
+        }
+      },
+      "x": 900,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "cae69bf0-4cd4-11ea-9014-2b24e4165af9",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "x": 1050,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "c5abf3a0-51c1-11ea-bec0-a7e1071491c2",
+      "name": "Deduplicate",
+      "type": "transforms/deduplicate",
+      "params": {
+        "key": "${}",
+        "lifeTimeDays": 1
+      },
+      "x": 750,
+      "y": 200
+    }
+  ],
+  "edges": [
+    {
+      "id": "27cc1cc0-4cd3-11ea-9014-2b24e4165af9",
+      "from": "20eee900-4cd3-11ea-9014-2b24e4165af9",
+      "to": "269fd1c0-4cd3-11ea-9014-2b24e4165af9",
+      "config": {}
+    },
+    {
+      "id": "cc732f60-4cd4-11ea-9014-2b24e4165af9",
+      "from": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+      "to": "cae69bf0-4cd4-11ea-9014-2b24e4165af9",
+      "config": {}
+    },
+    {
+      "id": "c81af7d0-51c1-11ea-bec0-a7e1071491c2",
+      "from": "269fd1c0-4cd3-11ea-9014-2b24e4165af9",
+      "to": "c5abf3a0-51c1-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "ca28f040-51c1-11ea-bec0-a7e1071491c2",
+      "from": "c5abf3a0-51c1-11ea-bec0-a7e1071491c2",
+      "to": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+      "config": {}
+    }
+  ]
+}
