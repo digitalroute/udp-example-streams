@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "name": "Data Enrichment with Foreign Exchange Rates",
+  "nodes": [
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "5198efa0-51b1-11ea-bec0-a7e1071491c2",
+      "name": "Count",
+      "type": "readers/counter",
+      "params": {
+        "max": 3
+      },
+      "x": 400,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "59fe4a00-51b1-11ea-bec0-a7e1071491c2",
+      "name": "Simulate Data",
+      "type": "transforms/script",
+      "params": {
+        "transform": "// Create sample data base on input value from Count Function\nawait push({\n    \"Name\": \"User-\" + payload.value,\n    \"Service Fee\": payload.value,\n    \"Base Currency\": \"EUR\"\n});"
+      },
+      "x": 550,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
+      "name": "Exchange Rate",
+      "type": "transforms/http",
+      "params": {
+        "errorMode": "emit",
+        "cacheSeconds": 300,
+        "useCache": true,
+        "method": "GET",
+        "uri": "https://api.exchangeratesapi.io/latest",
+        "qs": {
+          "base": "${Base Currency}",
+          "symbols": "USD"
+        }
+      },
+      "x": 700,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "8f56a430-51b2-11ea-bec0-a7e1071491c2",
+      "name": "Extract Record",
+      "type": "transforms/map",
+      "params": {
+        "mappings": {
+          "Name": "Name",
+          "EUR to USD Rate": "httpResponse.rates.USD",
+          "Service Fee (EUR)": "Service Fee",
+          "Service Fee (USD)": "usd"
+        }
+      },
+      "x": 1000,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "e1df0760-51b2-11ea-bec0-a7e1071491c2",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "x": 1150,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "dda9a5a0-51b3-11ea-bec0-a7e1071491c2",
+      "name": "Covert Fees",
+      "type": "transforms/script",
+      "params": {
+        "transform": "// Convert fees from EUR to USD\nvar convertusd = payload[\"Service Fee\"] * payload.httpResponse.rates.USD;\n\n// Round the converted number to a 4 digits\npayload.usd = parseFloat((convertusd).toFixed(4));\n\nawait push(payload);\n"
+      },
+      "x": 850,
+      "y": 200
+    }
+  ],
+  "edges": [
+    {
+      "id": "5b1a4150-51b1-11ea-bec0-a7e1071491c2",
+      "from": "5198efa0-51b1-11ea-bec0-a7e1071491c2",
+      "to": "59fe4a00-51b1-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "d162b630-51b1-11ea-bec0-a7e1071491c2",
+      "from": "59fe4a00-51b1-11ea-bec0-a7e1071491c2",
+      "to": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "00eadfd0-51b3-11ea-bec0-a7e1071491c2",
+      "from": "8f56a430-51b2-11ea-bec0-a7e1071491c2",
+      "to": "e1df0760-51b2-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "dfce0c40-51b3-11ea-bec0-a7e1071491c2",
+      "from": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
+      "to": "dda9a5a0-51b3-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "64c2c2b0-51b4-11ea-bec0-a7e1071491c2",
+      "from": "dda9a5a0-51b3-11ea-bec0-a7e1071491c2",
+      "to": "8f56a430-51b2-11ea-bec0-a7e1071491c2",
+      "config": {}
+    }
+  ]
+}
