@@ -1,3 +1,3 @@
 ##### Intermediate
 
-Learn about enriching the usage data by integrating external foreign exchange rate with HTTP client function.
+Learn about enriching the usage data by integrating external foreign exchange rate API.
