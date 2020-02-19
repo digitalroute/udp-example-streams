@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "name": "Data Enrichment With Foreign Exchange Rates",
+  "name": "Enrich Data With Foreign Exchange Rates",
   "nodes": [
     {
       "partitionKey": null,
