@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "name": "Data Quality with Deduplicate and Validation",
+  "name": "Data Quality With Deduplicate And Validation",
   "nodes": [
     {
       "partitionKey": null,

@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "name": "Managed Print Services",
+    "name": "Print As A Service",
     "nodes": [
       {
         "partitionKey": null,
