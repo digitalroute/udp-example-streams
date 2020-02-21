@@ -8,8 +8,9 @@ If you want to add/update a demo stream, feel free to create a PR!
 
 Things to consider:
 - Folder name needs to be the same as the stream file name
-- A `README` file needs to be created and should contain a difficulty level and a short description of the stream
+- A `README` file needs to be created and should contain a difficulty level and a description of the stream
 - The difficulty levels are either `Beginner`, `Intermediate` or `Advanced`
+- Please try to keep the description (max 128 chars) and stream name (max 40 chars) short
 
 ## Example
 You want to add your new demo stream called "My Cool Stream".
