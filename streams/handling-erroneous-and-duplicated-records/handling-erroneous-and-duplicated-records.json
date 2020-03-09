@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "name": "Clean And Deduplicate Usage Data",
+  "name": "Handling Erroneous And Duplicated Records",
   "nodes": [
     {
       "partitionKey": null,
@@ -11,7 +11,7 @@
       "params": {
         "max": 1
       },
-      "x": 450,
+      "x": 400,
       "y": 200
     },
     {
@@ -21,7 +21,7 @@
       "name": "Simulate Data",
       "type": "transforms/script",
       "params": {
-        "transform": "const today = new Date();\n\n// Create 5 sample data\nconst usageEvent = [\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  }, \n  \n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n  // Simulate invalid data with missing kWhCharged\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"9aa641a2-361e-4027-bd49-5c0c3de7f54e\",\n    //\"kWhCharged\": 48,\n    \"chargingPlace\": \"Sorbonne_02\"\n  },\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"48053017-07b5-4d3b-ade4-e1183423453b\",\n    \"kWhCharged\": 52,\n    \"chargingPlace\": \"Grand_Hotel_Paris_01\"\n  },\n\n// Simulate invalid data with wrong userTechnicalId\n  {\n    \"date\": \"2020-01-01\",\n    \"userTechnicalId\": \"45f2389b-f8f6-4d1b-960a-19ab82b15b34-\",\n    \"kWhCharged\": 20,\n    \"chargingPlace\": \"Rue_Morgue_01\"\n  }\n]\n\nfor (var key in usageEvent) {\n    await push(usageEvent[key]);\n}\n"
+        "transform": "const today = new Date();\n\n// Create sample data\nconst usageEvent = [\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  }, \n  \n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n  // Simulate invalid data with missing kWhCharged\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"9aa641a2-361e-4027-bd49-5c0c3de7f54e\",\n    //\"kWhCharged\": 48,\n    \"chargingPlace\": \"Sorbonne_02\"\n  },\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"48053017-07b5-4d3b-ade4-e1183423453b\",\n    \"kWhCharged\": 52,\n    \"chargingPlace\": \"Grand_Hotel_Paris_01\"\n  },\n\n// Simulate invalid data with wrong userTechnicalId\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"45f2389b-f8f6-4d1b-960a-19ab82b15b34---\",\n    \"kWhCharged\": 20,\n    \"chargingPlace\": \"Rue_Morgue_01\"\n  }\n]\n\nfor (var key in usageEvent) {\n    await push(usageEvent[key]);\n}\n"
       },
       "x": 600,
       "y": 200
@@ -52,7 +52,7 @@
           "enabled": true
         }
       },
-      "x": 900,
+      "x": 1000,
       "y": 200
     },
     {
@@ -62,7 +62,7 @@
       "name": "Log",
       "type": "writers/log",
       "params": {},
-      "x": 1050,
+      "x": 1200,
       "y": 200
     },
     {
@@ -75,7 +75,7 @@
         "key": "${}",
         "lifeTimeDays": 1
       },
-      "x": 750,
+      "x": 800,
       "y": 200
     }
   ],

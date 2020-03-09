@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "name": "Enrich Data With Foreign Exchange Rates",
+  "name": "Data Enrichment With Foreign Exchange Rates",
   "nodes": [
     {
       "partitionKey": null,
@@ -9,7 +9,7 @@
       "name": "Count",
       "type": "readers/counter",
       "params": {
-        "max": 3
+        "max": 1
       },
       "x": 400,
       "y": 200
@@ -21,7 +21,7 @@
       "name": "Simulate Data",
       "type": "transforms/script",
       "params": {
-        "transform": "// Create sample data base on input value from Count Function\nawait push({\n    \"Name\": \"User-\" + payload.value,\n    \"Service Fee\": payload.value,\n    \"Base Currency\": \"EUR\"\n});"
+        "transform": "// Simulate sample data\n\nconst event = [\n    {\n        \"Name\": \"User-1\",\n        \"Service Fee\": 10,\n        \"Base Currency\": \"EUR\"   \n    },\n    {\n        \"Name\": \"User-2\",\n        \"Service Fee\": 4,\n        \"Base Currency\": \"GBP\"   \n    },\n    {\n        \"Name\": \"User-3\",\n        \"Service Fee\": 7,\n        \"Base Currency\": \"AUD\"   \n    }\n]\n\n\nfor (var key in event) {\n    await push(event[key]);\n}"
       },
       "x": 550,
       "y": 200
@@ -35,7 +35,7 @@
       "params": {
         "errorMode": "emit",
         "cacheSeconds": 300,
-        "useCache": true,
+        "useCache": false,
         "method": "GET",
         "uri": "https://api.exchangeratesapi.io/latest",
         "qs": {
@@ -55,8 +55,8 @@
       "params": {
         "mappings": {
           "Name": "Name",
-          "EUR to USD Rate": "httpResponse.rates.USD",
-          "Service Fee (EUR)": "Service Fee",
+          "Exchange Rate": "httpResponse.rates.USD",
+          "Service Fee": "Service Fee",
           "Service Fee (USD)": "usd"
         }
       },
@@ -77,10 +77,10 @@
       "partitionKey": null,
       "schemaVersion": 1,
       "id": "dda9a5a0-51b3-11ea-bec0-a7e1071491c2",
-      "name": "Covert Fees",
+      "name": "Convert Fees",
       "type": "transforms/script",
       "params": {
-        "transform": "// Convert fees from EUR to USD\nvar convertusd = payload[\"Service Fee\"] * payload.httpResponse.rates.USD;\n\n// Round the converted number to a 4 digits\npayload.usd = parseFloat((convertusd).toFixed(4));\n\nawait push(payload);\n"
+        "transform": "// Convert fees to USD\nvar convertusd = payload[\"Service Fee\"] * payload.httpResponse.rates.USD;\n\n// Round the converted number to a 4 digits\npayload.usd = parseFloat((convertusd).toFixed(4));\n\nawait push(payload);\n"
       },
       "x": 850,
       "y": 200
