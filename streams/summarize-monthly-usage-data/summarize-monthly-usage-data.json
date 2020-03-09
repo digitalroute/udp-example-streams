@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "name": "Summarize Monthly Usage",
+  "name": "Summarize Monthly Usage Data",
   "nodes": [
     {
       "partitionKey": null,
@@ -11,7 +11,7 @@
       "params": {
         "max": 5
       },
-      "x": 450,
+      "x": 400,
       "y": 200
     },
     {
@@ -21,9 +21,9 @@
       "name": "Simulate Data",
       "type": "transforms/script",
       "params": {
-        "transform": "/*\nA sample script that\n- simulate simple usage data\n- sample usage of moment npm library\n*/\n\nlog.info (\"Receive input: \" + JSON.stringify(payload));\n\n// create sample usage event\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-1001\",\n    usage: 2 * payload.value,\n    dateTime: simDate(),\n}\n\n// send the usage event to next function\nawait push(usageEvent)\n\n// simulate different of date for each event\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add('days', payload.value);\n    return date.format('YYYY-MM-DD');\n}"
+        "transform": "// This script simulate daily record for number of game downloaded by a user\n\n// Write the input record from previous function into log\nlog.info (\"Receive data: \" + JSON.stringify(payload));\n\n// Create sample daily record\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-1001\",\n    downloadedGame: 2 * payload.value,\n    dateTime: simDate(),\n}\n\n// Send the record to next function\nawait push(usageEvent)\n\n// Simulate different date for each record\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add('days', payload.value);\n    return date.format('YYYY-MM-DD');\n}"
       },
-      "x": 650,
+      "x": 600,
       "y": 200
     },
     {
@@ -34,11 +34,11 @@
       "type": "transforms/aggregate",
       "params": {
         "key": "${userId}",
-        "valueKey": "${usage}",
+        "valueKey": "${downloadedGame}",
         "dateKey": "${dateTime}",
         "window": "month"
       },
-      "x": 850,
+      "x": 800,
       "y": 200
     },
     {
@@ -48,7 +48,23 @@
       "name": "Log",
       "type": "writers/log",
       "params": {},
-      "x": 1050,
+      "x": 1200,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
+      "name": "Monthly Record",
+      "type": "transforms/map",
+      "params": {
+        "mappings": {
+          "User": "key",
+          "Month": "period",
+          "TotalDownload": "sum"
+        }
+      },
+      "x": 1000,
       "y": 200
     }
   ],
@@ -66,8 +82,14 @@
       "config": {}
     },
     {
-      "id": "85ebb0f0-51c3-11ea-bec0-a7e1071491c2",
+      "id": "600797a0-5ec5-11ea-8ba5-d5bb374ad591",
       "from": "136fe100-4ccc-11ea-9014-2b24e4165af9",
+      "to": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
+      "config": {}
+    },
+    {
+      "id": "63402d60-5ec5-11ea-8ba5-d5bb374ad591",
+      "from": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
       "to": "84b4dea0-51c3-11ea-bec0-a7e1071491c2",
       "config": {}
     }
