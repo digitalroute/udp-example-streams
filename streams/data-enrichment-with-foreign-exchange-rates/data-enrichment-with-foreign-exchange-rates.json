@@ -21,14 +21,14 @@
       "name": "Simulate Data",
       "type": "transforms/script",
       "params": {
-        "transform": "// Simulate sample data\n\nconst event = [\n    {\n        \"Name\": \"User-1\",\n        \"Service Fee\": 10,\n        \"Base Currency\": \"EUR\"   \n    },\n    {\n        \"Name\": \"User-2\",\n        \"Service Fee\": 4,\n        \"Base Currency\": \"GBP\"   \n    },\n    {\n        \"Name\": \"User-3\",\n        \"Service Fee\": 7,\n        \"Base Currency\": \"AUD\"   \n    }\n]\n\n\nfor (var key in event) {\n    await push(event[key]);\n}"
+        "transform": "// Simulate sample data\n\nconst event = [\n    {\n        \"Name\": \"User-1\",\n        \"Service Fee\": 10,\n        \"Base_Currency\": \"EUR\"   \n    },\n    {\n        \"Name\": \"User-2\",\n        \"Service Fee\": 4,\n        \"Base_Currency\": \"GBP\"   \n    },\n    {\n        \"Name\": \"User-3\",\n        \"Service Fee\": 7,\n        \"Base_Currency\": \"AUD\"   \n    }\n]\n\n\nfor (var key in event) {\n    await push(event[key]);\n}"
       },
       "x": 550,
       "y": 200
     },
     {
       "partitionKey": null,
-      "schemaVersion": 1,
+      "schemaVersion": 2,
       "id": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
       "name": "Exchange Rate",
       "type": "transforms/http",
@@ -39,7 +39,7 @@
         "method": "GET",
         "uri": "https://api.exchangeratesapi.io/latest",
         "qs": {
-          "base": "${Base Currency}",
+          "base": "${payload.Base_Currency}",
           "symbols": "USD"
         }
       },

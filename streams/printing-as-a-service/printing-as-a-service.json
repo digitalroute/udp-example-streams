@@ -4,7 +4,7 @@
   "nodes": [
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "5c32a5b0-02b5-11e9-9f17-81651dddad53",
       "name": "Count",
       "type": "readers/counter",
@@ -16,7 +16,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "7f60b090-02b5-11e9-9f17-81651dddad53",
       "name": "Simulate Usage",
       "type": "transforms/script",
@@ -28,20 +28,27 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 2,
       "id": "5f5be970-02c6-11e9-abea-918bf71eccf8",
       "name": "Deduplicate 1",
       "type": "transforms/deduplicate",
       "params": {
         "key": "${eventId}",
-        "lifeTimeDays": 1
+        "lifeTimeDays": 1,
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "c113ae58-f9c6-4eb8-9773-8301046b219c"
+            }
+          }
+        }
       },
       "x": 900,
       "y": 100
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "1bb5e110-02c8-11e9-abea-918bf71eccf8",
       "name": "Validate",
       "type": "transforms/validate",
@@ -167,14 +174,14 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "02434580-02da-11e9-a2ab-ddc54ea0654a",
       "name": "Aggregate",
       "type": "transforms/aggregate",
       "params": {
-        "key": "${printerId}",
-        "valueKey": "${sheets}",
-        "dateKey": "${timestamp}",
+        "key": "${payload.printerId}",
+        "valueKey": "${payload.sheets}",
+        "dateKey": "${payload.timestamp}",
         "window": "month"
       },
       "x": 1100,
@@ -182,7 +189,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
       "name": "Enrich CRM 1",
       "type": "transforms/script",
@@ -194,20 +201,27 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 2,
       "id": "529547b0-1fd9-11e9-b13d-6969f21433e0",
       "name": "Deduplicate 2",
       "type": "transforms/deduplicate",
       "params": {
         "key": "${printerId}",
-        "lifeTimeDays": 1
+        "lifeTimeDays": 1,
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "a573e9cf-84cb-4374-bf3e-d8a7d6cab8ef"
+            }
+          }
+        }
       },
       "x": 1250,
       "y": 250
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
       "name": "Enrich CRM 2",
       "type": "transforms/script",
@@ -219,7 +233,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 2,
       "id": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
       "name": "Check Ink Level",
       "type": "transforms/split",
@@ -232,20 +246,24 @@
             "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd"
           }
         ],
-        "outputs": [
-          {
-            "id": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
-            "name": "Low Ink"
+        "onNoMatch": "discard",
+        "multiOutput": {
+          "configurable": {
+            "outputs": [
+              {
+                "id": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
+                "name": "Low Ink"
+              }
+            ]
           }
-        ],
-        "onNoMatch": "discard"
+        }
       },
       "x": 1100,
       "y": 250
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 2,
       "id": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
       "name": "Maintenance",
       "type": "transforms/split",
@@ -258,20 +276,24 @@
             "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd"
           }
         ],
-        "outputs": [
-          {
-            "id": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
-            "name": "Predictive Maintenance"
+        "onNoMatch": "discard",
+        "multiOutput": {
+          "configurable": {
+            "outputs": [
+              {
+                "id": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
+                "name": "Predictive Maintenance"
+              }
+            ]
           }
-        ],
-        "onNoMatch": "discard"
+        }
       },
       "x": 1100,
       "y": 400
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "79ad13a0-81f4-11e9-80f0-0bac64875d58",
       "name": "To Service",
       "type": "writers/log",
@@ -281,13 +303,20 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 2,
       "id": "1155ff50-81f5-11e9-80f0-0bac64875d58",
       "name": "Deduplicate 3",
       "type": "transforms/deduplicate",
       "params": {
         "key": "${printerId}",
-        "lifeTimeDays": 1
+        "lifeTimeDays": 1,
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "35fffde6-e496-421a-b938-cce97ac0bf60"
+            }
+          }
+        }
       },
       "x": 1250,
       "y": 400
@@ -352,7 +381,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": null,
+      "schemaVersion": 1,
       "id": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
       "name": "Enrich CRM 3",
       "type": "transforms/script",
@@ -406,7 +435,8 @@
       "id": "0643e630-02da-11e9-a2ab-ddc54ea0654a",
       "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
       "to": "02434580-02da-11e9-a2ab-ddc54ea0654a",
-      "config": {}
+      "config": {},
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
     },
     {
       "id": "43826b50-036d-11e9-90d6-9b46f02a690d",
@@ -418,13 +448,15 @@
       "id": "c2756680-1fe0-11e9-b333-8387e66c8bf7",
       "from": "529547b0-1fd9-11e9-b13d-6969f21433e0",
       "to": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
-      "config": {}
+      "config": {},
+      "output": "a573e9cf-84cb-4374-bf3e-d8a7d6cab8ef"
     },
     {
       "id": "79d7ccf0-4737-11e9-9166-6b7c69bb46fd",
       "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
       "to": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
-      "config": {}
+      "config": {},
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
     },
     {
       "id": "b7dd11d0-4738-11e9-94cb-5b409f620cb7",
@@ -437,7 +469,8 @@
       "id": "69458d80-81f4-11e9-80f0-0bac64875d58",
       "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
       "to": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
-      "config": {}
+      "config": {},
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
     },
     {
       "id": "1a596e70-81f5-11e9-80f0-0bac64875d58",
@@ -474,7 +507,8 @@
       "id": "a4e7a6f0-4c49-11ea-9b57-69fd58765c81",
       "from": "1155ff50-81f5-11e9-80f0-0bac64875d58",
       "to": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
-      "config": {}
+      "config": {},
+      "output": "35fffde6-e496-421a-b938-cce97ac0bf60"
     },
     {
       "id": "c9f8a2a0-4c49-11ea-9b57-69fd58765c81",
