@@ -33,9 +33,9 @@
       "name": "Aggregate",
       "type": "transforms/aggregate",
       "params": {
-        "key": "${userId}",
-        "valueKey": "${downloadedGame}",
-        "dateKey": "${dateTime}",
+        "key": "${payload.userId}",
+        "valueKey": "${payload.downloadedGame}",
+        "dateKey": "${payload.dateTime}",
         "window": "month"
       },
       "x": 800,
