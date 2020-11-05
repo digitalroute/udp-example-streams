@@ -28,12 +28,12 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
+      "schemaVersion": 3,
       "id": "5f5be970-02c6-11e9-abea-918bf71eccf8",
       "name": "Deduplicate 1",
       "type": "transforms/deduplicate",
       "params": {
-        "key": "${eventId}",
+        "key": "${payload.eventId}",
         "lifeTimeDays": 1,
         "multiOutput": {
           "fixed": {
@@ -174,7 +174,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 1,
+      "schemaVersion": 2,
       "id": "02434580-02da-11e9-a2ab-ddc54ea0654a",
       "name": "Aggregate",
       "type": "transforms/aggregate",
@@ -201,12 +201,12 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
+      "schemaVersion": 3,
       "id": "529547b0-1fd9-11e9-b13d-6969f21433e0",
       "name": "Deduplicate 2",
       "type": "transforms/deduplicate",
       "params": {
-        "key": "${printerId}",
+        "key": "${payload.printerId}",
         "lifeTimeDays": 1,
         "multiOutput": {
           "fixed": {
@@ -233,14 +233,14 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
+      "schemaVersion": 3,
       "id": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
       "name": "Check Ink Level",
       "type": "transforms/split",
       "params": {
         "rules": [
           {
-            "key": "${inkLevel}",
+            "key": "${payload.inkLevel}",
             "value": "21",
             "op": "lt",
             "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd"
@@ -263,14 +263,14 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
+      "schemaVersion": 3,
       "id": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
       "name": "Maintenance",
       "type": "transforms/split",
       "params": {
         "rules": [
           {
-            "key": "${status}",
+            "key": "${payload.status}",
             "value": "Needs service",
             "op": "eq",
             "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd"
@@ -303,12 +303,12 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
+      "schemaVersion": 3,
       "id": "1155ff50-81f5-11e9-80f0-0bac64875d58",
       "name": "Deduplicate 3",
       "type": "transforms/deduplicate",
       "params": {
-        "key": "${printerId}",
+        "key": "${payload.printerId}",
         "lifeTimeDays": 1,
         "multiOutput": {
           "fixed": {

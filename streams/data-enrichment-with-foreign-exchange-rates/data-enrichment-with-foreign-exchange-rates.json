@@ -28,7 +28,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
+      "schemaVersion": 3,
       "id": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
       "name": "Exchange Rate",
       "type": "transforms/http",

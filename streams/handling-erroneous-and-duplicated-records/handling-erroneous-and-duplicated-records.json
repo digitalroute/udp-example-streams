@@ -67,13 +67,20 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 1,
+      "schemaVersion": 3,
       "id": "c5abf3a0-51c1-11ea-bec0-a7e1071491c2",
       "name": "Deduplicate",
       "type": "transforms/deduplicate",
       "params": {
-        "key": "${}",
-        "lifeTimeDays": 1
+        "key": "${payload}",
+        "lifeTimeDays": 1,
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "3845df85-be64-46c6-a603-a953052fa3dc"
+            }
+          }
+        }
       },
       "x": 800,
       "y": 200
