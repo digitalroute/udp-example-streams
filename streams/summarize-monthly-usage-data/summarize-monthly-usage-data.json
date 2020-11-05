@@ -28,7 +28,7 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 1,
+      "schemaVersion": 2,
       "id": "136fe100-4ccc-11ea-9014-2b24e4165af9",
       "name": "Aggregate",
       "type": "transforms/aggregate",
