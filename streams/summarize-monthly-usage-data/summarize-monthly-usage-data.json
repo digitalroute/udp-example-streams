@@ -28,15 +28,17 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
-      "id": "136fe100-4ccc-11ea-9014-2b24e4165af9",
-      "name": "Aggregate",
-      "type": "transforms/aggregate",
+      "id": "31a45de0-80ba-11eb-b363-0dcbd0a358e8",
+      "name": "Data Aggregator",
+      "type": "transforms/data_aggregate",
+      "schemaVersion": 1,
       "params": {
-        "key": "${payload.userId}",
-        "valueKey": "${payload.downloadedGame}",
-        "dateKey": "${payload.dateTime}",
-        "window": "month"
+        "flushType": "ALL_FILES",
+        "groupKeys": [
+          { "field": "userId", "operationType": "NONE" },
+          { "field": "dateTime", "operationType": "MONTH" }
+        ],
+        "operations": [{ "field": "downloadedGame", "type": "NUMERIC_SUM" }]
       },
       "x": 800,
       "y": 200
@@ -59,9 +61,9 @@
       "type": "transforms/map",
       "params": {
         "mappings": {
-          "User": "key",
-          "Month": "period",
-          "TotalDownload": "sum"
+          "Month": "month_dateTime",
+          "TotalDownload": "sum_downloadedGame",
+          "User": "userId"
         }
       },
       "x": 1000,
@@ -78,12 +80,12 @@
     {
       "id": "1b293760-51c3-11ea-bec0-a7e1071491c2",
       "from": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
-      "to": "136fe100-4ccc-11ea-9014-2b24e4165af9",
+      "to": "31a45de0-80ba-11eb-b363-0dcbd0a358e8",
       "config": {}
     },
     {
       "id": "600797a0-5ec5-11ea-8ba5-d5bb374ad591",
-      "from": "136fe100-4ccc-11ea-9014-2b24e4165af9",
+      "from": "31a45de0-80ba-11eb-b363-0dcbd0a358e8",
       "to": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
       "config": {}
     },

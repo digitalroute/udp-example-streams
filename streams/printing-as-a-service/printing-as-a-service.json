@@ -71,96 +71,74 @@
               "type": "string",
               "title": "The Eventid Schema",
               "default": "",
-              "examples": [
-                "MPS-Super_1_2018-12-20T11:00:48.880Z"
-              ],
+              "examples": ["MPS-Super_1_2018-12-20T11:00:48.880Z"],
               "pattern": "^(.*)$"
             },
             "printerId": {
               "type": "integer",
               "title": "The Printerid Schema",
               "default": 0,
-              "examples": [
-                1
-              ]
+              "examples": [1]
             },
             "brand": {
               "type": "string",
               "title": "The Brand Schema",
               "default": "",
-              "examples": [
-                "Acme"
-              ],
+              "examples": ["Acme"],
               "pattern": "^(.*)$"
             },
             "model": {
               "type": "string",
               "title": "The Model Schema",
               "default": "",
-              "examples": [
-                "MPS-Super"
-              ],
+              "examples": ["MPS-Super"],
               "pattern": "^(.*)$"
             },
             "type": {
               "type": "string",
               "title": "The Type Schema",
               "default": "",
-              "examples": [
-                "Laser"
-              ],
+              "examples": ["Laser"],
               "pattern": "^(.*)$"
             },
             "paper": {
               "type": "string",
               "title": "The Paper Schema",
               "default": "",
-              "examples": [
-                "A4"
-              ],
+              "examples": ["A4"],
               "pattern": "A."
             },
             "sided": {
               "type": "string",
               "title": "The Sided Schema",
               "default": "",
-              "examples": [
-                "Two"
-              ],
+              "examples": ["Two"],
               "pattern": "^(.*)$"
             },
             "color": {
               "type": "string",
               "title": "The Color Schema",
               "default": "",
-              "examples": [
-                "No"
-              ],
+              "examples": ["No"],
               "pattern": "^(.*)$"
             },
             "sheets": {
               "type": "integer",
               "title": "The Sheets Schema",
               "default": 0,
-              "examples": [
-                16
-              ]
+              "examples": [16]
             },
             "inkLevel": {
               "type": "integer",
               "title": "The InkLevel Schema",
               "default": 0,
-              "examples": [
-                16
-              ]
+              "examples": [16]
             },
             "timestamp": {
               "type": "string",
               "title": "The Timestamp Schema",
               "default": "",
-              "examples": [
-                "2018-12-20T11:00:48.880Z"
-              ],
+              "examples": ["2018-12-20T11:00:48.880Z"],
               "pattern": "^(2.*)$"
             }
           }
@@ -174,16 +152,20 @@
     },
     {
       "partitionKey": null,
-      "schemaVersion": 2,
-      "id": "02434580-02da-11e9-a2ab-ddc54ea0654a",
-      "name": "Aggregate",
-      "type": "transforms/aggregate",
+      "schemaVersion": 1,
+      "id": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
+      "name": "Data Aggregator",
+      "type": "transforms/data_aggregate",
       "params": {
-        "key": "${payload.printerId}",
-        "valueKey": "${payload.sheets}",
-        "dateKey": "${payload.timestamp}",
-        "window": "month"
+        "flushType": "ALL_FILES",
+        "groupKeys": [
+          { "field": "printerId", "operationType": "NONE" },
+          { "field": "timestamp", "operationType": "MONTH" }
+        ],
+
+        "operations": [{ "field": "sheets", "type": "NUMERIC_SUM" }]
       },
+
       "x": 1100,
       "y": 100
     },
@@ -194,7 +176,7 @@
       "name": "Enrich CRM 1",
       "type": "transforms/script",
       "params": {
-        "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.key);\npayload.department = crmDepartmentLookup(payload.key);\nawait push(payload);\n"
+        "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
       },
       "x": 1400,
       "y": 100
@@ -351,9 +333,9 @@
         "mappings": {
           "customer": "customer",
           "department": "department",
-          "printerId": "key",
-          "sheets": "sum",
-          "period": "period"
+          "printerId": "printerId",
+          "sheets": "sum_sheets",
+          "period": "month_timestamp"
         }
       },
       "x": 1550,
@@ -434,13 +416,13 @@
     {
       "id": "0643e630-02da-11e9-a2ab-ddc54ea0654a",
       "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
-      "to": "02434580-02da-11e9-a2ab-ddc54ea0654a",
+      "to": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
       "config": {},
       "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
     },
     {
       "id": "43826b50-036d-11e9-90d6-9b46f02a690d",
-      "from": "02434580-02da-11e9-a2ab-ddc54ea0654a",
+      "from": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
       "to": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
       "config": {}
     },
