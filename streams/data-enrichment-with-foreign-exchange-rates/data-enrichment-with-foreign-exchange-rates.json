@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "name": "Data Enrichment With Foreign Exchange Rates",
+  "nodes": [
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "5198efa0-51b1-11ea-bec0-a7e1071491c2",
+      "name": "Count",
+      "type": "readers/counter",
+      "params": {
+        "max": 1
+      },
+      "x": 450,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "59fe4a00-51b1-11ea-bec0-a7e1071491c2",
+      "name": "Simulate Data",
+      "type": "transforms/script",
+      "params": {
+        "transform": "// Simulate sample data\n\nconst event = [\n    {\n        \"Name\": \"User-0\",\n        \"ServiceFee\": 25,\n        \"Currency\": \"SEK\"   \n    },\n    {\n        \"Name\": \"User-1\",\n        \"ServiceFee\": 10,\n        \"Currency\": \"EUR\"   \n    },\n    {\n        \"Name\": \"User-2\",\n        \"ServiceFee\": 4,\n        \"Currency\": \"GBP\"   \n    },\n    {\n        \"Name\": \"User-3\",\n        \"ServiceFee\": 7,\n        \"Currency\": \"AUD\"   \n    }\n]\n\n\nfor (var key in event) {\n    await push(event[key]);\n}"
+      },
+      "x": 600,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 4,
+      "id": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
+      "name": "Exchange Rate",
+      "type": "transforms/http",
+      "params": {
+        "errorMode": "emit",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "method": "GET",
+        "uri": " https://ingress.digitalroute.io/53d1b880-a9b5-11eb-903c-7f5f6b522c3e/rates",
+        "qs": {
+          "base": "${payload.Currency}",
+          "symbols": "USD"
+        },
+        "cacheKey": "${payload.Base_Currency}",
+        "basicAuthentication": {
+          "username": "test",
+          "password": {
+            "secret": true,
+            "value": "test"
+          }
+        }
+      },
+      "x": 750,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "id": "e1df0760-51b2-11ea-bec0-a7e1071491c2",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "x": 1050,
+      "y": 200
+    },
+    {
+      "partitionKey": null,
+      "schemaVersion": 2,
+      "id": "6b1f6590-ba28-11eb-8ba4-7393f6d56d99",
+      "name": "Convert Fees",
+      "type": "transforms/xmap",
+      "params": {
+        "keepFields": {
+          "enabled": true,
+          "except": [
+            "httpResponse"
+          ]
+        },
+        "mappings": [
+          {
+            "field": "USD Exchange Rate",
+            "expression": "httpResponse.rates.USD",
+            "ast": [
+              "R",
+              "httpResponse.rates.USD"
+            ],
+            "errorMessage": null
+          },
+          {
+            "field": "Service Fee (USD)",
+            "expression": "round(ServiceFee * httpResponse.rates.USD * 10000) / 10000",
+            "ast": [
+              "aop",
+              "/",
+              [
+                "call",
+                [
+                  "R",
+                  "round"
+                ],
+                [
+                  [
+                    "aop",
+                    "*",
+                    [
+                      "aop",
+                      "*",
+                      [
+                        "R",
+                        "ServiceFee"
+                      ],
+                      [
+                        "R",
+                        "httpResponse.rates.USD"
+                      ]
+                    ],
+                    [
+                      "N",
+                      10000
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "N",
+                10000
+              ]
+            ],
+            "errorMessage": null
+          }
+        ]
+      },
+      "x": 900,
+      "y": 200
+    }
+  ],
+  "edges": [
+    {
+      "id": "5b1a4150-51b1-11ea-bec0-a7e1071491c2",
+      "from": "5198efa0-51b1-11ea-bec0-a7e1071491c2",
+      "to": "59fe4a00-51b1-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "d162b630-51b1-11ea-bec0-a7e1071491c2",
+      "from": "59fe4a00-51b1-11ea-bec0-a7e1071491c2",
+      "to": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
+      "config": {}
+    },
+    {
+      "id": "6d1c4700-ba28-11eb-8ba4-7393f6d56d99",
+      "from": "cff347b0-51b1-11ea-bec0-a7e1071491c2",
+      "to": "6b1f6590-ba28-11eb-8ba4-7393f6d56d99",
+      "config": {}
+    },
+    {
+      "id": "7600c700-ba29-11eb-8ba4-7393f6d56d99",
+      "from": "6b1f6590-ba28-11eb-8ba4-7393f6d56d99",
+      "to": "e1df0760-51b2-11ea-bec0-a7e1071491c2",
+      "config": {}
+    }
+  ]
+}
