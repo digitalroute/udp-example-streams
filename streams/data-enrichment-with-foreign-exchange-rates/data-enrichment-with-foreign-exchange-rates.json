@@ -37,7 +37,7 @@
         "cacheSeconds": 300,
         "useCache": false,
         "method": "GET",
-        "uri": " https://ingress.digitalroute.io/53d1b880-a9b5-11eb-903c-7f5f6b522c3e/rates",
+        "uri": "https://ingress.digitalroute.io/53d1b880-a9b5-11eb-903c-7f5f6b522c3e/rates",
         "qs": {
           "base": "${payload.Currency}",
           "symbols": "USD"
