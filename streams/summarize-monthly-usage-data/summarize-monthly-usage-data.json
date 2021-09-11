@@ -21,7 +21,7 @@
       "name": "Simulate Data",
       "type": "transforms/script",
       "params": {
-        "transform": "// This script simulate daily record for number of game downloaded by a user\n\n// Write the input record from previous function into log\nlog.info (\"Receive data: \" + JSON.stringify(payload));\n\n// Create sample daily record\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-1001\",\n    downloadedGame: 2 * payload.value,\n    dateTime: simDate(),\n}\n\n// Send the record to next function\nawait push(usageEvent)\n\n// Simulate different date for each record\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add('days', payload.value);\n    return date.format('YYYY-MM-DD');\n}"
+        "transform": "// This script simulate daily record for number of game downloaded by a user\n\n// Write the input record from previous function into log\nlog.info (\"Receive data: \" + JSON.stringify(payload));\n\n// Create sample daily record\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-1001\",\n    downloadedGame: 2 * payload.value,\n    dateTime: simDate(),\n}\n\n// Send the record to next function\nawait push(usageEvent)\n\n// Simulate different date for each record\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add(payload.value, 'days');\n    return date.format('YYYY-MM-DD');\n}"
       },
       "x": 600,
       "y": 200
