@@ -1,6 +1,111 @@
 {
-  "schemaVersion": 1,
-  "name": "Badflix video streaming",
+  "edges": [
+    {
+      "id": "6840c960-d74e-11ec-9fd8-49df506d0834",
+      "from": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
+      "to": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "2795d890-d750-11ec-9fd8-49df506d0834",
+      "from": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "to": "24681840-d750-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "712f2280-d751-11ec-9fd8-49df506d0834",
+      "from": "24681840-d750-11ec-9fd8-49df506d0834",
+      "to": "6adbdf40-d751-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "a0389ee0-d755-11ec-9fd8-49df506d0834",
+      "from": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
+      "to": "9d5a1000-d755-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "f688ea10-d756-11ec-9fd8-49df506d0834",
+      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
+      "output": "2ae506c0-d754-11ec-9fd8-49df506d0834",
+      "to": "f0da7250-d756-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "33134430-d757-11ec-9fd8-49df506d0834",
+      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
+      "output": "132bb920-d754-11ec-9fd8-49df506d0834",
+      "to": "2faff4f0-d757-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "c3be3410-d75f-11ec-9fd8-49df506d0834",
+      "from": "2faff4f0-d757-11ec-9fd8-49df506d0834",
+      "to": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "c55771b0-d75f-11ec-9fd8-49df506d0834",
+      "from": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
+      "to": "555c4970-d75b-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "debe6f50-d75f-11ec-9fd8-49df506d0834",
+      "from": "f0da7250-d756-11ec-9fd8-49df506d0834",
+      "to": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "e052a3e0-d75f-11ec-9fd8-49df506d0834",
+      "from": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
+      "to": "59850b90-d75b-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "fb317470-d75f-11ec-9fd8-49df506d0834",
+      "from": "9d5a1000-d755-11ec-9fd8-49df506d0834",
+      "to": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "fd11f440-d75f-11ec-9fd8-49df506d0834",
+      "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
+      "to": "4b22f260-d75b-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "df100a20-da72-11ec-8fb5-59ce769604a4",
+      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "to": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "e2d353b0-da72-11ec-8fb5-59ce769604a4",
+      "from": "6adbdf40-d751-11ec-9fd8-49df506d0834",
+      "to": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "config": {}
+    },
+    {
+      "id": "f78ca7c0-da72-11ec-8fb5-59ce769604a4",
+      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "to": "132bb921-d754-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "6e878190-e7f9-11ec-a1a1-9fde961a34eb",
+      "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
+      "to": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
+      "config": {}
+    },
+    {
+      "id": "7388c960-e7f9-11ec-a1a1-9fde961a34eb",
+      "from": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
+      "to": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
+      "config": {}
+    }
+  ],
+  "name": "Cultflicks video streaming",
   "nodes": [
     {
       "id": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
@@ -138,9 +243,13 @@
           {
             "field": "plan",
             "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "os_type",
+            "type": "GENERAL_CARRY_LAST"
           }
         ],
-        "storeId": "b1fef4495aa39970169e832370deaad1f44e966f"
+        "storeId": "d7cfb40baf8b2a608bc1ccca018f2eb8bf3bdb1b"
       },
       "partitionKey": null,
       "schemaVersion": 2,
@@ -152,7 +261,7 @@
       "name": "Classify user",
       "type": "transforms/script",
       "params": {
-        "transform": "const sum_view_percent = Math.round(100 * payload.sum_view_duration / payload.sum_full_duration);\nconst user_churn_risk = (sum_view_percent < 76);\n\n\nlet user_category = \"standard\";\nif (payload.sum_view_duration > 200000) {\n    user_category = \"heavy_user\";\n} else if (payload.sum_view_duration < 100000) {\n    user_category = \"light_user\";\n} \n\n\nconst metrics_msg = \"You have watched a total of \" + payload.count_title + \" movies this month. You completed \" + sum_view_percent + \"% of the movies you started watching.\";\n\nlet nudge_msg;\nif (user_churn_risk) {\n    nudge_msg = \"Maybe you would be interested in our pay-per-view plan?\";\n    audit.count(\"pay_per_view_nudge_messages_sent\");\n} else if (user_category == \"heavy_user\" && payload.carry_last_plan != \"Premium\") {\n    nudge_msg = \"Sign up for our Premium plan and enjoy great movies at super high quality for 5 family members!\";\n    audit.count(\"premium_nudge_messages_sent\");\n} else {\n    nudge_msg = \"We are glad you're enjoying your Badflix experience.\";\n}\n\nconst enriched_payload = {...payload, sum_view_percent, user_category, user_churn_risk, metrics_msg, nudge_msg};\n\naudit.count(\"count_user_category_\" + user_category);\naudit.sum(\"sum_view_duration\", payload.sum_view_duration);\naudit.sum(\"sum_full_duration\", payload.sum_full_duration);\n\nif (user_churn_risk) {\n    audit.count(\"count_churn_risk\");     \n}\n\nawait push(enriched_payload);"
+        "transform": "const sum_view_percent = Math.round(100 * payload.sum_view_duration / payload.sum_full_duration);\nconst user_churn_risk = (sum_view_percent < 76);\n\n\nlet user_category = \"standard\";\nif (payload.sum_view_duration > 200000) {\n    user_category = \"heavy_user\";\n} else if (payload.sum_view_duration < 100000) {\n    user_category = \"light_user\";\n} \n\n\nconst metrics_msg = \"You have watched a total of \" + payload.count_title + \" movies this month. You completed \" + sum_view_percent + \"% of the movies you started watching.\";\n\nlet nudge_msg;\nif (user_churn_risk) {\n    nudge_msg = \"Maybe you would be interested in our pay-per-view plan?\";\n    audit.count(\"pay_per_view_nudge_messages_sent\");\n} else if (user_category == \"heavy_user\" && payload.carry_last_plan != \"Premium\") {\n    nudge_msg = \"Sign up for our Premium plan and enjoy great movies at super high quality for 5 family members!\";\n    audit.count(\"premium_nudge_messages_sent\");\n} else {\n    nudge_msg = \"We are glad you're enjoying your Cultflicks experience.\";\n}\n\nconst enriched_payload = {...payload, sum_view_percent, user_category, user_churn_risk, metrics_msg, nudge_msg};\n\naudit.count(\"count_user_category_\" + user_category);\naudit.sum(\"sum_view_duration\", payload.sum_view_duration);\naudit.sum(\"sum_full_duration\", payload.sum_full_duration);\n\nif (user_churn_risk) {\n    audit.count(\"count_churn_risk\");     \n}\n\nawait push(enriched_payload);"
       },
       "partitionKey": null,
       "schemaVersion": 1,
@@ -193,7 +302,7 @@
             "type": "GENERAL_CARRY_LAST"
           }
         ],
-        "storeId": "541022e3dc3e5fb4105668c00225b335f68e3980"
+        "storeId": "e987dd2c5146ccc2e14addc4167c9386b207fe1d"
       },
       "partitionKey": null,
       "schemaVersion": 2,
@@ -396,7 +505,7 @@
       "partitionKey": null,
       "schemaVersion": 1,
       "x": 2050,
-      "y": 250
+      "y": 200
     },
     {
       "id": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
@@ -409,16 +518,16 @@
         "mappings": [
           {
             "field": "subject",
-            "expression": "\"Thank you for using Badflix!\"",
+            "expression": "\"Thank you for using Cultflicks!\"",
             "ast": [
               "S",
-              "Thank you for using Badflix!"
+              "Thank you for using Cultflicks!"
             ],
             "errorMessage": null
           },
           {
             "field": "message",
-            "expression": "\"Hi dear \" + @{payload.name} + \", Your email is \" + @{payload.email} + \", your country is \" + @{payload.country} + \", and you were born on \" + @{payload.birth_year} + \". \" + @{payload.nudge_msg} + \" \" + @{payload.metrics_msg} + \"  Best regards, Badflix\"",
+            "expression": "\"Hi dear \" + @{payload.name} + \", Your email is \" + @{payload.email} + \", your country is \" + @{payload.country} + \", and you were born on \" + @{payload.birth_year} + \". \" + @{payload.nudge_msg} + \" \" + @{payload.metrics_msg} + \"  Best regards, Cultflicks\"",
             "ast": [
               "aop",
               "+",
@@ -516,7 +625,7 @@
               ],
               [
                 "S",
-                "  Best regards, Badflix"
+                "  Best regards, Cultflicks"
               ]
             ],
             "errorMessage": null
@@ -526,113 +635,7 @@
       "partitionKey": null,
       "schemaVersion": 3,
       "x": 1850,
-      "y": 250
-    }
-  ],
-  "edges": [
-    {
-      "id": "6840c960-d74e-11ec-9fd8-49df506d0834",
-      "from": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
-      "to": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "2795d890-d750-11ec-9fd8-49df506d0834",
-      "from": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "to": "24681840-d750-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "712f2280-d751-11ec-9fd8-49df506d0834",
-      "from": "24681840-d750-11ec-9fd8-49df506d0834",
-      "to": "6adbdf40-d751-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "a0389ee0-d755-11ec-9fd8-49df506d0834",
-      "from": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
-      "to": "9d5a1000-d755-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "f688ea10-d756-11ec-9fd8-49df506d0834",
-      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "output": "2ae506c0-d754-11ec-9fd8-49df506d0834",
-      "to": "f0da7250-d756-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "33134430-d757-11ec-9fd8-49df506d0834",
-      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "output": "132bb920-d754-11ec-9fd8-49df506d0834",
-      "to": "2faff4f0-d757-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "c3be3410-d75f-11ec-9fd8-49df506d0834",
-      "from": "2faff4f0-d757-11ec-9fd8-49df506d0834",
-      "to": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "c55771b0-d75f-11ec-9fd8-49df506d0834",
-      "from": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
-      "to": "555c4970-d75b-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "debe6f50-d75f-11ec-9fd8-49df506d0834",
-      "from": "f0da7250-d756-11ec-9fd8-49df506d0834",
-      "to": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "e052a3e0-d75f-11ec-9fd8-49df506d0834",
-      "from": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
-      "to": "59850b90-d75b-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "fb317470-d75f-11ec-9fd8-49df506d0834",
-      "from": "9d5a1000-d755-11ec-9fd8-49df506d0834",
-      "to": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "fd11f440-d75f-11ec-9fd8-49df506d0834",
-      "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
-      "to": "4b22f260-d75b-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "df100a20-da72-11ec-8fb5-59ce769604a4",
-      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "to": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "e2d353b0-da72-11ec-8fb5-59ce769604a4",
-      "from": "6adbdf40-d751-11ec-9fd8-49df506d0834",
-      "to": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "config": {}
-    },
-    {
-      "id": "f78ca7c0-da72-11ec-8fb5-59ce769604a4",
-      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "to": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "6e878190-e7f9-11ec-a1a1-9fde961a34eb",
-      "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
-      "to": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
-      "config": {}
-    },
-    {
-      "id": "7388c960-e7f9-11ec-a1a1-9fde961a34eb",
-      "from": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
-      "to": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
-      "config": {}
+      "y": 200
     }
   ]
 }
