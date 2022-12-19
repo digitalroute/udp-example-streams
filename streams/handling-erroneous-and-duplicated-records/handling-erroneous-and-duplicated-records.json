@@ -47,9 +47,6 @@
               "maxLength": 36
             }
           }
-        },
-        "suspenseManagement": {
-          "enabled": true
         }
       },
       "x": 1000,

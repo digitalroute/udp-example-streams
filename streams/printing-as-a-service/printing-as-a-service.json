@@ -142,9 +142,6 @@
               "pattern": "^(2.*)$"
             }
           }
-        },
-        "suspenseManagement": {
-          "enabled": true
         }
       },
       "x": 750,
