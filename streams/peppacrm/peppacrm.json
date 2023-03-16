@@ -1,0 +1,569 @@
+{
+    "edges": [
+      {
+        "id": "4d1b86f0-a5eb-11ec-9235-0fb4c7e17e51",
+        "from": "38450df0-a5eb-11ec-9235-0fb4c7e17e51",
+        "to": "4a96fef0-a5eb-11ec-9235-0fb4c7e17e51",
+        "config": {}
+      },
+      {
+        "id": "6ccd1540-a5eb-11ec-9235-0fb4c7e17e51",
+        "from": "5b76c250-a5eb-11ec-9235-0fb4c7e17e51",
+        "to": "6a0a4bc0-a5eb-11ec-9235-0fb4c7e17e51",
+        "config": {}
+      },
+      {
+        "id": "6deb5f00-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "from": "4024ed20-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "output": "4024ed21-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "to": "6afaa7b0-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "fbe88ca0-2d18-11ed-aafa-3f5ed9c4d03f",
+        "from": "6afaa7b0-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "to": "f6e7e110-2d18-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "86507b00-2d23-11ed-aafa-3f5ed9c4d03f",
+        "from": "bc2eae60-2d21-11ed-aafa-3f5ed9c4d03f",
+        "to": "81253d00-2d23-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "c152fca0-2d23-11ed-aafa-3f5ed9c4d03f",
+        "from": "81253d00-2d23-11ed-aafa-3f5ed9c4d03f",
+        "to": "bc413a10-2d23-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "1c4584d0-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "from": "24aa2ab1-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "output": "24aa2ab0-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "to": "1891a490-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "1f1ce7c0-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "from": "f6e7e110-2d18-11ed-aafa-3f5ed9c4d03f",
+        "to": "1891a490-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "1a99d700-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "from": "1891a490-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "to": "15efd6f0-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "3bae9ed0-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "from": "15efd6f0-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "to": "1553af50-2d21-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "5ec50300-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "from": "1891a490-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "to": "5813c140-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "a99d2b00-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "from": "1891a490-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "to": "a65d4240-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "aee39220-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "from": "a65d4240-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "to": "9a817e80-2d1e-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "b1fd0720-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "from": "5813c140-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "to": "9a817e80-2d1e-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "1cca8fc0-326b-11ed-b888-1741e8af897e",
+        "from": "89684350-2d18-11ed-aafa-3f5ed9c4d03f",
+        "to": "24aa2ab1-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "6b46e090-326b-11ed-b888-1741e8af897e",
+        "from": "6a0a4bc0-a5eb-11ec-9235-0fb4c7e17e51",
+        "to": "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "7727f430-326b-11ed-b888-1741e8af897e",
+        "from": "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+        "to": "af417100-2d18-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "78a80480-326b-11ed-b888-1741e8af897e",
+        "from": "af417100-2d18-11ed-aafa-3f5ed9c4d03f",
+        "to": "4024ed20-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "9220dc70-326b-11ed-b888-1741e8af897e",
+        "from": "4a96fef0-a5eb-11ec-9235-0fb4c7e17e51",
+        "to": "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "9d7e6830-326b-11ed-b888-1741e8af897e",
+        "from": "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+        "to": "6fada770-2d18-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "a4cb9bd0-326b-11ed-b888-1741e8af897e",
+        "from": "6fada770-2d18-11ed-aafa-3f5ed9c4d03f",
+        "to": "bc2eae60-2d21-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "a6491410-326b-11ed-b888-1741e8af897e",
+        "from": "6fada770-2d18-11ed-aafa-3f5ed9c4d03f",
+        "to": "89684350-2d18-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      },
+      {
+        "id": "f4604f90-39c0-11ed-ba38-c5c0513afd80",
+        "from": "bc413a10-2d23-11ed-aafa-3f5ed9c4d03f",
+        "to": "e1249ad0-39c0-11ed-ba38-c5c0513afd80",
+        "config": {}
+      },
+      {
+        "id": "f5efa220-39c0-11ed-ba38-c5c0513afd80",
+        "from": "e1249ad0-39c0-11ed-ba38-c5c0513afd80",
+        "to": "8a6518e0-2d23-11ed-aafa-3f5ed9c4d03f",
+        "config": {}
+      }
+    ],
+    "name": "PeppaCRM",
+    "nodes": [
+      {
+        "id": "38450df0-a5eb-11ec-9235-0fb4c7e17e51",
+        "name": "Trigger 1",
+        "type": "readers/counter",
+        "params": {
+          "max": 200
+        },
+        "partitionKey": null,
+        "schemaVersion": 2,
+        "x": -300,
+        "y": 50
+      },
+      {
+        "id": "4a96fef0-a5eb-11ec-9235-0fb4c7e17e51",
+        "name": "Core Sources",
+        "type": "transforms/script",
+        "params": {
+          "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nlet funnelEventId = simFunnelEventId();\n\nconst simulatedAccountEvent = {\n    eventId: simEventId(),\n    accountId: simAccountId(),\n    funnelEventId,\n    serviceId: simServiceId(funnelEventId),\n    timestamp: simDate()\n};\n\nstate.node.count++;\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedAccountEvent.accountId = \"UNKNOWN\";\n    simulatedAccountEvent.timestamp = \"2222-01-01T00:00:00.000Z\";\n    simulatedAccountEvent.serviceId = \"UNKNOWN\";\n}\n\nawait push(simulatedAccountEvent);\n\n// 20% duplicates\nif (state.node.count % 5 === 0) {\n    simulatedAccountEvent.serviceId = \"DUPLICATE\";\n    await push(simulatedAccountEvent);\n}\n    \n\nfunction simAccountId() {\n    return Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6);\n}\n\nfunction simEventId() {\n    return Math.floor(Math.random() * 1000000);\n}\n\nfunction simFunnelEventId() {\n    // 0 = New lead\n    // 1 = Opportunity\n    // 2 = Trial\n    // 3 = Paying customer\n    // 4 = Churn risk\n    // 5 = Up-sell potential\n    // 6 = Cross-sell potential\n    // 7 = Late payment\n    // 8 = Renewal pending\n    // 9 = Renewed\n    // 10 = Lost\n    return Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6);\n}\n\nfunction simServiceId(funnelEventId) {\n    switch (funnelEventId) {\n        case 0: return \"LeadFinder\";\n        case 1: return \"OpportunityTracker\";\n        case 2: return \"TrialManager\";\n        case 3: return \"Billing\";\n        case 4: return \"ChurnAnalyzer\";\n        case 5: return \"Recommender\";\n        case 6: return \"Recommender\";\n        case 7: return \"DunningFlow\";\n        case 8: return \"RenewalPlanner\";\n        case 9: return \"Billing\";\n        case 10: return \"ContractTerminator\";\n    }\n\n    return \"UNKNOWN SERVICE\";\n}\n\nfunction simDate() {\n    const date = new Date();\n    date.setDate(Math.ceil(Math.random() * date.getDate()));\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": -100,
+        "y": 50
+      },
+      {
+        "id": "5b76c250-a5eb-11ec-9235-0fb4c7e17e51",
+        "name": "Trigger 2",
+        "type": "readers/counter",
+        "params": {
+          "max": 200
+        },
+        "partitionKey": null,
+        "schemaVersion": 2,
+        "x": -300,
+        "y": 500
+      },
+      {
+        "id": "6a0a4bc0-a5eb-11ec-9235-0fb4c7e17e51",
+        "name": "CPQ Sources",
+        "type": "transforms/script",
+        "params": {
+          "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nlet funnelEventId = simFunnelEventId();\n\nconst simulatedAccountEvent = {\n    eventKey: simEventId(),\n    userId: simUserId(),\n    funnelEventId,\n    sourceServiceId: simServiceId(funnelEventId),\n    timestamp: simDate()\n};\n\nstate.node.count++;\n\n// 20% duplicates\nif (state.node.count % 5 === 0) {\n    await push(simulatedAccountEvent);\n}\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedAccountEvent.userId = \"UNKNOWN\";\n    simulatedAccountEvent.funnelEventId = \"UNKNOWN\";\n    simulatedAccountEvent.sourceServiceId = \"UNKNOWN\";\n}\n\nawait push(simulatedAccountEvent);\n\n    \n\nfunction simUserId() {\n    // UserId = 100 + accountId.\n    return 100 + Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6);\n\n/*\n    switch (rnd) {\n        case 0: return \"Management Automation Inc\";\n        case 1: return \"United DAOs Ltd\"\n        case 2: return \"Play-to-Earn Inc\";\n        case 3: return \"Metaverse Inc\";\n        case 4: return \"Dog AR Goggles Inc\";\n        case 5: return \"Hypechain Inc\";\n        case 6: return \"Cloud AI Inc\";\n        case 7: return \"Futurist Strategies Inc\";\n        case 8: return \"Green Tech Ltd\";\n        case 9: return \"FinTech Lords Inc\";\n        case 10: return \"Transhumanist Inc\";\n    }\n\n    return \"UNKNOWN CUSTOMER\";\n    */\n}\n\nfunction simEventId() {\n    return 1000000 + Math.floor(Math.random() * 1000000);\n}\n\nfunction simFunnelEventId() {\n    // 10 = New quote created\n    // 11 = Quote sent\n    // 12 = Order received\n    // 13 = Contract signed\n    return 10 + Math.floor(Math.random() * 2) + Math.floor(Math.random() * 3);\n}\n\nfunction simServiceId(funnelEventId) {\n    switch (funnelEventId) {\n        case 10: return \"QuoteBuilder\";\n        case 11: return \"QuoteSender\";\n        case 12: return \"OrderTracker\";\n        case 13: return \"ContractManager\";\n    }\n\n    return \"UNKNOWN SERVICE\";\n}\n\nfunction simDate() {\n    const date = new Date();\n    date.setDate(Math.ceil(Math.random() * date.getDate()));\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": -100,
+        "y": 500
+      },
+      {
+        "id": "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+        "name": "Validate CPQ events",
+        "type": "transforms/validate",
+        "params": {
+          "schema": {
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "title": "The Timestamp Schema",
+                "default": "",
+                "examples": [
+                  "2018-12-20T11:00:48.880Z"
+                ],
+                "pattern": "^(20.*)$"
+              },
+              "userId": {
+                "pattern": "^(?!UNKNOWN)$",
+                "description": "userId must be known"
+              }
+            },
+            "required": [
+              "timestamp",
+              "userId"
+            ]
+          },
+          "suspenseManagement": {
+            "enabled": false,
+            "resetOnValidEvent": true,
+            "eventThreshold": 100,
+            "onThresholdExceeded": "ABORT"
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 100,
+        "y": 500
+      },
+      {
+        "id": "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+        "name": "Validate Core events",
+        "type": "transforms/validate",
+        "params": {
+          "schema": {
+            "properties": {
+              "accountId": {
+                "pattern": "^(?!UNKNOWN)$"
+              },
+              "timestamp": {}
+            },
+            "required": [
+              "accountId",
+              "timestamp"
+            ]
+          },
+          "suspenseManagement": {
+            "enabled": false,
+            "resetOnValidEvent": true,
+            "eventThreshold": 100,
+            "onThresholdExceeded": "ABORT"
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 100,
+        "y": 50
+      },
+      {
+        "id": "24aa2ab1-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "name": "Deduplicate Core events",
+        "type": "transforms/deduplicate",
+        "params": {
+          "multiOutput": {
+            "fixed": {
+              "unique": {
+                "id": "24aa2ab0-2d0d-11ed-aafa-3f5ed9c4d03f"
+              }
+            }
+          },
+          "key": "${payload.eventId}"
+        },
+        "partitionKey": null,
+        "schemaVersion": 4,
+        "x": 700,
+        "y": 50
+      },
+      {
+        "id": "4024ed20-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "name": "Deduplicate CPQ events (1)",
+        "type": "transforms/deduplicate",
+        "params": {
+          "multiOutput": {
+            "fixed": {
+              "unique": {
+                "id": "4024ed21-2d0d-11ed-aafa-3f5ed9c4d03f"
+              }
+            }
+          },
+          "key": "${payload.eventKey}"
+        },
+        "partitionKey": null,
+        "schemaVersion": 4,
+        "x": 700,
+        "y": 500
+      },
+      {
+        "id": "6afaa7b0-2d0d-11ed-aafa-3f5ed9c4d03f",
+        "name": "Map user to accountId",
+        "type": "transforms/script",
+        "params": {
+          "transform": "// We do a simple mapping of userId -> accountId here in this demo. \n// In a real-life use case, this would have been a lookup in an\n// external CRM system using a HTTP processor.\nconst accountId = payload.userId - 100;\n\npayload.accountId = accountId;\ndelete payload.userId;\n\nawait push(payload);"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 900,
+        "y": 500
+      },
+      {
+        "id": "6fada770-2d18-11ed-aafa-3f5ed9c4d03f",
+        "name": "Enrich Core Accounts",
+        "type": "transforms/script",
+        "params": {
+          "transform": "\n// Maps \"accountId\" to an owning company\nconst accountOwner = {\n        0:  \"Management Automation Inc\",\n        1:  \"United DAOs Ltd\",\n        2:  \"Play-to-Earn Inc\",\n        3:  \"Metaverse Inc\",\n        4:  \"Dog AR Goggles Inc\",\n        5:  \"Hypechain Inc\",\n        6:  \"Cloud AI Inc\",\n        7:  \"Futurist Strategies Inc\",\n        8:  \"ACCOUNT NOT FOUND\",\n        9:  \"FinTech Lords Inc\",\n        10: \"Transhumanist Inc\"\n};\n\nfunction crmCustomerLookup(accountId) {\n    return accountOwner[accountId];\n}\n\npayload.accountName = crmCustomerLookup(payload.accountId);\n\nconst new_payload = {\n    accountId: payload.accountId,\n    accountName: payload.accountName,\n    serviceId: payload.serviceId,\n    funnelEventId: payload.funnelEventId,\n    funnelEventName: payload.funnelEventName,\n    timestamp: payload.timestamp,\n    eventId: payload.eventId\n}\n\nawait push(new_payload);\n"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 300,
+        "y": 50
+      },
+      {
+        "id": "89684350-2d18-11ed-aafa-3f5ed9c4d03f",
+        "name": "Enrich Core Funnel events",
+        "type": "transforms/script",
+        "params": {
+          "transform": "\n// Maps \"funnelEventId\" to a meaningful funnel event name.\n// In a real-life use case, this would be looked up in an external\n// system / database using an HTTP processor or Database processor for example.\nconst funnelEventName = {\n        0:  \"New lead\",\n        1:  \"Opportunity\",\n        2:  \"Trial\",\n        3:  \"Paying customer\",\n        4:  \"Churn risk\",\n        5:  \"Up-sell potential\",\n        6:  \"Cross-sell potential\",\n        7:  \"Late payment\",\n        8:  \"Renewal pending\",\n        9:  \"Renewed\",\n        10: \"Lost\",\n        11: \"New quote created\",\n        12: \"Quote sent\",\n        13: \"Order received\",\n        14: \"Contract signed\",\n};\n\nfunction funnelEventLookup(funnelEventId) {\n    return funnelEventName[funnelEventId];\n}\n\npayload.funnelEventName = funnelEventLookup(payload.funnelEventId);\nawait push(payload);\n"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 500,
+        "y": 50
+      },
+      {
+        "id": "af417100-2d18-11ed-aafa-3f5ed9c4d03f",
+        "name": "Enrich CPQ Funnel events",
+        "type": "transforms/script",
+        "params": {
+          "transform": "\n// Maps \"funnelEventId\" to a meaningful funnel event name.\n// In a real-life use case, this would be looked up in an external\n// system / database using an HTTP processor or Database processor for example.\nconst funnelEventName = {\n        0:  \"New lead\",\n        1:  \"Opportunity\",\n        2:  \"Trial\",\n        3:  \"Paying customer\",\n        4:  \"Churn risk\",\n        5:  \"Up-sell potential\",\n        6:  \"Cross-sell potential\",\n        7:  \"Late payment\",\n        8:  \"Renewal pending\",\n        9:  \"Renewed\",\n        10: \"Lost\",\n        11: \"New quote created\",\n        12: \"Quote sent\",\n        13: \"Order received\",\n        14: \"Contract signed\",\n};\n\nfunction funnelEventLookup(funnelEventId) {\n    return funnelEventName[funnelEventId];\n}\n\npayload.funnelEventName = funnelEventLookup(payload.funnelEventId);\nawait push(payload);\n"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 500,
+        "y": 500
+      },
+      {
+        "id": "f6e7e110-2d18-11ed-aafa-3f5ed9c4d03f",
+        "name": "Enrich CPQ Accounts",
+        "type": "transforms/script",
+        "params": {
+          "transform": "\n// Maps \"accountId\" to an human-readable company name\nconst accountOwner = {\n        0:  \"Management Automation Inc\",\n        1:  \"United DAOs Ltd\",\n        2:  \"Play-to-Earn Inc\",\n        3:  \"Metaverse Inc\",\n        4:  \"Dog AR Goggles Inc\",\n        5:  \"Hypechain Inc\",\n        6:  \"Cloud AI Inc\",\n        7:  \"Futurist Strategies Inc\",\n        8:  \"Green Tech Ltd\",\n        9:  \"FinTech Lords Inc\",\n        10: \"Transhumanist Inc\"\n};\n\nfunction crmCustomerLookup(accountId) {\n    return accountOwner[accountId];\n}\n\npayload.accountName = crmCustomerLookup(payload.accountId);\n\nconst new_payload = {\n    accountId: payload.accountId,\n    accountName: payload.accountName,\n    sourceServiceId: payload.sourceServiceId,\n    funnelEventId: payload.funnelEventId,\n    funnelEventName: payload.funnelEventName,\n    timestamp: payload.timestamp,\n    eventKey: payload.eventKey\n}\n\nawait push(new_payload);\n"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1100,
+        "y": 500
+      },
+      {
+        "id": "9a817e80-2d1e-11ed-aafa-3f5ed9c4d03f",
+        "name": "To analytics",
+        "type": "writers/noop",
+        "params": {},
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1850,
+        "y": 350
+      },
+      {
+        "id": "1553af50-2d21-11ed-aafa-3f5ed9c4d03f",
+        "name": "To Billing",
+        "type": "writers/noop",
+        "params": {},
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1850,
+        "y": 50
+      },
+      {
+        "id": "bc2eae60-2d21-11ed-aafa-3f5ed9c4d03f",
+        "name": "Account not found",
+        "type": "transforms/validate",
+        "params": {
+          "schema": {
+            "properties": {
+              "accountId": {
+                "type": "integer"
+              },
+              "accountName": {
+                "type": "string",
+                "const": "ACCOUNT NOT FOUND"
+              },
+              "serviceId": {
+                "type": "string"
+              },
+              "funnelEventId": {
+                "type": "integer"
+              },
+              "timestamp": {
+                "type": "string"
+              },
+              "eventId": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "accountId",
+              "accountName",
+              "serviceId",
+              "funnelEventId",
+              "timestamp",
+              "eventId"
+            ]
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 500,
+        "y": -200
+      },
+      {
+        "id": "81253d00-2d23-11ed-aafa-3f5ed9c4d03f",
+        "name": "Sum events per account",
+        "type": "transforms/data_aggregate",
+        "params": {
+          "flushType": "EACH_FILE",
+          "groupKeys": [
+            {
+              "field": "timestamp",
+              "operationType": "MONTH"
+            },
+            {
+              "field": "accountId",
+              "operationType": "NONE"
+            }
+          ],
+          "operations": [
+            {
+              "field": "accountName",
+              "type": "GENERAL_CARRY_LAST"
+            },
+            {
+              "field": "eventId",
+              "type": "GENERAL_COUNT"
+            }
+          ],
+          "storeId": "a83230416378defea69ed7a194de4a0a85fee70c"
+        },
+        "partitionKey": null,
+        "schemaVersion": 2,
+        "x": 700,
+        "y": -200
+      },
+      {
+        "id": "8a6518e0-2d23-11ed-aafa-3f5ed9c4d03f",
+        "name": "To reconciliation",
+        "type": "writers/noop",
+        "params": {},
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1850,
+        "y": -200
+      },
+      {
+        "id": "bc413a10-2d23-11ed-aafa-3f5ed9c4d03f",
+        "name": "Map for reconciliation",
+        "type": "transforms/map",
+        "params": {
+          "mappings": {
+            "accountId": "accountId",
+            "accountName": "carry_last_accountName",
+            "sumFunnelEvents": "count_eventId",
+            "billingPeriod": "month_timestamp"
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 900,
+        "y": -200
+      },
+      {
+        "id": "1891a490-2dd7-11ed-aafa-3f5ed9c4d03f",
+        "name": "Correlate and sum",
+        "type": "transforms/script_aggregate",
+        "params": {
+          "onTransform": "// Once this reaches 100 (counted across all sessions, driven by our two Trigger collectors), we flush the session.\n// A real use case would use a timeout or explicit END event or other criteria.\n// The output from this function is best viewed in Tree mode.\nif (state.node.count === undefined) {\n    state.node.count = 0; \n} else {\n    state.node.count++;\n}\n\n// Initialize session object\nif (session.data.eventCount === undefined) {\n    session.data.eventCount = 0;\n    session.data.accountName = session.key;\n    session.data.eventCountByFunnelEvent = {};\n    session.data.eventCountByServiceId = {};\n}\n\n// These are common regardless of data source, because they use the same field names\nif (session.data.eventCountByFunnelEvent[payload.funnelEventName] === undefined) {\n    session.data.eventCountByFunnelEvent[payload.funnelEventName] = 0;\n}\n\n// Here, field names differ between sources.\nlet serviceId = payload.serviceId;\nif (serviceId === undefined) {\n    // This comes from CPQ services, field names are different.\n    serviceId = payload.sourceServiceId;\n}\nif (session.data.eventCountByServiceId[serviceId] === undefined) {\n    session.data.eventCountByServiceId[serviceId] = 0;\n}\n\n\n// Update session counters\nsession.data.eventCount++;\nsession.data.eventCountByFunnelEvent[payload.funnelEventName]++;\nsession.data.eventCountByServiceId[serviceId]++;\n\n\n// Force all sessions to flush in Preview. This is just for demoability.\n// In a real use case, this would be triggered by a timeout or end event or similar.\nif (state.node.count >= 100) {\n    session.data.accountName = payload.accountName; // Like \"carry_last\" in normal aggregation\n    session.data.month = payload.timestamp.substring(0, 7);\n    session.data.eventCount = session.meta.count; // We can just re-use this counter.\n    await session.flush();\n}\n",
+          "groupByRules": [
+            {
+              "fields": [
+                "accountName"
+              ]
+            }
+          ]
+        },
+        "partitionKey": null,
+        "schemaVersion": 2,
+        "x": 1350,
+        "y": 50
+      },
+      {
+        "id": "15efd6f0-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "name": "Map billable items",
+        "type": "transforms/map",
+        "params": {
+          "mappings": {
+            "accountName": "accountName",
+            "month": "month",
+            "eventCount": "eventCount"
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1600,
+        "y": 50
+      },
+      {
+        "id": "5813c140-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "name": "Map service analytics",
+        "type": "transforms/map",
+        "params": {
+          "mappings": {
+            "accountName": "accountName",
+            "eventCount": "eventCount",
+            "eventCountByServiceId": "eventCountByServiceId",
+            "month": "month"
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1600,
+        "y": 500
+      },
+      {
+        "id": "a65d4240-2ddf-11ed-aafa-3f5ed9c4d03f",
+        "name": "Map funnel analytics",
+        "type": "transforms/map",
+        "params": {
+          "mappings": {
+            "accountName": "accountName",
+            "eventCount": "eventCount",
+            "eventCountByFunnelEvent": "eventCountByFunnelEvent",
+            "month": "month"
+          }
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1600,
+        "y": 350
+      },
+      {
+        "id": "e1249ad0-39c0-11ed-ba38-c5c0513afd80",
+        "name": "Audit unprovisioned",
+        "type": "transforms/script",
+        "params": {
+          "transform": "audit.sum(\"sumFunnelEventsNoAccountInCRM\", payload.sumFunnelEvents);\naudit.count(\"countAccountsMissingInCRM\");"
+        },
+        "partitionKey": null,
+        "schemaVersion": 1,
+        "x": 1100,
+        "y": -200
+      }
+    ]
+  }
