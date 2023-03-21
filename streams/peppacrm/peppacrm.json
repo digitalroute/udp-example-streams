@@ -558,7 +558,7 @@
         "name": "Audit unprovisioned",
         "type": "transforms/script",
         "params": {
-          "transform": "audit.sum(\"sumFunnelEventsNoAccountInCRM\", payload.sumFunnelEvents);\naudit.count(\"countAccountsMissingInCRM\");"
+          "transform": "audit.sum(\"sumFunnelEventsNoAccountInCRM\", payload.sumFunnelEvents);\naudit.count(\"countAccountsMissingInCRM\");\nawait push(payload);"
         },
         "partitionKey": null,
         "schemaVersion": 1,
