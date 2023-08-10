@@ -142,6 +142,12 @@
               "pattern": "^(2.*)$"
             }
           }
+        },
+        "suspenseManagement": {
+          "enabled": true,
+          "resetOnValidEvent": true,
+          "eventThreshold": 10000,
+          "onThresholdExceeded": "ABORT"
         }
       },
       "x": 750,
