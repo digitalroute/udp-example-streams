@@ -1,0 +1,91 @@
+{
+  "name": "1. Provisioning Meter Types",
+  "nodes": [
+    {
+      "id": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "name": "Init",
+      "type": "readers/counter",
+      "params": {
+        "max": 1
+      },
+      "partitionKey": null,
+      "schemaVersion": 2,
+      "x": 350,
+      "y": 50
+    },
+    {
+      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "name": "Prepare Meter Types",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const meterTypes = [\n  {\n    name: 'AI Assist',\n    description:\n      `Meter definition to calculate number of resolved cases by Botbot's AI assist`,\n    unit: 'cases',\n    category: 'Customer cases',\n    aggregation: {\n      type: 'increment',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n];\n\n\nfor(const meterType of meterTypes) {\n    await push({ meterType });\n}"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 550,
+      "y": 50
+    },
+    {
+      "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "name": "Meter API",
+      "type": "transforms/http",
+      "params": {
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
+        "errorMode": "defer",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "useMockData": true,
+        "method": "POST",
+        "authType": "oAuth2",
+        "shouldRetry": false,
+        "useResponseHeaderKey": true,
+        "oAuth2Authentication": {
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer",
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token"
+        },
+        "body": "${payload.meterType}",
+        "retries": 1,
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "9d1611c4-5de5-44ca-8940-6d0fe7b2635a",
+          "secretType": "oauth2"
+        }
+      },
+      "partitionKey": null,
+      "schemaVersion": 9,
+      "x": 750,
+      "y": 50
+    },
+    {
+      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 950,
+      "y": 50
+    }
+  ],
+  "edges": [
+    {
+      "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
+      "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "408efbb0-0ed5-11ef-a415-f705033d8568",
+      "from": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "to": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "62c07e20-0ed5-11ef-a415-f705033d8568",
+      "from": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "to": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    }
+  ]
+}
