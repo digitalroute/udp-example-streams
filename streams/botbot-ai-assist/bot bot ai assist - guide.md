@@ -25,10 +25,10 @@ Navigate to "Usage metering" and copy the ids of the "AI Assist" meter type for 
 Also, open the stream configuration of "2. Botbot usage data billing stream" and copy the meter key from the Meter processor for later.
 
 Step 7:
-Open the stream configuration of "2. Provisioning Meters" and open the script named "Prepare Meters". Paste in the meter type ids and meter key that you got from the previous step.
+Open the stream configuration of "3. Provisioning Meters" and open the script named "Prepare Meters". Paste in the meter type ids and meter key that you got from the previous step.
 
 Step 8:
-Run stream "2. Provisioning Meters". After the stream has completed, you will have 5 meters across your newly created meter types.
+Run stream "3. Provisioning Meters". After the stream has completed, you will have 5 meters across your newly created meter types.
 
 Step 9:
 The meters you created in the previous step is now associated with the Meter Processor in the "Botbot AI assist" stream. 
