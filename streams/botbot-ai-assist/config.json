@@ -2,5 +2,6 @@
   "readMoreDocId": "220299265",
   "featureToggles": [
     "usageMetering"
-  ]
+  ],
+  "hidden": false
 }
