@@ -1,0 +1,207 @@
+{
+  "name": "Botbot AI assist",
+  "nodes": [
+    {
+      "id": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
+      "name": "Validate",
+      "type": "transforms/validate",
+      "params": {
+        "schema": {
+          "properties": {
+            "region": {
+              "enum": ["APAC", "EMEA", "AMER"],
+              "description": "Region validation"
+            }
+          },
+          "required": ["region"]
+        },
+        "suspenseManagement": {
+          "enabled": true,
+          "resetOnValidEvent": true,
+          "eventThreshold": 10000,
+          "onThresholdExceeded": "ABORT",
+          "abortOnDisabled": false
+        }
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 750,
+      "y": 200
+    },
+    {
+      "id": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
+      "name": "Script",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const orgs = {\n  'Cloud AI': {\n    emails: [\n      'noah@notmail.com', \n      'joseph@notmail.com', \n      'tim@shotmail.com', \n      'gia@botmail.com',\n      'tara@botmail.com',\n    ],\n  },\n  'Play-to-Earn': {\n    emails: [\n      'drfreppa@email.com',\n      'chris@jmail.com',\n      'rope@shotmail.com',\n      'stefan@shotmail.com',\n    ]\n  },'FinTech Lords': {\n    emails: [\n      'johan@jeemail.com',\n      'cole@grabmail.com',\n      'jaira@shotmail.com',\n      'carboard@grabmail.com',\n    ]\n  }\n} \nconst orgKeys = Object.keys(orgs);\nconst regions = ['EMEA', 'APAC', 'AMER', 'unknown'];\n\nconst serviceAgents = ['Apex', 'Carl', 'Tia'];\n\n\nlet duplicate;\nfor(let i = 0; i < 100; i++) {\n  if(duplicate) {\n    await push(duplicate);\n    duplicate = undefined;\n    continue;\n  }\n\n  const orgName = orgKeys[Math.floor(Math.random() * orgKeys.length)];\n  const status = getStatus();\n  const created = new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 5));\n  const resolved = status === 'Resolved' ? new Date(created.valueOf() + Math.floor(Math.random() * 1000 * 60 * 3)) : undefined;\n  const data = {\n    userId: orgName,\n    customerEmail: orgs[orgName].emails[Math.floor(Math.random() * orgs[orgName].emails.length)],\n    requestId: createRequestId(),\n    orderNumber: Math.floor(Math.random() * 9000000) + 1000000,\n    status: status,\n    region: regions[Math.floor(Math.random() * regions.length)],\n    createdDate: created,\n    resolvedDate: resolved > new Date() ? new Date(): resolved,\n    value: 1,\n  };\n  \n  \n\n  const shouldDuplicate = Math.random() * 100 < 10;\n  if(shouldDuplicate){\n    duplicate = data\n  }\n\n  await push(data);\n}\n\nfunction getStatus() {\n  const roll = Math.random() * 100;\n  if(roll < 95) {\n    return 'Resolved';\n  }\n\n  if(roll < 98) {\n    return 'Open';\n  }\n\n  return 'Ongoing';\n}\n\nfunction createRequestId() {\n  let idPrefix = '';\n  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';\n  const charactersLength = characters.length;\n  for (let i = 0; i < 5; i++) {\n    idPrefix += characters.charAt(Math.floor(Math.random() * charactersLength));\n  }\n\n  // Generate a random number between 100 and 999\n  const randomNum = Math.floor(Math.random() * 9000) + 1000;\n\n  // Concatenate static characters with the random number\n  const shortId = `${idPrefix}${randomNum}`;\n\n  return shortId;\n}"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 450,
+      "y": 200
+    },
+    {
+      "id": "6363e5b0-ea18-11ee-b028-57e26d98119b",
+      "name": "Meter",
+      "type": "transforms/meter",
+      "params": {
+        "meterKey": "60acec80-141c-11ef-85c8-3fd7b93e308b",
+        "guidingRules": [
+          {
+            "customName": "Resolved customer cases",
+            "conditions": [
+              {
+                "customName": "",
+                "field": "status",
+                "value": "Resolved"
+              }
+            ],
+            "conditionRelation": "and",
+            "ignoreCondition": false,
+            "matchCategory": "Customer cases",
+            "groupBy": [
+              {
+                "fields": ["region"]
+              }
+            ],
+            "otherOperations": [
+              {
+                "field": "createdDate",
+                "operation": "carry-first"
+              }
+            ]
+          }
+        ],
+        "suspenseManagement": {
+          "enabled": true
+        },
+        "flushType": "TIMEOUT"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 1050,
+      "y": 200
+    },
+    {
+      "id": "50920421-eab9-11ee-be5c-ed7b10940926",
+      "name": "Deduplicate",
+      "type": "transforms/deduplicate",
+      "params": {
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "50920420-eab9-11ee-be5c-ed7b10940926"
+            }
+          }
+        },
+        "key": "${payload.requestId}",
+        "lifeTimeDays": 30
+      },
+      "partitionKey": null,
+      "schemaVersion": 4,
+      "x": 600,
+      "y": 200
+    },
+    {
+      "id": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
+      "name": "Count",
+      "type": "readers/counter",
+      "params": {
+        "max": 1
+      },
+      "partitionKey": null,
+      "schemaVersion": 2,
+      "x": 300,
+      "y": 200
+    },
+    {
+      "id": "907b08f0-1392-11ef-aa40-3bc36eb7b565",
+      "name": "Field organizer",
+      "type": "transforms/map",
+      "params": {
+        "mappings": [
+          {
+            "userId": "userId"
+          },
+          {
+            "customerEmail": "customerEmail"
+          },
+          {
+            "requestId": "requestId"
+          },
+          {
+            "orderNumber": "orderNumber"
+          },
+          {
+            "status": "status"
+          },
+          {
+            "region": "region"
+          },
+          {
+            "createdDate": "createdDate"
+          },
+          {
+            "value": "value"
+          },
+          {
+            "timestamp": "resolvedDate"
+          }
+        ]
+      },
+      "partitionKey": null,
+      "schemaVersion": 2,
+      "x": 900,
+      "y": 200
+    },
+    {
+      "id": "af86ba50-1392-11ef-aa40-3bc36eb7b565",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 1200,
+      "y": 200
+    }
+  ],
+  "edges": [
+    {
+      "id": "524fe0c0-eab9-11ee-be5c-ed7b10940926",
+      "from": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
+      "to": "50920421-eab9-11ee-be5c-ed7b10940926",
+      "config": {}
+    },
+    {
+      "id": "5370e120-eab9-11ee-be5c-ed7b10940926",
+      "from": "50920421-eab9-11ee-be5c-ed7b10940926",
+      "output": "50920420-eab9-11ee-be5c-ed7b10940926",
+      "to": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
+      "config": {}
+    },
+    {
+      "id": "2e2ec160-138c-11ef-aa40-3bc36eb7b565",
+      "from": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
+      "to": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
+      "config": {}
+    },
+    {
+      "id": "92af2700-1392-11ef-aa40-3bc36eb7b565",
+      "from": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
+      "to": "907b08f0-1392-11ef-aa40-3bc36eb7b565",
+      "config": {}
+    },
+    {
+      "id": "95f159b0-1392-11ef-aa40-3bc36eb7b565",
+      "from": "907b08f0-1392-11ef-aa40-3bc36eb7b565",
+      "to": "6363e5b0-ea18-11ee-b028-57e26d98119b",
+      "config": {}
+    },
+    {
+      "id": "b1603540-1392-11ef-aa40-3bc36eb7b565",
+      "from": "6363e5b0-ea18-11ee-b028-57e26d98119b",
+      "to": "af86ba50-1392-11ef-aa40-3bc36eb7b565",
+      "config": {}
+    }
+  ]
+}

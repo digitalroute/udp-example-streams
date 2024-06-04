@@ -1,0 +1,92 @@
+{
+  "name": "3. Provisioning Meters",
+  "nodes": [
+    {
+      "id": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "name": "Init",
+      "type": "readers/counter",
+      "params": {
+        "max": 1
+      },
+      "partitionKey": null,
+      "schemaVersion": 2,
+      "x": 350,
+      "y": 50
+    },
+    {
+      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "name": "Prepare Meters",
+      "type": "transforms/script",
+      "params": {
+        "transform": "/** REPLACE THESE VALUES **/\n\nconst METER_KEY = \"f99de7ec-9c48-4755-87cf-c76527dbc652\";\n\nconst METER_TYPE_ID = \"639182cc-a31f-4986-8bb0-f6f151bbfb77\";\n\n/***************************/\n\nawait push({ meter: {\n    userId: 'Cloud AI',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: 'Play-to-Earn',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: 'FinTech Lords',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 550,
+      "y": 50
+    },
+    {
+      "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "name": "Meter API",
+      "type": "transforms/http",
+      "params": {
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meters",
+        "errorMode": "defer",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "useMockData": true,
+        "method": "POST",
+        "authType": "oAuth2",
+        "shouldRetry": false,
+        "useResponseHeaderKey": true,
+        "oAuth2Authentication": {
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer",
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/"
+        },
+        "body": "${payload.meter}",
+        "retries": 1,
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "63cf132a-4517-409f-a5cd-24511a6fa0be",
+          "secretType": "oauth2"
+        }
+      },
+      "partitionKey": null,
+      "schemaVersion": 9,
+      "x": 750,
+      "y": 50
+    },
+    {
+      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 950,
+      "y": 50
+    }
+  ],
+  "edges": [
+    {
+      "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
+      "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "408efbb0-0ed5-11ef-a415-f705033d8568",
+      "from": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "to": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "62c07e20-0ed5-11ef-a415-f705033d8568",
+      "from": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "to": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    }
+  ]
+}

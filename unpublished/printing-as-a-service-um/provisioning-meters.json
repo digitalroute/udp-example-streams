@@ -1,0 +1,92 @@
+{
+  "name": "3. Provisioning Meters",
+  "nodes": [
+    {
+      "id": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "name": "Init",
+      "type": "readers/counter",
+      "params": {
+        "max": 1
+      },
+      "partitionKey": null,
+      "schemaVersion": 2,
+      "x": 350,
+      "y": 50
+    },
+    {
+      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "name": "Prepare Meters",
+      "type": "transforms/script",
+      "params": {
+        "transform": "/** REPLACE THESE VALUES **/\n\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\nconst METER_TYPE_ID__BASIC = \"0ae733af-b2f6-48f1-b101-4d3be415ceb3\";\nconst METER_TYPE_ID__STANDARD = \"0d820400-18f6-41f0-97a8-691a98e77d6f\";\nconst METER_TYPE_ID__PREMIUM = \"f6249542-ea99-430d-b7c2-41e91c6d0c7b\";\n\n/***************************/\n\nawait push({ meter: {\n    userId: '101',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID__BASIC,\n}});\n\nawait push({ meter: {\n    userId: '102',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID__STANDARD,\n}});\n\nawait push({ meter: {\n    userId: '103',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID__PREMIUM,\n}});\n\nawait push({ meter: {\n    userId: '104',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID__PREMIUM,\n}});\n\nawait push({ meter: {\n    userId: '105',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID__PREMIUM,\n}});"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 550,
+      "y": 50
+    },
+    {
+      "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "name": "Meter API",
+      "type": "transforms/http",
+      "params": {
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meters",
+        "errorMode": "defer",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "useMockData": true,
+        "method": "POST",
+        "authType": "oAuth2",
+        "shouldRetry": false,
+        "useResponseHeaderKey": true,
+        "oAuth2Authentication": {
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer",
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/"
+        },
+        "body": "${payload.meter}",
+        "retries": 1,
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "63cf132a-4517-409f-a5cd-24511a6fa0be",
+          "secretType": "oauth2"
+        }
+      },
+      "partitionKey": null,
+      "schemaVersion": 9,
+      "x": 750,
+      "y": 50
+    },
+    {
+      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "name": "Log",
+      "type": "writers/log",
+      "params": {},
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 950,
+      "y": 50
+    }
+  ],
+  "edges": [
+    {
+      "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
+      "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "408efbb0-0ed5-11ef-a415-f705033d8568",
+      "from": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "to": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "62c07e20-0ed5-11ef-a415-f705033d8568",
+      "from": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
+      "to": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    }
+  ]
+}
