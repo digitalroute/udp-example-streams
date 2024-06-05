@@ -47,11 +47,7 @@
         },
         "body": "${payload.meter}",
         "retries": 1,
-        "authentication": "password",
-        "secretsWalletEntry": {
-          "secretId": "63cf132a-4517-409f-a5cd-24511a6fa0be",
-          "secretType": "oauth2"
-        }
+        "authentication": "client_credentials"
       },
       "partitionKey": null,
       "schemaVersion": 9,
