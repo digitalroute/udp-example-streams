@@ -18,7 +18,7 @@
       "name": "Prepare Meter Types",
       "type": "transforms/script",
       "params": {
-        "transform": "const meterTypes = [\n  {\n    name: 'Basic Tier: Pay-Per-Print',\n    description:\n      'This tier offers a straightforward pay-per-print model, suitable for occasional users or small businesses with minimal printing needs.',\n    unit: 'sheets',\n    category: 'Printing',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n\n  {\n    name: 'Standard Tier: Pay-Per-Print Plus',\n    description:\n      'This tier provides enhanced features and benefits for users with moderate to regular printing needs.',\n    unit: 'sheets',\n    category: 'Printing',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n\n  {\n    name: 'Premium Tier: Pay-Per-Print Enterprise',\n    description:\n      'This tier offers comprehensive printing solutions tailored to the needs of large enterprises and organizations with high-volume printing demands.',\n    unit: 'sheets',\n    category: 'Printing',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n];\n\n\nfor(const meterType of meterTypes) {\n    await push({ meterType });\n}"
+        "transform": "const meterType = {\n  name: 'Pay-Per-Print',\n  description:\n    'This product charges customers based on total number of prints taken on a printer.',\n  unit: 'sheets',\n  category: 'Printing',\n  aggregation: {\n    type: 'sum',\n  },\n  resetSchedule: {\n    day: '1',\n    hour: '0',\n    minute: '0',\n    month: '*',\n    weekday: '*',\n  },\n  timezone: 'Etc/UTC',\n};\n\nawait push({ meterType });\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,
@@ -47,11 +47,7 @@
         },
         "body": "${payload.meterType}",
         "retries": 1,
-        "authentication": "password",
-        "secretsWalletEntry": {
-          "secretId": "63cf132a-4517-409f-a5cd-24511a6fa0be",
-          "secretType": "oauth2"
-        }
+        "authentication": "client_credentials"
       },
       "partitionKey": null,
       "schemaVersion": 9,

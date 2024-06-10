@@ -1,6 +1,6 @@
 ### Printing As A Service with Metering
 
-##### Advanced
+##### Intermediate
 
 ##### Usage metering extension
 
