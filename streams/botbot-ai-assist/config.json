@@ -3,5 +3,5 @@
   "featureToggles": [
     "usageMetering"
   ],
-  "hidden": true
+  "hidden": false
 }
