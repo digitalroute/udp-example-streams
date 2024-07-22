@@ -61,7 +61,7 @@
       "name": "Prepare Filter",
       "type": "transforms/script",
       "params": {
-        "transform": "/** REPLACE THESE VALUES **/\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\n// Ids of all meter types that you want to purge\nconst METER_TYPES = [payload.meterType.id];\n\n/**************************/\n\nfor(const meterTypeId of METER_TYPES) {\n    await push({\n        meterKey: METER_KEY,\n        meterTypeId: meterTypeId\n    });\n}\n"
+        "transform": "/** REPLACE THIS VALUE **/\n\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\n/**************************/\n\nconst METER_TYPES = [payload.meterType.id];\nfor(const meterTypeId of METER_TYPES) {\n    await push({\n        meterKey: METER_KEY,\n        meterTypeId: meterTypeId\n    });\n}\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,
