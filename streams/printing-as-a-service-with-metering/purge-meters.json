@@ -14,15 +14,58 @@
       "y": 50
     },
     {
+      "id": "85940b71-45d4-11ef-a193-8bcf9ece763e",
+      "name": "List Meter Type API",
+      "type": "transforms/http",
+      "params": {
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
+        "errorMode": "defer",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "useMockData": true,
+        "method": "GET",
+        "authType": "oAuth2",
+        "shouldRetry": false,
+        "useResponseHeaderKey": true,
+        "oAuth2Authentication": {
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer",
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/"
+        },
+        "retries": 1,
+        "qs": {
+          "name": "Pay-Per-Print"
+        },
+        "authentication": "client_credentials"
+      },
+      "partitionKey": null,
+      "schemaVersion": 11,
+      "x": 550,
+      "y": 50
+    },
+    {
+      "id": "85940b70-45d4-11ef-a193-8bcf9ece763e",
+      "name": "Prepare Meter Types",
+      "type": "transforms/script",
+      "params": {
+        "transform": "for(let meterType of payload.httpResponse.meterTypes) {\n    await push({ meterType });\n}"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 750,
+      "y": 50
+    },
+    {
       "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "name": "Prepare Filter",
       "type": "transforms/script",
       "params": {
-        "transform": "/** REPLACE THESE VALUES **/\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\n// Ids of all meter types that you want to purge\nconst METER_TYPES = [\n    \"0ae733af-b2f6-48f1-b101-4d3be415ceb3\",\n    \"0d820400-18f6-41f0-97a8-691a98e77d6f\",\n    \"f6249542-ea99-430d-b7c2-41e91c6d0c7b\"\n];\n\n/**************************/\n\nfor(const meterTypeId of METER_TYPES) {\n    await push({\n        meterKey: METER_KEY,\n        meterTypeId: meterTypeId\n    });\n}\n"
+        "transform": "/** REPLACE THIS VALUE **/\n\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\n/**************************/\n\nconst METER_TYPES = [payload.meterType.id];\n\nfor(const meterTypeId of METER_TYPES) {\n    await push({\n        meterKey: METER_KEY,\n        meterTypeId: meterTypeId\n    });\n}\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 550,
+      "x": 950,
       "y": 50
     },
     {
@@ -54,7 +97,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 9,
-      "x": 750,
+      "x": 1150,
       "y": 50
     },
     {
@@ -66,7 +109,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 950,
+      "x": 1350,
       "y": 50
     },
     {
@@ -94,7 +137,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 9,
-      "x": 1150,
+      "x": 1550,
       "y": 50
     },
     {
@@ -104,7 +147,7 @@
       "params": {},
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 1350,
+      "x": 1750,
       "y": 50
     }
   ],
@@ -112,6 +155,18 @@
     {
       "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
       "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "to": "85940b71-45d4-11ef-a193-8bcf9ece763e",
+      "config": {}
+    },
+    {
+      "id": "c46ac690-45d4-11ef-a193-8bcf9ece763e",
+      "from": "85940b71-45d4-11ef-a193-8bcf9ece763e",
+      "to": "85940b70-45d4-11ef-a193-8bcf9ece763e",
+      "config": {}
+    },
+    {
+      "id": "da21db90-45d4-11ef-a193-8bcf9ece763e",
+      "from": "85940b70-45d4-11ef-a193-8bcf9ece763e",
       "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "config": {}
     },
