@@ -14,15 +14,46 @@
       "y": 50
     },
     {
+      "id": "af0f98c0-45ca-11ef-a193-8bcf9ece763e",
+      "name": "Meter-types API",
+      "type": "transforms/http",
+      "params": {
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
+        "errorMode": "defer",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "useMockData": false,
+        "method": "GET",
+        "authType": "oAuth2",
+        "shouldRetry": false,
+        "useResponseHeaderKey": true,
+        "oAuth2Authentication": {
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer",
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/"
+        },
+        "retries": 1,
+        "authentication": "password",
+        "qs": {
+          "name": "Pay-Per-Print"
+        }
+      },
+      "partitionKey": null,
+      "schemaVersion": 11,
+      "x": 550,
+      "y": 50
+    },
+    {
       "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "name": "Prepare Meters",
       "type": "transforms/script",
       "params": {
-        "transform": "/** REPLACE THESE VALUES **/\n\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\nconst METER_TYPE_ID = \"0ae733af-b2f6-48f1-b101-4d3be415ceb3\";\n\n/***************************/\n\nawait push({ meter: {\n    userId: '101',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '102',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '103',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '104',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '105',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n"
+        "transform": "/** REPLACE THIS VALUE **/\n\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\n/***************************/\n\nconst METER_TYPE_ID = payload.httpResponse.meterTypes[0].id;\n\nawait push({ meter: {\n    userId: '101',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '102',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '103',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '104',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n\nawait push({ meter: {\n    userId: '105',\n    meterKey: METER_KEY,\n    meterTypeId: METER_TYPE_ID,\n}});\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 550,
+      "x": 750,
       "y": 50
     },
     {
@@ -51,7 +82,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 9,
-      "x": 750,
+      "x": 950,
       "y": 50
     },
     {
@@ -61,7 +92,7 @@
       "params": {},
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 950,
+      "x": 1150,
       "y": 50
     }
   ],
@@ -69,6 +100,12 @@
     {
       "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
       "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "to": "af0f98c0-45ca-11ef-a193-8bcf9ece763e",
+      "config": {}
+    },
+    {
+      "id": "a1c31170-45ce-11ef-a193-8bcf9ece763e",
+      "from": "af0f98c0-45ca-11ef-a193-8bcf9ece763e",
       "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "config": {}
     },
