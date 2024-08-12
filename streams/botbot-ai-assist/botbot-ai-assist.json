@@ -9,11 +9,17 @@
         "schema": {
           "properties": {
             "region": {
-              "enum": ["APAC", "EMEA", "AMER"],
+              "enum": [
+                "APAC",
+                "EMEA",
+                "AMER"
+              ],
               "description": "Region validation"
             }
           },
-          "required": ["region"]
+          "required": [
+            "region"
+          ]
         },
         "suspenseManagement": {
           "enabled": true,
@@ -25,7 +31,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 750,
+      "x": 800,
       "y": 200
     },
     {
@@ -33,11 +39,11 @@
       "name": "Script",
       "type": "transforms/script",
       "params": {
-        "transform": "const orgs = {\n  'Cloud AI': {\n    emails: [\n      'noah@notmail.com', \n      'joseph@notmail.com', \n      'tim@shotmail.com', \n      'gia@botmail.com',\n      'tara@botmail.com',\n    ],\n  },\n  'Play-to-Earn': {\n    emails: [\n      'drfreppa@email.com',\n      'chris@jmail.com',\n      'rope@shotmail.com',\n      'stefan@shotmail.com',\n    ]\n  },'FinTech Lords': {\n    emails: [\n      'johan@jeemail.com',\n      'cole@grabmail.com',\n      'jaira@shotmail.com',\n      'carboard@grabmail.com',\n    ]\n  }\n} \nconst orgKeys = Object.keys(orgs);\nconst regions = ['EMEA', 'APAC', 'AMER', 'unknown'];\n\nconst serviceAgents = ['Apex', 'Carl', 'Tia'];\n\n\nlet duplicate;\nfor(let i = 0; i < 100; i++) {\n  if(duplicate) {\n    await push(duplicate);\n    duplicate = undefined;\n    continue;\n  }\n\n  const orgName = orgKeys[Math.floor(Math.random() * orgKeys.length)];\n  const status = getStatus();\n  const created = new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 5));\n  const resolved = status === 'Resolved' ? new Date(created.valueOf() + Math.floor(Math.random() * 1000 * 60 * 3)) : undefined;\n  const data = {\n    userId: orgName,\n    customerEmail: orgs[orgName].emails[Math.floor(Math.random() * orgs[orgName].emails.length)],\n    requestId: createRequestId(),\n    orderNumber: Math.floor(Math.random() * 9000000) + 1000000,\n    status: status,\n    region: regions[Math.floor(Math.random() * regions.length)],\n    createdDate: created,\n    resolvedDate: resolved > new Date() ? new Date(): resolved,\n    value: 1,\n  };\n  \n  \n\n  const shouldDuplicate = Math.random() * 100 < 10;\n  if(shouldDuplicate){\n    duplicate = data\n  }\n\n  await push(data);\n}\n\nfunction getStatus() {\n  const roll = Math.random() * 100;\n  if(roll < 95) {\n    return 'Resolved';\n  }\n\n  if(roll < 98) {\n    return 'Open';\n  }\n\n  return 'Ongoing';\n}\n\nfunction createRequestId() {\n  let idPrefix = '';\n  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';\n  const charactersLength = characters.length;\n  for (let i = 0; i < 5; i++) {\n    idPrefix += characters.charAt(Math.floor(Math.random() * charactersLength));\n  }\n\n  // Generate a random number between 100 and 999\n  const randomNum = Math.floor(Math.random() * 9000) + 1000;\n\n  // Concatenate static characters with the random number\n  const shortId = `${idPrefix}${randomNum}`;\n\n  return shortId;\n}"
+        "transform": "const orgs = {\n  'Cloud AI': {\n    emails: [\n      'noah@cloudai.foo', \n      'swan@cloudai.foo', \n      'elle@cloudai.foo', \n      'gia@cloudai.foo',\n      'tara@cloudai.foo',\n    ],\n  },\n  'Play-to-Earn': {\n    emails: [\n      'freppa@playtoearn.foo',\n      'chris@playtoearn.foo',\n      'lia@playtoearn.foo',\n      'kim@playtoearn.foo',\n    ]\n  },'FinTech Lords': {\n    emails: [\n      'johan@finlords.foo',\n      'cole@finlords.foo',\n      'jaira@finlords.foo',\n      'carboard@finlords.foo',\n    ]\n  },'Machine Emotions': {\n    emails: [\n      'hope@machineemotions.foo',\n      'joy@machineemotions.foo',\n      'sadie@machineemotions.foo',\n      'mercy@machineemotions.foo',\n    ]\n  },'Android Sheep': {\n    emails: [\n      'baah@androidsheep.foo',\n      'bee@androidsheep.foo',\n      'buuurh@androidsheep.foo',\n      'bro@androidsheep.foo',\n    ]\n  },'Metaverse Mages': {\n    emails: [\n      'gibson@metaversemages.foo',\n      'stevenson@metaversemages.foo',\n      'neo@metaversemages.foo',\n      'akira@metaversemages.foo',\n    ]\n  }\n} \nconst orgKeys = Object.keys(orgs);\nconst regions = ['EMEA', 'APAC', 'AMER', 'unknown'];\n\nconst serviceAgents = ['Apex', 'Carl', 'Tia'];\n\n\nlet duplicate;\nfor(let i = 0; i < 100; i++) {\n  if(duplicate) {\n    await push(duplicate);\n    duplicate = undefined;\n    continue;\n  }\n\n  const orgName = orgKeys[Math.floor(Math.random() * orgKeys.length)];\n  const status = getStatus();\n  const created = new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 5));\n  const apiCalls = 5 + Math.floor(Math.random() * 30 + Math.random() * 10 + Math.random());\n  const apiCallsType = Math.random() * 100 < 70 ? \"L1\" : \"L2\";\n  const data = {\n    userId: orgName,\n    customerEmail: orgs[orgName].emails[Math.floor(Math.random() * orgs[orgName].emails.length)],\n    sessionId: createRequestId(),\n    caseNumber: Math.floor(Math.random() * 9000000) + 1000000,\n    status: status,\n    apiCalls: apiCalls,\n    apiCallsType: apiCallsType,\n    region: regions[Math.floor(Math.random() * regions.length)],\n    sessionEndTime: created,\n  };\n  \n\n  /*\n  {\n    \"userId\": \"Play-to-Earn\",\n    \"customerEmail\": \"rope@shotmail.com\",\n    \"sessionId\": \"QTCFN7266\", // This is unique for every record and can used for de-duplication\n    \"caseNumber\": 5563879,    // This is the customer case number (can span multiple sessions), we don’t really use this\n    \"status\": \"Open\",   // Open, Resolved, HandedOverToOperator, Failed\n\n    “apiCalls“: 12 // Integer, >= 0\n\n    “apiCallsType”: “L1” // L1, L2\n\n    \"region\": \"EMEA\",\n    \"sessionEndTime\": \"2024-05-27T12:59:57.960Z\",\n}\n  */\n  \n\n  const shouldDuplicate = Math.random() * 100 < 10;\n  if(shouldDuplicate){\n    duplicate = data\n  }\n\n  await push(data);\n}\n\nfunction getStatus() {\n  const roll = Math.random() * 100;\n  if(roll < 50) {\n    return 'Resolved';\n  }\n\n  if(roll < 80) {\n    return 'Open';\n  }\n\n  if (roll < 90) {\n    return \"Failed\";\n  }\n\n  return 'HandedOverToOperator';\n}\n\nfunction createRequestId() {\n  let idPrefix = '';\n  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';\n  const charactersLength = characters.length;\n  for (let i = 0; i < 5; i++) {\n    idPrefix += characters.charAt(Math.floor(Math.random() * charactersLength));\n  }\n\n  // Generate a random number between 100 and 999\n  const randomNum = Math.floor(Math.random() * 9000) + 1000;\n\n  // Concatenate static characters with the random number\n  const shortId = `${idPrefix}${randomNum}`;\n\n  return shortId;\n}"
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 450,
+      "x": 500,
       "y": 200
     },
     {
@@ -45,41 +51,107 @@
       "name": "Meter",
       "type": "transforms/meter",
       "params": {
-        "meterKey": "60acec80-141c-11ef-85c8-3fd7b93e308b",
+        "meterKey": "17f05f60-5bd7-11ef-bc19-99d6414306ee",
         "guidingRules": [
           {
-            "customName": "Resolved customer cases",
+            "customName": "L1 API Requests",
             "conditions": [
               {
                 "customName": "",
-                "field": "status",
-                "value": "Resolved"
+                "field": "apiCallsType",
+                "value": "L1"
               }
             ],
             "conditionRelation": "and",
             "ignoreCondition": false,
-            "matchCategory": "Customer cases",
+            "matchCategory": "L1_API_Requests",
             "groupBy": [
               {
-                "fields": ["region"]
+                "fields": [
+                  "region"
+                ]
+              },
+              {
+                "fields": [
+                  "status"
+                ]
               }
             ],
             "otherOperations": [
               {
-                "field": "createdDate",
-                "operation": "carry-first"
+                "field": "caseNumber",
+                "operation": "carry-last"
+              },
+              {
+                "field": "customerEmail",
+                "operation": "carry-last"
+              },
+              {
+                "field": "status",
+                "operation": "carry-last"
+              },
+              {
+                "field": "sessionId",
+                "operation": "carry-last"
+              }
+            ]
+          },
+          {
+            "customName": "L2 API Requests",
+            "conditions": [
+              {
+                "customName": "",
+                "field": "apiCallsType",
+                "value": "L2"
+              }
+            ],
+            "conditionRelation": "and",
+            "ignoreCondition": false,
+            "matchCategory": "L2_API_Requests",
+            "groupBy": [
+              {
+                "fields": [
+                  "region"
+                ]
+              },
+              {
+                "fields": [
+                  "status"
+                ]
+              }
+            ],
+            "otherOperations": [
+              {
+                "field": "status",
+                "operation": "carry-last"
+              },
+              {
+                "field": "caseNumber",
+                "operation": "carry-last"
+              },
+              {
+                "field": "customerEmail",
+                "operation": "carry-last"
+              },
+              {
+                "field": "sessionId",
+                "operation": "carry-last"
               }
             ]
           }
         ],
         "suspenseManagement": {
-          "enabled": true
+          "enabled": true,
+          "abortOnDisabled": false,
+          "resetOnValidEvent": true,
+          "eventThreshold": 10000,
+          "onThresholdExceeded": "ABORT"
         },
         "flushType": "TIMEOUT"
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 1050,
+      "x": 1100,
       "y": 200
     },
     {
@@ -94,12 +166,11 @@
             }
           }
         },
-        "key": "${payload.requestId}",
-        "lifeTimeDays": 30
+        "key": "${payload.sessionId}"
       },
       "partitionKey": null,
       "schemaVersion": 4,
-      "x": 600,
+      "x": 650,
       "y": 200
     },
     {
@@ -111,7 +182,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 2,
-      "x": 300,
+      "x": 350,
       "y": 200
     },
     {
@@ -127,10 +198,10 @@
             "customerEmail": "customerEmail"
           },
           {
-            "requestId": "requestId"
+            "sessionId": "sessionId"
           },
           {
-            "orderNumber": "orderNumber"
+            "caseNumber": "caseNumber"
           },
           {
             "status": "status"
@@ -139,19 +210,16 @@
             "region": "region"
           },
           {
-            "createdDate": "createdDate"
+            "apiCallsType": "apiCallsType"
           },
           {
-            "value": "value"
-          },
-          {
-            "timestamp": "resolvedDate"
+            "value": "apiCalls"
           }
         ]
       },
       "partitionKey": null,
       "schemaVersion": 2,
-      "x": 900,
+      "x": 950,
       "y": 200
     },
     {
@@ -161,7 +229,7 @@
       "params": {},
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 1200,
+      "x": 1250,
       "y": 200
     }
   ],

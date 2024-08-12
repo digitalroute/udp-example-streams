@@ -10,20 +10,20 @@
       },
       "partitionKey": null,
       "schemaVersion": 2,
-      "x": 350,
-      "y": 50
+      "x": 500,
+      "y": 150
     },
     {
       "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "name": "Prepare Meter Types",
       "type": "transforms/script",
       "params": {
-        "transform": "const meterTypes = [\n  {\n    name: 'AI Assist',\n    description:\n      `Meter definition to calculate number of resolved cases by Botbot's AI assist`,\n    unit: 'cases',\n    category: 'Customer cases',\n    aggregation: {\n      type: 'increment',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n];\n\n\nfor(const meterType of meterTypes) {\n    await push({ meterType });\n}"
+        "transform": "/*\nL1_Llama3_Requests\n\nL1_Gemini_Pro_Requests\n\nL1_Claude3_Sonnet_Requests\n\nL2_GPT4o_Requests\n\nL2_Gemini_Advanced_Requests\n\nL2_Claude3_Opus_Requests\n*/\n\nconst meterTypes = [\n  {\n    name: 'L1_Llama3_Requests',\n    description: \"L1 API requests using the Llama3 LLM\",\n    unit: 'API request',\n    category: 'L1_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n  {\n    name: 'L1_Gemini_Pro_Requests',\n    description: \"L1 API requests using the Gemini Pro LLM\",\n    unit: 'API request',\n    category: 'L1_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n  {\n    name: 'L1_Claude3_Sonnet_Requests',\n    description: \"L1 API requests using the Claude3 Sonnet LLM\",\n    unit: 'API request',\n    category: 'L1_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n  {\n    name: 'L2_GPT4o_Requests',\n    description: \"L2 API requests using the GPT4o LLM\",\n    unit: 'API request',\n    category: 'L2_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  }, \n  {\n    name: 'L2_Gemini_Advanced_Requests',\n    description: \"L2 API requests using the Gemini Advanced LLM\",\n    unit: 'API request',\n    category: 'L2_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  }, \n  {\n    name: 'L2_Claude3_Opus_Requests',\n    description: \"L2 API requests using the Claude3 Opus LLM\",\n    unit: 'API request',\n    category: 'L2_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  }\n];\n\n\nfor(const meterType of meterTypes) {\n    await push({ meterType });\n}"
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 550,
-      "y": 50
+      "x": 700,
+      "y": 150
     },
     {
       "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
@@ -47,12 +47,16 @@
         },
         "body": "${payload.meterType}",
         "retries": 1,
-        "authentication": "client_credentials"
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
+          "secretType": "oauth2"
+        }
       },
       "partitionKey": null,
-      "schemaVersion": 9,
-      "x": 750,
-      "y": 50
+      "schemaVersion": 11,
+      "x": 900,
+      "y": 150
     },
     {
       "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
@@ -61,8 +65,8 @@
       "params": {},
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 950,
-      "y": 50
+      "x": 1100,
+      "y": 150
     }
   ],
   "edges": [

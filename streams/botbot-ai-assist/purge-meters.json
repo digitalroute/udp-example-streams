@@ -10,63 +10,20 @@
       },
       "partitionKey": null,
       "schemaVersion": 2,
-      "x": 350,
-      "y": 50
-    },
-    {
-      "id": "85940b71-45d4-11ef-a193-8bcf9ece763e",
-      "name": "List Meter Type API",
-      "type": "transforms/http",
-      "params": {
-        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
-        "errorMode": "defer",
-        "cacheSeconds": 300,
-        "useCache": false,
-        "useMockData": true,
-        "method": "GET",
-        "authType": "oAuth2",
-        "shouldRetry": false,
-        "useResponseHeaderKey": true,
-        "oAuth2Authentication": {
-          "clientAuthentication": "sendInBody",
-          "headerPrefix": "Bearer",
-          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
-          "audience": "https://api.digitalroute.io/"
-        },
-        "retries": 1,
-        "qs": {
-          "name": "AI Assist"
-        },
-        "authentication": "client_credentials"
-      },
-      "partitionKey": null,
-      "schemaVersion": 11,
-      "x": 550,
-      "y": 50
-    },
-    {
-      "id": "85940b70-45d4-11ef-a193-8bcf9ece763e",
-      "name": "Prepare Meter Types",
-      "type": "transforms/script",
-      "params": {
-        "transform": "for(let meterType of payload.httpResponse.meterTypes) {\n    await push({ meterType });\n}"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 750,
-      "y": 50
+      "x": 200,
+      "y": 200
     },
     {
       "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "name": "Prepare Filter",
       "type": "transforms/script",
       "params": {
-        "transform": "/** REPLACE THIS VALUE **/\n\nconst METER_KEY = \"dd11e0a0-1381-11ef-9a8f-cdc91c56d42c\";\n\n/**************************/\n\nconst METER_TYPES = [payload.meterType.id];\nfor(const meterTypeId of METER_TYPES) {\n    await push({\n        meterKey: METER_KEY,\n        meterTypeId: meterTypeId\n    });\n}\n"
+        "transform": "await push({ meterTypeId: payload.httpResponse.meterTypes[0].id });\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 950,
-      "y": 50
+      "x": 650,
+      "y": 200
     },
     {
       "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
@@ -77,7 +34,7 @@
         "errorMode": "defer",
         "cacheSeconds": 300,
         "useCache": false,
-        "useMockData": true,
+        "useMockData": false,
         "method": "GET",
         "authType": "oAuth2",
         "shouldRetry": false,
@@ -90,15 +47,18 @@
         },
         "retries": 1,
         "qs": {
-          "meterKey": "${payload.meterKey}",
           "meterTypeId": "${payload.meterTypeId}"
         },
-        "authentication": "client_credentials"
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
+          "secretType": "oauth2"
+        }
       },
       "partitionKey": null,
       "schemaVersion": 11,
-      "x": 1150,
-      "y": 50
+      "x": 800,
+      "y": 200
     },
     {
       "id": "2281a210-11f7-11ef-928a-4f451c85cdd7",
@@ -109,8 +69,8 @@
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 1350,
-      "y": 50
+      "x": 950,
+      "y": 200
     },
     {
       "id": "33e8e4f0-11f7-11ef-928a-4f451c85cdd7",
@@ -133,12 +93,16 @@
           "audience": "https://api.digitalroute.io/"
         },
         "retries": 1,
-        "authentication": "client_credentials"
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
+          "secretType": "oauth2"
+        }
       },
       "partitionKey": null,
       "schemaVersion": 11,
-      "x": 1550,
-      "y": 50
+      "x": 1100,
+      "y": 200
     },
     {
       "id": "195e8080-11f8-11ef-928a-4f451c85cdd7",
@@ -147,8 +111,55 @@
       "params": {},
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 1750,
-      "y": 50
+      "x": 1250,
+      "y": 200
+    },
+    {
+      "id": "fb13ee40-595e-11ef-a8f4-9562be45e442",
+      "name": "Find Meter Types",
+      "type": "transforms/http",
+      "params": {
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
+        "errorMode": "defer",
+        "cacheSeconds": 300,
+        "useCache": false,
+        "useMockData": false,
+        "method": "GET",
+        "authType": "oAuth2",
+        "shouldRetry": false,
+        "retries": 1,
+        "useResponseHeaderKey": false,
+        "oAuth2Authentication": {
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer",
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/"
+        },
+        "qs": {
+          "name": "${payload.meterTypeName}"
+        },
+        "authentication": "password",
+        "secretsWalletEntry": {
+          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
+          "secretType": "oauth2"
+        }
+      },
+      "partitionKey": null,
+      "schemaVersion": 11,
+      "x": 500,
+      "y": 200
+    },
+    {
+      "id": "fb141550-595e-11ef-a8f4-9562be45e442",
+      "name": "Meter Type Filter",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const meterTypeNames = [\n    'L1_Claude3_Sonnet_Requests',\n    'L1_Gemini_Pro_Requests',\n    'L1_Llama3_Requests',\n    'L2_Claude3_Opus_Requests',\n    'L2_Gemini_Advanced_Requests',\n    'L2_GPT4o_Requests',\n];\n\nfor(const meterTypeName of meterTypeNames)\n    await push({ meterTypeName });\n"
+      },
+      "partitionKey": null,
+      "schemaVersion": 1,
+      "x": 350,
+      "y": 200
     }
   ],
   "edges": [
@@ -177,20 +188,20 @@
       "config": {}
     },
     {
-      "id": "b0b8f770-45d4-11ef-a193-8bcf9ece763e",
+      "id": "fb141551-595e-11ef-a8f4-9562be45e442",
+      "from": "fb141550-595e-11ef-a8f4-9562be45e442",
+      "to": "fb13ee40-595e-11ef-a8f4-9562be45e442",
+      "config": {}
+    },
+    {
+      "id": "0496c690-595f-11ef-a8f4-9562be45e442",
       "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
-      "to": "85940b71-45d4-11ef-a193-8bcf9ece763e",
+      "to": "fb141550-595e-11ef-a8f4-9562be45e442",
       "config": {}
     },
     {
-      "id": "c46ac690-45d4-11ef-a193-8bcf9ece763e",
-      "from": "85940b71-45d4-11ef-a193-8bcf9ece763e",
-      "to": "85940b70-45d4-11ef-a193-8bcf9ece763e",
-      "config": {}
-    },
-    {
-      "id": "da21db90-45d4-11ef-a193-8bcf9ece763e",
-      "from": "85940b70-45d4-11ef-a193-8bcf9ece763e",
+      "id": "05cf6da0-595f-11ef-a8f4-9562be45e442",
+      "from": "fb13ee40-595e-11ef-a8f4-9562be45e442",
       "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "config": {}
     }
