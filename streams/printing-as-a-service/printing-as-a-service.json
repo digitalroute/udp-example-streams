@@ -1,34 +1,29 @@
 {
-  "schemaVersion": 1,
   "name": "Printing As A Service",
   "nodes": [
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "5c32a5b0-02b5-11e9-9f17-81651dddad53",
       "name": "Count",
       "type": "readers/counter",
       "params": {
         "max": 10
       },
+      "schemaVersion": 2,
       "x": 450,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "7f60b090-02b5-11e9-9f17-81651dddad53",
       "name": "Simulate Usage",
       "type": "transforms/script",
       "params": {
         "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nconst timestamp = simDate();\nconst printerId = simPrinterId();\nconst model = simModel();\n\nconst simulatedPrinterEvent = {\n    eventId: (model + \"_\" + printerId + \"_\" + timestamp),\n    printerId,\n    brand: simBrand(),\n    model,\n    type: simType(),\n    paper: simPaper(),\n    sided: simSided(),\n    color: simColor(),\n    sheets: simSheets(),\n    inkLevel: simInkLevel(),\n    status: simStatus(),\n    timestamp,\n};\n\nstate.node.count++;\n\n// 20% duplicates\nif (state.node.count % 5 === 0) {\n    await push(simulatedPrinterEvent);\n}\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedPrinterEvent.printerId = \"invalidShouldBeInt\";\n    simulatedPrinterEvent.timestamp = \"UNKNOWN\";\n    simulatedPrinterEvent.paper = \"XYZ123\";\n}\n\nawait push(simulatedPrinterEvent);\n\nfunction simBrand() {\n    return \"Acme\";\n}\n\nfunction simModel() {\n    if (printerId % 3 === 0) {\n        return \"MPS-Super\";\n    } else if (printerId % 2 === 0) {\n        return \"MPS-Ultra\";\n    } \n    return \"MPS-Plus\";\n}\n\nfunction simType() {\n    return printerId % 2 === 0 ? \"Laser\" : \"Ink\";\n}\n\nfunction simPaper() {\n    return state.node.count % 5 === 0 ? \"A4\" : \"A3\";\n}\n\nfunction simSided() {\n    return state.node.count % 3 === 0 ? \"Two\" : \"One\";\n}\n\nfunction simColor() {\n    return state.node.count % 2 === 0 ? \"No\" : \"Yes\";\n}\n\n// simulate last month timestamp between 10th to 12th\nfunction simDate() {\n    const date = new Date();\n    date.setMonth(date.getMonth() - 1);\n    \n    if (state.node.count % 3 === 0) {\n        date.setDate(11);\n    } else if (state.node.count % 2 === 0) {\n        date.setDate(12);\n    } else {\n        date.setDate(10);\n    }\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}\n\nfunction simSheets() {\n    return Math.floor(payload.value * 3.55);\n}\n\n// simulate 5 unique printers\nfunction simPrinterId() {\n    return ((payload.value-1) % 5) + 101;\n}\n\nfunction simInkLevel() {\n    if (printerId % 4 === 0) {\n        return 15;\n    } if (printerId % 3 === 0) {\n        return 50;\n    } else {\n        return 45;\n    }\n}\n\nfunction simStatus() {\n    return printerId % 3 === 0 ? \"Needs service\" : \"Normal\";\n}"
       },
+      "schemaVersion": 1,
       "x": 600,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 3,
       "id": "5f5be970-02c6-11e9-abea-918bf71eccf8",
       "name": "Deduplicate 1",
       "type": "transforms/deduplicate",
@@ -43,12 +38,11 @@
           }
         }
       },
+      "schemaVersion": 4,
       "x": 900,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "1bb5e110-02c8-11e9-abea-918bf71eccf8",
       "name": "Validate",
       "type": "transforms/validate",
@@ -150,43 +144,50 @@
           "onThresholdExceeded": "ABORT"
         }
       },
+      "schemaVersion": 1,
       "x": 750,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
       "name": "Data Aggregator",
       "type": "transforms/data_aggregate",
       "params": {
-        "flushType": "ALL_FILES",
-        "groupKeys": [
-          { "field": "printerId", "operationType": "NONE" },
-          { "field": "timestamp", "operationType": "MONTH" }
+        "operations": [
+          {
+            "field": "sheets",
+            "type": "NUMERIC_SUM"
+          }
         ],
-
-        "operations": [{ "field": "sheets", "type": "NUMERIC_SUM" }]
+        "groupKeys": [
+          {
+            "field": "printerId",
+            "operationType": "NONE"
+          },
+          {
+            "field": "timestamp",
+            "operationType": "MONTH",
+            "alias": "month_timestamp"
+          }
+        ],
+        "flushType": "ALL_FILES"
       },
-
-      "x": 1100,
+      "schemaVersion": 3,
+      "x": 1250,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
       "name": "Enrich CRM 1",
       "type": "transforms/script",
       "params": {
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
       },
+      "schemaVersion": 1,
       "x": 1400,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 3,
       "id": "529547b0-1fd9-11e9-b13d-6969f21433e0",
       "name": "Deduplicate 2",
       "type": "transforms/deduplicate",
@@ -201,24 +202,22 @@
           }
         }
       },
+      "schemaVersion": 4,
       "x": 1250,
       "y": 250
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
       "name": "Enrich CRM 2",
       "type": "transforms/script",
       "params": {
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
       },
+      "schemaVersion": 1,
       "x": 1400,
       "y": 250
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 3,
       "id": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
       "name": "Check Ink Level",
       "type": "transforms/split",
@@ -243,12 +242,11 @@
           }
         }
       },
+      "schemaVersion": 3,
       "x": 1100,
       "y": 250
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 3,
       "id": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
       "name": "Maintenance",
       "type": "transforms/split",
@@ -273,22 +271,20 @@
           }
         }
       },
+      "schemaVersion": 3,
       "x": 1100,
       "y": 400
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "79ad13a0-81f4-11e9-80f0-0bac64875d58",
       "name": "To Service",
       "type": "writers/log",
       "params": {},
+      "schemaVersion": 1,
       "x": 1700,
       "y": 400
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 3,
       "id": "1155ff50-81f5-11e9-80f0-0bac64875d58",
       "name": "Deduplicate 3",
       "type": "transforms/deduplicate",
@@ -303,98 +299,167 @@
           }
         }
       },
+      "schemaVersion": 4,
       "x": 1250,
       "y": 400
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "801f7090-48c6-11ea-934b-e7039b2101e2",
       "name": "To Billing",
       "type": "writers/log",
       "params": {},
+      "schemaVersion": 1,
       "x": 1700,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "a41fbf90-48c6-11ea-934b-e7039b2101e2",
       "name": "To Order Ink",
       "type": "writers/log",
       "params": {},
+      "schemaVersion": 1,
       "x": 1700,
       "y": 250
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "30202230-4c48-11ea-9b57-69fd58765c81",
       "name": "Column Filter 1",
       "type": "transforms/map",
       "params": {
-        "mappings": {
-          "customer": "customer",
-          "department": "department",
-          "printerId": "printerId",
-          "sheets": "sum_sheets",
-          "period": "month_timestamp"
-        }
+        "mappings": [
+          {
+            "customer": "customer"
+          },
+          {
+            "department": "department"
+          },
+          {
+            "printerId": "printerId"
+          },
+          {
+            "sheets": "sum_sheets"
+          },
+          {
+            "period": "month_timestamp"
+          }
+        ]
       },
+      "schemaVersion": 2,
       "x": 1550,
       "y": 100
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
       "name": "Column Filter 2",
       "type": "transforms/map",
       "params": {
-        "mappings": {
-          "customer": "customer",
-          "department": "department",
-          "printerId": "printerId",
-          "brand": "brand",
-          "model": "model",
-          "type": "type",
-          "inkLevel": "inkLevel"
-        }
+        "mappings": [
+          {
+            "customer": "customer"
+          },
+          {
+            "department": "department"
+          },
+          {
+            "printerId": "printerId"
+          },
+          {
+            "brand": "brand"
+          },
+          {
+            "model": "model"
+          },
+          {
+            "type": "type"
+          },
+          {
+            "inkLevel": "inkLevel"
+          }
+        ]
       },
+      "schemaVersion": 2,
       "x": 1550,
       "y": 250
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
       "name": "Enrich CRM 3",
       "type": "transforms/script",
       "params": {
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
       },
+      "schemaVersion": 1,
       "x": 1400,
       "y": 400
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "c6098e20-4c49-11ea-9b57-69fd58765c81",
       "name": "Column Filter 3",
       "type": "transforms/map",
       "params": {
-        "mappings": {
-          "customer": "customer",
-          "department": "department",
-          "printerId": "printerId",
-          "brand": "brand",
-          "model": "model",
-          "type": "type",
-          "status": "status"
-        }
+        "mappings": [
+          {
+            "customer": "customer"
+          },
+          {
+            "department": "department"
+          },
+          {
+            "printerId": "printerId"
+          },
+          {
+            "brand": "brand"
+          },
+          {
+            "model": "model"
+          },
+          {
+            "type": "type"
+          },
+          {
+            "status": "status"
+          }
+        ]
       },
+      "schemaVersion": 2,
       "x": 1550,
       "y": 400
+    },
+    {
+      "id": "b33f41f0-192f-11f0-8ec1-b7fbef245d13",
+      "name": "Date",
+      "type": "transforms/date",
+      "params": {
+        "items": [
+          {
+            "field": "timestamp",
+            "inputFormat": "YYYY-MM-DDTHH:mm:ss.SSSZ",
+            "targetField": "timestamp",
+            "outputFormat": "YYYY-MM-DDTHH:mm:ss",
+            "operation": {
+              "second": {
+                "value": 59,
+                "mode": "set"
+              },
+              "minute": {
+                "value": 59,
+                "mode": "set"
+              },
+              "hour": {
+                "value": 23,
+                "mode": "set"
+              },
+              "month": {
+                "value": 1,
+                "mode": "add"
+              }
+            }
+          }
+        ]
+      },
+      "schemaVersion": 1,
+      "x": 1100,
+      "y": 100
     }
   ],
   "edges": [
@@ -417,13 +482,6 @@
       "config": {}
     },
     {
-      "id": "0643e630-02da-11e9-a2ab-ddc54ea0654a",
-      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
-      "to": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
-      "config": {},
-      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
-    },
-    {
       "id": "43826b50-036d-11e9-90d6-9b46f02a690d",
       "from": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
       "to": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
@@ -432,16 +490,16 @@
     {
       "id": "c2756680-1fe0-11e9-b333-8387e66c8bf7",
       "from": "529547b0-1fd9-11e9-b13d-6969f21433e0",
+      "output": "a573e9cf-84cb-4374-bf3e-d8a7d6cab8ef",
       "to": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
-      "config": {},
-      "output": "a573e9cf-84cb-4374-bf3e-d8a7d6cab8ef"
+      "config": {}
     },
     {
       "id": "79d7ccf0-4737-11e9-9166-6b7c69bb46fd",
       "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
       "to": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
-      "config": {},
-      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
+      "config": {}
     },
     {
       "id": "b7dd11d0-4738-11e9-94cb-5b409f620cb7",
@@ -453,9 +511,9 @@
     {
       "id": "69458d80-81f4-11e9-80f0-0bac64875d58",
       "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
       "to": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
-      "config": {},
-      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c"
+      "config": {}
     },
     {
       "id": "1a596e70-81f5-11e9-80f0-0bac64875d58",
@@ -491,9 +549,9 @@
     {
       "id": "a4e7a6f0-4c49-11ea-9b57-69fd58765c81",
       "from": "1155ff50-81f5-11e9-80f0-0bac64875d58",
+      "output": "35fffde6-e496-421a-b938-cce97ac0bf60",
       "to": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
-      "config": {},
-      "output": "35fffde6-e496-421a-b938-cce97ac0bf60"
+      "config": {}
     },
     {
       "id": "c9f8a2a0-4c49-11ea-9b57-69fd58765c81",
@@ -505,6 +563,19 @@
       "id": "d94060e0-4c49-11ea-9b57-69fd58765c81",
       "from": "c6098e20-4c49-11ea-9b57-69fd58765c81",
       "to": "79ad13a0-81f4-11e9-80f0-0bac64875d58",
+      "config": {}
+    },
+    {
+      "id": "baf57090-192f-11f0-8ec1-b7fbef245d13",
+      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
+      "to": "b33f41f0-192f-11f0-8ec1-b7fbef245d13",
+      "config": {}
+    },
+    {
+      "id": "bbc39600-192f-11f0-8ec1-b7fbef245d13",
+      "from": "b33f41f0-192f-11f0-8ec1-b7fbef245d13",
+      "to": "05f7c3f0-80bd-11eb-aeed-a5886b079575",
       "config": {}
     }
   ]
