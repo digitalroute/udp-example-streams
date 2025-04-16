@@ -433,8 +433,8 @@
         "items": [
           {
             "field": "timestamp",
+            "mode": "modify",
             "inputFormat": "YYYY-MM-DDTHH:mm:ss.SSSZ",
-            "targetField": "timestamp",
             "outputFormat": "YYYY-MM-DDTHH:mm:ss",
             "operation": {
               "second": {
