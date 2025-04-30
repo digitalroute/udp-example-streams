@@ -1,15 +1,552 @@
 {
+  "name": "Cultflicks video streaming",
+  "nodes": [
+    {
+      "id": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
+      "name": "Count",
+      "type": "readers/counter",
+      "params": {
+        "max": 100
+      },
+      "schemaVersion": 2,
+      "x": 400,
+      "y": 200
+    },
+    {
+      "id": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "name": "View simulator",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const view_array = \n[\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 6800,\n   \"view_duration\": 3000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-Jan-03\",\n   \"full_duration\": 5600,\n   \"view_duration\": 2600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6700,\n   \"view_duration\": 4000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-Jan-04\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-Jan-05\",\n   \"full_duration\": 10000,\n   \"view_duration\": 7750,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-Jan-06\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7460,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6400,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n  {\n   \"user_id\": 2,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 5250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6800,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-Jan-03\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6700,\n   \"view_duration\": 6600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7200,\n   \"view_duration\": 2200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-Jan-04\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-Jan-05\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6650,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-Jan-06\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7160,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n }\n];\n\nconst index = payload.value % 20;\nawait push(view_array[index]);"
+      },
+      "schemaVersion": 1,
+      "x": 600,
+      "y": 200
+    },
+    {
+      "id": "24681840-d750-11ec-9fd8-49df506d0834",
+      "name": "Enrich user info",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const user_db = {\n    1: {\n        name: \"John Doe\",\n        email: \"john@doe.com\",\n        birth_year: 1980,\n        country: \"Syldavia\",\n        plan: \"Standard\"\n    },\n    2: {\n        name: \"Penny Lane\",\n        email: \"penny@lane.com\",\n        birth_year: 1996,\n        country: \"Moldania\",\n        plan: \"Premium\"\n    },\n    3: {\n        name: \"Meng Chow\",\n        email: \"meng@chow.com\",\n        birth_year: 2002,\n        country: \"Chapon\",\n        plan: \"Standard\"\n    },\n    4: {\n        name: \"Sikis Vadikis\",\n        email: \"sikis@vadikis.com\",\n        birth_year: 1988,\n        country: \"Greecey\",\n        plan: \"Standard\"\n    },\n}\n\nconst user_info = user_db[payload.user_id];\n\nconst enriched_payload = {...payload, ...user_info};\n\naudit.count(\"count_views_in_\" + enriched_payload.country);\n\nawait push(enriched_payload);"
+      },
+      "schemaVersion": 1,
+      "x": 800,
+      "y": 200
+    },
+    {
+      "id": "6adbdf40-d751-11ec-9fd8-49df506d0834",
+      "name": "Enrich title info",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const media_db = {\n    \"Murder Tomatoes\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Plan 9 From Outer Space\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1957,\n    },\n    \"Bad Taste\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Santa Clause Conquers the Martians\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"Howard the Duck\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1986,\n    },\n    \"Battlefield Earth\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2000,\n    },\n    \"Sex Lives of the Potato Men\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2004,\n    },\n    \"The Beast of Yucca Flats\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1961,\n    },\n    \"Kidnapping, Caucasian Style!\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2014,\n    },\n    \"They Saved Hitler's Brain\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"The Horror of of Party Beach\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n}\n\nconst media_info = media_db[payload.title];\n\nconst enriched_payload = {...payload, ...media_info};\n\nawait push(enriched_payload);"
+      },
+      "schemaVersion": 1,
+      "x": 1000,
+      "y": 200
+    },
+    {
+      "id": "132bb921-d754-11ec-9fd8-49df506d0834",
+      "name": "View completion check",
+      "type": "transforms/split",
+      "params": {
+        "multiOutput": {
+          "configurable": {
+            "outputs": [
+              {
+                "id": "132bb920-d754-11ec-9fd8-49df506d0834",
+                "name": "Completed"
+              },
+              {
+                "id": "2ae506c0-d754-11ec-9fd8-49df506d0834",
+                "name": "Not completed"
+              }
+            ]
+          }
+        },
+        "onNoMatch": "discard",
+        "rules": [
+          {
+            "key": "@{payload.view_percent}",
+            "value": "90",
+            "op": "gt",
+            "output": "132bb920-d754-11ec-9fd8-49df506d0834"
+          },
+          {
+            "key": "@{payload.view_percent}",
+            "value": "91",
+            "op": "lt",
+            "output": "2ae506c0-d754-11ec-9fd8-49df506d0834"
+          }
+        ]
+      },
+      "schemaVersion": 3,
+      "x": 1200,
+      "y": 600
+    },
+    {
+      "id": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
+      "name": "Aggregate view time",
+      "type": "transforms/data_aggregate",
+      "params": {
+        "operations": [
+          {
+            "field": "view_duration",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "field": "full_duration",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "field": "birth_year",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "country",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "email",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "name",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "title",
+            "type": "GENERAL_COUNT"
+          },
+          {
+            "field": "plan",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "os_type",
+            "type": "GENERAL_CARRY_LAST"
+          }
+        ],
+        "groupKeys": [
+          {
+            "field": "user_id",
+            "operationType": "NONE"
+          },
+          {
+            "field": "timestamp",
+            "operationType": "MONTH",
+            "alias": "month_timestamp"
+          }
+        ],
+        "flushType": "EACH_FILE"
+      },
+      "schemaVersion": 3,
+      "x": 1200,
+      "y": 450
+    },
+    {
+      "id": "9d5a1000-d755-11ec-9fd8-49df506d0834",
+      "name": "Classify user",
+      "type": "transforms/script",
+      "params": {
+        "transform": "const sum_view_percent = Math.round(100 * payload.sum_view_duration / payload.sum_full_duration);\nconst user_churn_risk = (sum_view_percent < 76);\n\n\nlet user_category = \"standard\";\nif (payload.sum_view_duration > 200000) {\n    user_category = \"heavy_user\";\n} else if (payload.sum_view_duration < 100000) {\n    user_category = \"light_user\";\n} \n\n\nconst metrics_msg = \"You have watched a total of \" + payload.count_title + \" movies this month. You completed \" + sum_view_percent + \"% of the movies you started watching.\";\n\nlet nudge_msg;\nif (user_churn_risk) {\n    nudge_msg = \"Maybe you would be interested in our pay-per-view plan?\";\n    audit.count(\"pay_per_view_nudge_messages_sent\");\n} else if (user_category == \"heavy_user\" && payload.carry_last_plan != \"Premium\") {\n    nudge_msg = \"Sign up for our Premium plan and enjoy great movies at super high quality for 5 family members!\";\n    audit.count(\"premium_nudge_messages_sent\");\n} else {\n    nudge_msg = \"We are glad you're enjoying your Cultflicks experience.\";\n}\n\nconst enriched_payload = {...payload, sum_view_percent, user_category, user_churn_risk, metrics_msg, nudge_msg};\n\naudit.count(\"count_user_category_\" + user_category);\naudit.sum(\"sum_view_duration\", payload.sum_view_duration);\naudit.sum(\"sum_full_duration\", payload.sum_full_duration);\n\nif (user_churn_risk) {\n    audit.count(\"count_churn_risk\");     \n}\n\nawait push(enriched_payload);"
+      },
+      "schemaVersion": 1,
+      "x": 1450,
+      "y": 450
+    },
+    {
+      "id": "f0da7250-d756-11ec-9fd8-49df506d0834",
+      "name": "Count not completed",
+      "type": "transforms/data_aggregate",
+      "params": {
+        "operations": [
+          {
+            "field": "title",
+            "type": "GENERAL_COUNT"
+          },
+          {
+            "field": "view_duration",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "field": "view_percent",
+            "type": "NUMERIC_AVERAGE"
+          },
+          {
+            "field": "revenue_sharing_model",
+            "type": "GENERAL_CARRY_LAST"
+          }
+        ],
+        "groupKeys": [
+          {
+            "field": "timestamp",
+            "operationType": "MONTH"
+          },
+          {
+            "field": "title",
+            "operationType": "NONE"
+          }
+        ],
+        "flushType": "EACH_FILE"
+      },
+      "schemaVersion": 3,
+      "x": 1450,
+      "y": 750
+    },
+    {
+      "id": "2faff4f0-d757-11ec-9fd8-49df506d0834",
+      "name": "Count completed",
+      "type": "transforms/data_aggregate",
+      "params": {
+        "operations": [
+          {
+            "field": "title",
+            "type": "GENERAL_COUNT"
+          },
+          {
+            "field": "view_duration",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "field": "revenue_sharing_model",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "ip_owner",
+            "type": "GENERAL_CARRY_LAST"
+          }
+        ],
+        "groupKeys": [
+          {
+            "field": "timestamp",
+            "operationType": "MONTH",
+            "alias": "month_timestamp"
+          },
+          {
+            "field": "title",
+            "operationType": "NONE"
+          }
+        ],
+        "flushType": "EACH_FILE"
+      },
+      "schemaVersion": 3,
+      "x": 1450,
+      "y": 600
+    },
+    {
+      "id": "4b22f260-d75b-11ec-9fd8-49df506d0834",
+      "name": "To Billing",
+      "type": "writers/noop",
+      "params": {},
+      "schemaVersion": 1,
+      "x": 1850,
+      "y": 450
+    },
+    {
+      "id": "555c4970-d75b-11ec-9fd8-49df506d0834",
+      "name": "To partner settlement",
+      "type": "writers/noop",
+      "params": {},
+      "schemaVersion": 1,
+      "x": 1850,
+      "y": 600
+    },
+    {
+      "id": "59850b90-d75b-11ec-9fd8-49df506d0834",
+      "name": "To analytics",
+      "type": "writers/noop",
+      "params": {},
+      "schemaVersion": 1,
+      "x": 1850,
+      "y": 750
+    },
+    {
+      "id": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
+      "name": "Format for settlement",
+      "type": "transforms/map",
+      "params": {
+        "mappings": [
+          {
+            "total_views": "count_title"
+          },
+          {
+            "total_view_duration": "sum_view_duration"
+          },
+          {
+            "revenue_sharing_model": "carry_last_revenue_sharing_model"
+          },
+          {
+            "ip_owner": "carry_last_ip_owner"
+          },
+          {
+            "month": "month_timestamp"
+          },
+          {
+            "title": "title"
+          }
+        ]
+      },
+      "schemaVersion": 2,
+      "x": 1650,
+      "y": 600
+    },
+    {
+      "id": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
+      "name": "Format for analytics",
+      "type": "transforms/map",
+      "params": {
+        "mappings": [
+          {
+            "total_views": "count_title"
+          },
+          {
+            "total_view_duration": "sum_view_duration"
+          },
+          {
+            "revenue_sharing_model": "carry_last_revenue_sharing_model"
+          },
+          {
+            "ip_owner": "carry_last_ip_owner"
+          },
+          {
+            "month": "month_timestamp"
+          },
+          {
+            "title": "title"
+          },
+          {
+            "average_view_perc": "avg_view_percent"
+          }
+        ]
+      },
+      "schemaVersion": 2,
+      "x": 1650,
+      "y": 750
+    },
+    {
+      "id": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
+      "name": "Format for billing",
+      "type": "transforms/map",
+      "params": {
+        "mappings": [
+          {
+            "user_id": "user_id"
+          },
+          {
+            "name": "carry_last_name"
+          },
+          {
+            "email": "carry_last_email"
+          },
+          {
+            "birth_year": "carry_last_birth_year"
+          },
+          {
+            "country": "carry_last_country"
+          },
+          {
+            "plan": "carry_last_plan"
+          },
+          {
+            "month": "month_timestamp"
+          },
+          {
+            "total_views": "count_title"
+          },
+          {
+            "total_view_duration": "sum_view_duration"
+          },
+          {
+            "total_full_duration": "sum_full_duration"
+          },
+          {
+            "average_view_percent": "sum_view_percent"
+          },
+          {
+            "user_category": "user_category"
+          },
+          {
+            "user_churn_risk": "user_churn_risk"
+          },
+          {
+            "metrics_msg": "metrics_msg"
+          },
+          {
+            "nudge_msg": "nudge_msg"
+          }
+        ]
+      },
+      "schemaVersion": 2,
+      "x": 1650,
+      "y": 450
+    },
+    {
+      "id": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "name": "Calculate view percent",
+      "type": "transforms/xmap",
+      "params": {
+        "keepFields": {
+          "enabled": true
+        },
+        "mappings": [
+          {
+            "field": "view_percent",
+            "expression": "round(100 * @{payload.view_duration} / @{payload.full_duration})",
+            "ast": [
+              "call",
+              ["R", "round"],
+              [
+                [
+                  "aop",
+                  "/",
+                  ["aop", "*", ["N", 100], ["IP", "@{payload.view_duration}"]],
+                  ["IP", "@{payload.full_duration}"]
+                ]
+              ]
+            ],
+            "errorMessage": null
+          }
+        ]
+      },
+      "schemaVersion": 3,
+      "x": 1000,
+      "y": 450
+    },
+    {
+      "id": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
+      "name": "Send email notification",
+      "type": "writers/noop",
+      "params": {},
+      "schemaVersion": 1,
+      "x": 2050,
+      "y": 200
+    },
+    {
+      "id": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
+      "name": "Format email message",
+      "type": "transforms/xmap",
+      "params": {
+        "keepFields": {
+          "enabled": false
+        },
+        "mappings": [
+          {
+            "field": "subject",
+            "expression": "\"Thank you for using Cultflicks!\"",
+            "ast": ["S", "Thank you for using Cultflicks!"],
+            "errorMessage": null
+          },
+          {
+            "field": "message",
+            "expression": "\"Hi dear \" + @{payload.name} + \", Your email is \" + @{payload.email} + \", your country is \" + @{payload.country} + \", and you were born on \" + @{payload.birth_year} + \". \" + @{payload.nudge_msg} + \" \" + @{payload.metrics_msg} + \"  Best regards, Cultflicks\"",
+            "ast": [
+              "aop",
+              "+",
+              [
+                "aop",
+                "+",
+                [
+                  "aop",
+                  "+",
+                  [
+                    "aop",
+                    "+",
+                    [
+                      "aop",
+                      "+",
+                      [
+                        "aop",
+                        "+",
+                        [
+                          "aop",
+                          "+",
+                          [
+                            "aop",
+                            "+",
+                            [
+                              "aop",
+                              "+",
+                              [
+                                "aop",
+                                "+",
+                                [
+                                  "aop",
+                                  "+",
+                                  [
+                                    "aop",
+                                    "+",
+                                    ["S", "Hi dear "],
+                                    ["IP", "@{payload.name}"]
+                                  ],
+                                  ["S", ", Your email is "]
+                                ],
+                                ["IP", "@{payload.email}"]
+                              ],
+                              ["S", ", your country is "]
+                            ],
+                            ["IP", "@{payload.country}"]
+                          ],
+                          ["S", ", and you were born on "]
+                        ],
+                        ["IP", "@{payload.birth_year}"]
+                      ],
+                      ["S", ". "]
+                    ],
+                    ["IP", "@{payload.nudge_msg}"]
+                  ],
+                  ["S", " "]
+                ],
+                ["IP", "@{payload.metrics_msg}"]
+              ],
+              ["S", "  Best regards, Cultflicks"]
+            ],
+            "errorMessage": null
+          }
+        ]
+      },
+      "schemaVersion": 3,
+      "x": 1850,
+      "y": 200
+    },
+    {
+      "id": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
+      "name": "Date",
+      "type": "transforms/date",
+      "params": {
+        "items": [
+          {
+            "field": "timestamp",
+            "mode": "modify",
+            "inputFormat": "YYYY-MMM-DD",
+            "outputFormat": "YYYY-MM-DDTHH:mm:ss.SSS[Z]",
+            "operation": {
+              "hour": {
+                "value": 23,
+                "mode": "set"
+              },
+              "minute": {
+                "value": 59,
+                "mode": "set"
+              },
+              "second": {
+                "value": 59,
+                "mode": "set"
+              }
+            }
+          }
+        ]
+      },
+      "schemaVersion": 1,
+      "x": 1200,
+      "y": 200
+    }
+  ],
   "edges": [
     {
       "id": "6840c960-d74e-11ec-9fd8-49df506d0834",
       "from": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
       "to": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "2795d890-d750-11ec-9fd8-49df506d0834",
-      "from": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "to": "24681840-d750-11ec-9fd8-49df506d0834",
       "config": {}
     },
     {
@@ -81,12 +618,6 @@
       "config": {}
     },
     {
-      "id": "e2d353b0-da72-11ec-8fb5-59ce769604a4",
-      "from": "6adbdf40-d751-11ec-9fd8-49df506d0834",
-      "to": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "config": {}
-    },
-    {
       "id": "f78ca7c0-da72-11ec-8fb5-59ce769604a4",
       "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
       "to": "132bb921-d754-11ec-9fd8-49df506d0834",
@@ -103,539 +634,24 @@
       "from": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
       "to": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
       "config": {}
-    }
-  ],
-  "name": "Cultflicks video streaming",
-  "nodes": [
-    {
-      "id": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
-      "name": "Count",
-      "type": "readers/counter",
-      "params": {
-        "max": 100
-      },
-      "partitionKey": null,
-      "schemaVersion": 2,
-      "x": 400,
-      "y": 200
     },
     {
-      "id": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "name": "View simulator",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const view_array = \n[\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-01-01 00:00:00\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-01-01 00:00:00\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-01-02 00:00:00\",\n   \"full_duration\": 6800,\n   \"view_duration\": 3000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-01-03 00:00:00\",\n   \"full_duration\": 5600,\n   \"view_duration\": 2600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-01-01 04:00:00\",\n   \"full_duration\": 6700,\n   \"view_duration\": 4000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-01-01 12:00:00\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-01-04 20:00:00\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-01-05 19:00:00\",\n   \"full_duration\": 10000,\n   \"view_duration\": 7750,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-01-06 16:00:00\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-01-02 11:00:00\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7460,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-01-02 14:00:00\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-01-01 00:00:00\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6400,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n  {\n   \"user_id\": 2,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-01-01 00:00:00\",\n   \"full_duration\": 7300,\n   \"view_duration\": 5250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-01-02 00:00:00\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6800,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-01-03 00:00:00\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-01-01 04:00:00\",\n   \"full_duration\": 6700,\n   \"view_duration\": 6600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-01-01 12:00:00\",\n   \"full_duration\": 7200,\n   \"view_duration\": 2200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-01-04 20:00:00\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-01-05 19:00:00\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6650,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-01-06 16:00:00\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-01-02 11:00:00\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7160,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-01-02 14:00:00\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-01-01 00:00:00\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n }\n];\n\nconst index = payload.value % 20;\nawait push(view_array[index]);"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 600,
-      "y": 200
+      "id": "0c4bf5c0-25ad-11f0-945c-6fdaa4d53658",
+      "from": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "to": "24681840-d750-11ec-9fd8-49df506d0834",
+      "config": {}
     },
     {
-      "id": "24681840-d750-11ec-9fd8-49df506d0834",
-      "name": "Enrich user info",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const user_db = {\n    1: {\n        name: \"John Doe\",\n        email: \"john@doe.com\",\n        birth_year: 1980,\n        country: \"Syldavia\",\n        plan: \"Standard\"\n    },\n    2: {\n        name: \"Penny Lane\",\n        email: \"penny@lane.com\",\n        birth_year: 1996,\n        country: \"Moldania\",\n        plan: \"Premium\"\n    },\n    3: {\n        name: \"Meng Chow\",\n        email: \"meng@chow.com\",\n        birth_year: 2002,\n        country: \"Chapon\",\n        plan: \"Standard\"\n    },\n    4: {\n        name: \"Sikis Vadikis\",\n        email: \"sikis@vadikis.com\",\n        birth_year: 1988,\n        country: \"Greecey\",\n        plan: \"Standard\"\n    },\n}\n\nconst user_info = user_db[payload.user_id];\n\nconst enriched_payload = {...payload, ...user_info};\n\naudit.count(\"count_views_in_\" + enriched_payload.country);\n\nawait push(enriched_payload);"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1000,
-      "y": 200
+      "id": "92652f00-25ad-11f0-945c-6fdaa4d53658",
+      "from": "6adbdf40-d751-11ec-9fd8-49df506d0834",
+      "to": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
+      "config": {}
     },
     {
-      "id": "6adbdf40-d751-11ec-9fd8-49df506d0834",
-      "name": "Enrich title info",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const media_db = {\n    \"Murder Tomatoes\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Plan 9 From Outer Space\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1957,\n    },\n    \"Bad Taste\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Santa Clause Conquers the Martians\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"Howard the Duck\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1986,\n    },\n    \"Battlefield Earth\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2000,\n    },\n    \"Sex Lives of the Potato Men\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2004,\n    },\n    \"The Beast of Yucca Flats\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1961,\n    },\n    \"Kidnapping, Caucasian Style!\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2014,\n    },\n    \"They Saved Hitler's Brain\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"The Horror of of Party Beach\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n}\n\nconst media_info = media_db[payload.title];\n\nconst enriched_payload = {...payload, ...media_info};\n\nawait push(enriched_payload);"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1200,
-      "y": 200
-    },
-    {
-      "id": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "name": "View completion check",
-      "type": "transforms/split",
-      "params": {
-        "multiOutput": {
-          "configurable": {
-            "outputs": [
-              {
-                "id": "132bb920-d754-11ec-9fd8-49df506d0834",
-                "name": "Completed"
-              },
-              {
-                "id": "2ae506c0-d754-11ec-9fd8-49df506d0834",
-                "name": "Not completed"
-              }
-            ]
-          }
-        },
-        "onNoMatch": "discard",
-        "rules": [
-          {
-            "key": "@{payload.view_percent}",
-            "value": "90",
-            "op": "gt",
-            "output": "132bb920-d754-11ec-9fd8-49df506d0834"
-          },
-          {
-            "key": "@{payload.view_percent}",
-            "value": "91",
-            "op": "lt",
-            "output": "2ae506c0-d754-11ec-9fd8-49df506d0834"
-          }
-        ]
-      },
-      "partitionKey": null,
-      "schemaVersion": 3,
-      "x": 1200,
-      "y": 600
-    },
-    {
-      "id": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
-      "name": "Aggregate view time",
-      "type": "transforms/data_aggregate",
-      "params": {
-        "flushType": "EACH_FILE",
-        "groupKeys": [
-          {
-            "field": "user_id",
-            "operationType": "NONE"
-          },
-          {
-            "field": "timestamp",
-            "operationType": "MONTH"
-          }
-        ],
-        "operations": [
-          {
-            "field": "view_duration",
-            "type": "NUMERIC_SUM"
-          },
-          {
-            "field": "full_duration",
-            "type": "NUMERIC_SUM"
-          },
-          {
-            "field": "birth_year",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "country",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "email",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "name",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "title",
-            "type": "GENERAL_COUNT"
-          },
-          {
-            "field": "plan",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "os_type",
-            "type": "GENERAL_CARRY_LAST"
-          }
-        ],
-        "storeId": "d7cfb40baf8b2a608bc1ccca018f2eb8bf3bdb1b"
-      },
-      "partitionKey": null,
-      "schemaVersion": 2,
-      "x": 1200,
-      "y": 450
-    },
-    {
-      "id": "9d5a1000-d755-11ec-9fd8-49df506d0834",
-      "name": "Classify user",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const sum_view_percent = Math.round(100 * payload.sum_view_duration / payload.sum_full_duration);\nconst user_churn_risk = (sum_view_percent < 76);\n\n\nlet user_category = \"standard\";\nif (payload.sum_view_duration > 200000) {\n    user_category = \"heavy_user\";\n} else if (payload.sum_view_duration < 100000) {\n    user_category = \"light_user\";\n} \n\n\nconst metrics_msg = \"You have watched a total of \" + payload.count_title + \" movies this month. You completed \" + sum_view_percent + \"% of the movies you started watching.\";\n\nlet nudge_msg;\nif (user_churn_risk) {\n    nudge_msg = \"Maybe you would be interested in our pay-per-view plan?\";\n    audit.count(\"pay_per_view_nudge_messages_sent\");\n} else if (user_category == \"heavy_user\" && payload.carry_last_plan != \"Premium\") {\n    nudge_msg = \"Sign up for our Premium plan and enjoy great movies at super high quality for 5 family members!\";\n    audit.count(\"premium_nudge_messages_sent\");\n} else {\n    nudge_msg = \"We are glad you're enjoying your Cultflicks experience.\";\n}\n\nconst enriched_payload = {...payload, sum_view_percent, user_category, user_churn_risk, metrics_msg, nudge_msg};\n\naudit.count(\"count_user_category_\" + user_category);\naudit.sum(\"sum_view_duration\", payload.sum_view_duration);\naudit.sum(\"sum_full_duration\", payload.sum_full_duration);\n\nif (user_churn_risk) {\n    audit.count(\"count_churn_risk\");     \n}\n\nawait push(enriched_payload);"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1450,
-      "y": 450
-    },
-    {
-      "id": "f0da7250-d756-11ec-9fd8-49df506d0834",
-      "name": "Count not completed",
-      "type": "transforms/data_aggregate",
-      "params": {
-        "flushType": "EACH_FILE",
-        "groupKeys": [
-          {
-            "field": "timestamp",
-            "operationType": "MONTH"
-          },
-          {
-            "field": "title",
-            "operationType": "NONE"
-          }
-        ],
-        "operations": [
-          {
-            "field": "title",
-            "type": "GENERAL_COUNT"
-          },
-          {
-            "field": "view_duration",
-            "type": "NUMERIC_SUM"
-          },
-          {
-            "field": "view_percent",
-            "type": "NUMERIC_AVERAGE"
-          },
-          {
-            "field": "revenue_sharing_model",
-            "type": "GENERAL_CARRY_LAST"
-          }
-        ],
-        "storeId": "e987dd2c5146ccc2e14addc4167c9386b207fe1d"
-      },
-      "partitionKey": null,
-      "schemaVersion": 2,
-      "x": 1450,
-      "y": 750
-    },
-    {
-      "id": "2faff4f0-d757-11ec-9fd8-49df506d0834",
-      "name": "Count completed",
-      "type": "transforms/data_aggregate",
-      "params": {
-        "flushType": "EACH_FILE",
-        "groupKeys": [
-          {
-            "field": "timestamp",
-            "operationType": "MONTH"
-          },
-          {
-            "field": "title",
-            "operationType": "NONE"
-          }
-        ],
-        "operations": [
-          {
-            "field": "title",
-            "type": "GENERAL_COUNT"
-          },
-          {
-            "field": "view_duration",
-            "type": "NUMERIC_SUM"
-          },
-          {
-            "field": "revenue_sharing_model",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "ip_owner",
-            "type": "GENERAL_CARRY_LAST"
-          }
-        ],
-        "storeId": "7ece8a45c74e92521e2c50eb81939d4753b9d069"
-      },
-      "partitionKey": null,
-      "schemaVersion": 2,
-      "x": 1450,
-      "y": 600
-    },
-    {
-      "id": "4b22f260-d75b-11ec-9fd8-49df506d0834",
-      "name": "To Billing",
-      "type": "writers/noop",
-      "params": {},
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1850,
-      "y": 450
-    },
-    {
-      "id": "555c4970-d75b-11ec-9fd8-49df506d0834",
-      "name": "To partner settlement",
-      "type": "writers/noop",
-      "params": {},
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1850,
-      "y": 600
-    },
-    {
-      "id": "59850b90-d75b-11ec-9fd8-49df506d0834",
-      "name": "To analytics",
-      "type": "writers/noop",
-      "params": {},
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1850,
-      "y": 750
-    },
-    {
-      "id": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
-      "name": "Format for settlement",
-      "type": "transforms/map",
-      "params": {
-        "mappings": {
-          "total_views": "count_title",
-          "total_view_duration": "sum_view_duration",
-          "revenue_sharing_model": "carry_last_revenue_sharing_model",
-          "ip_owner": "carry_last_ip_owner",
-          "month": "month_timestamp",
-          "title": "title"
-        }
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1650,
-      "y": 600
-    },
-    {
-      "id": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
-      "name": "Format for analytics",
-      "type": "transforms/map",
-      "params": {
-        "mappings": {
-          "total_views": "count_title",
-          "total_view_duration": "sum_view_duration",
-          "revenue_sharing_model": "carry_last_revenue_sharing_model",
-          "ip_owner": "carry_last_ip_owner",
-          "month": "month_timestamp",
-          "title": "title",
-          "average_view_perc": "avg_view_percent"
-        }
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1650,
-      "y": 750
-    },
-    {
-      "id": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
-      "name": "Format for billing",
-      "type": "transforms/map",
-      "params": {
-        "mappings": {
-          "user_id": "user_id",
-          "name": "carry_last_name",
-          "email": "carry_last_email",
-          "birth_year": "carry_last_birth_year",
-          "country": "carry_last_country",
-          "plan": "carry_last_plan",
-          "month": "month_timestamp",
-          "total_views": "count_title",
-          "total_view_duration": "sum_view_duration",
-          "total_full_duration": "sum_full_duration",
-          "average_view_percent": "sum_view_percent",
-          "user_category": "user_category",
-          "user_churn_risk": "user_churn_risk",
-          "metrics_msg": "metrics_msg",
-          "nudge_msg": "nudge_msg"
-        }
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1650,
-      "y": 450
-    },
-    {
-      "id": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "name": "Calculate view percent",
-      "type": "transforms/xmap",
-      "params": {
-        "keepFields": {
-          "enabled": true
-        },
-        "mappings": [
-          {
-            "field": "view_percent",
-            "expression": "round(100 * @{payload.view_duration} / @{payload.full_duration})",
-            "ast": [
-              "call",
-              [
-                "R",
-                "round"
-              ],
-              [
-                [
-                  "aop",
-                  "/",
-                  [
-                    "aop",
-                    "*",
-                    [
-                      "N",
-                      100
-                    ],
-                    [
-                      "IP",
-                      "@{payload.view_duration}"
-                    ]
-                  ],
-                  [
-                    "IP",
-                    "@{payload.full_duration}"
-                  ]
-                ]
-              ]
-            ],
-            "errorMessage": null
-          }
-        ]
-      },
-      "partitionKey": null,
-      "schemaVersion": 3,
-      "x": 1000,
-      "y": 450
-    },
-    {
-      "id": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
-      "name": "Send email notification",
-      "type": "writers/noop",
-      "params": {},
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 2050,
-      "y": 200
-    },
-    {
-      "id": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
-      "name": "Format email message",
-      "type": "transforms/xmap",
-      "params": {
-        "keepFields": {
-          "enabled": false
-        },
-        "mappings": [
-          {
-            "field": "subject",
-            "expression": "\"Thank you for using Cultflicks!\"",
-            "ast": [
-              "S",
-              "Thank you for using Cultflicks!"
-            ],
-            "errorMessage": null
-          },
-          {
-            "field": "message",
-            "expression": "\"Hi dear \" + @{payload.name} + \", Your email is \" + @{payload.email} + \", your country is \" + @{payload.country} + \", and you were born on \" + @{payload.birth_year} + \". \" + @{payload.nudge_msg} + \" \" + @{payload.metrics_msg} + \"  Best regards, Cultflicks\"",
-            "ast": [
-              "aop",
-              "+",
-              [
-                "aop",
-                "+",
-                [
-                  "aop",
-                  "+",
-                  [
-                    "aop",
-                    "+",
-                    [
-                      "aop",
-                      "+",
-                      [
-                        "aop",
-                        "+",
-                        [
-                          "aop",
-                          "+",
-                          [
-                            "aop",
-                            "+",
-                            [
-                              "aop",
-                              "+",
-                              [
-                                "aop",
-                                "+",
-                                [
-                                  "aop",
-                                  "+",
-                                  [
-                                    "aop",
-                                    "+",
-                                    [
-                                      "S",
-                                      "Hi dear "
-                                    ],
-                                    [
-                                      "IP",
-                                      "@{payload.name}"
-                                    ]
-                                  ],
-                                  [
-                                    "S",
-                                    ", Your email is "
-                                  ]
-                                ],
-                                [
-                                  "IP",
-                                  "@{payload.email}"
-                                ]
-                              ],
-                              [
-                                "S",
-                                ", your country is "
-                              ]
-                            ],
-                            [
-                              "IP",
-                              "@{payload.country}"
-                            ]
-                          ],
-                          [
-                            "S",
-                            ", and you were born on "
-                          ]
-                        ],
-                        [
-                          "IP",
-                          "@{payload.birth_year}"
-                        ]
-                      ],
-                      [
-                        "S",
-                        ". "
-                      ]
-                    ],
-                    [
-                      "IP",
-                      "@{payload.nudge_msg}"
-                    ]
-                  ],
-                  [
-                    "S",
-                    " "
-                  ]
-                ],
-                [
-                  "IP",
-                  "@{payload.metrics_msg}"
-                ]
-              ],
-              [
-                "S",
-                "  Best regards, Cultflicks"
-              ]
-            ],
-            "errorMessage": null
-          }
-        ]
-      },
-      "partitionKey": null,
-      "schemaVersion": 3,
-      "x": 1850,
-      "y": 200
+      "id": "93b5a3d0-25ad-11f0-945c-6fdaa4d53658",
+      "from": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
+      "to": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "config": {}
     }
   ]
 }
