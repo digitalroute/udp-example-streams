@@ -380,11 +380,6 @@
             ],
             "conditionRelation": "and",
             "ignoreCondition": true,
-            "groupBy": [
-              {
-                "fields": ["type"]
-              }
-            ],
             "otherOperations": [],
             "matchCategory": "Printing"
           }
