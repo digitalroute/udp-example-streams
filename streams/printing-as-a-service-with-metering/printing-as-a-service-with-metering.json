@@ -367,7 +367,6 @@
       "name": "Meter",
       "type": "transforms/meter",
       "params": {
-        "meterKey": "cc79e320-141a-11ef-85c8-3fd7b93e308b",
         "guidingRules": [
           {
             "customName": "Printing",
@@ -380,6 +379,7 @@
             ],
             "conditionRelation": "and",
             "ignoreCondition": true,
+            "groupBy": [],
             "otherOperations": [],
             "matchCategory": "Printing"
           }
