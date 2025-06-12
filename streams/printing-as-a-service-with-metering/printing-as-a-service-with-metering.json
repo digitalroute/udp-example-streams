@@ -126,17 +126,6 @@
       "y": 100
     },
     {
-      "id": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
-      "name": "Enrich CRM 1",
-      "type": "transforms/script",
-      "params": {
-        "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.userId);\npayload.department = crmDepartmentLookup(payload.userId);\nawait push(payload);\n"
-      },
-      "schemaVersion": 1,
-      "x": 1400,
-      "y": 100
-    },
-    {
       "id": "529547b0-1fd9-11e9-b13d-6969f21433e0",
       "name": "Deduplicate 2",
       "type": "transforms/deduplicate",
@@ -157,7 +146,7 @@
     },
     {
       "id": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
-      "name": "Enrich CRM 2",
+      "name": "Enrich CRM 1",
       "type": "transforms/script",
       "params": {
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
@@ -293,6 +282,21 @@
           },
           {
             "periodEnd": "periodEnd"
+          },
+          {
+            "brand": "customFields.brand"
+          },
+          {
+            "type": "customFields.type"
+          },
+          {
+            "model": "customFields.model"
+          },
+          {
+            "customer": "customFields.customer"
+          },
+          {
+            "department": "customFields.department"
           }
         ]
       },
@@ -326,7 +330,7 @@
     },
     {
       "id": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
-      "name": "Enrich CRM 3",
+      "name": "Enrich CRM 2",
       "type": "transforms/script",
       "params": {
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
@@ -488,12 +492,6 @@
       "config": {}
     },
     {
-      "id": "317ea0c0-4c48-11ea-9b57-69fd58765c81",
-      "from": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
-      "to": "30202230-4c48-11ea-9b57-69fd58765c81",
-      "config": {}
-    },
-    {
       "id": "372f3b60-4c48-11ea-9b57-69fd58765c81",
       "from": "30202230-4c48-11ea-9b57-69fd58765c81",
       "to": "801f7090-48c6-11ea-934b-e7039b2101e2",
@@ -544,10 +542,11 @@
       "config": {}
     },
     {
-      "id": "76572c50-1384-11ef-aa40-3bc36eb7b565",
+      "id": "a60307c0-4769-11f0-af27-8fb7e3c00229",
       "from": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
-      "to": "bd0183f0-02da-11e9-a2ab-ddc54ea0654a",
+      "to": "30202230-4c48-11ea-9b57-69fd58765c81",
       "config": {}
     }
-  ]
+  ],
+  "nodeGroups": []
 }
