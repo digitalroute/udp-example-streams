@@ -45,6 +45,15 @@
               "type": "string",
               "minLength": 36,
               "maxLength": 36
+            },
+            "kWhCharged": {
+              "type": "number"
+            },
+            "date": {
+              "type": "string"
+            },
+            "chargingPlace": {
+              "type": "string"
             }
           }
         },
