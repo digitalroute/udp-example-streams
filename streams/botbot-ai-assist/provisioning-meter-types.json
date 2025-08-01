@@ -3,79 +3,65 @@
   "nodes": [
     {
       "id": "c0d50910-0ed3-11ef-a415-f705033d8568",
-      "name": "Init",
       "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Init",
       "params": {
         "max": 1
       },
-      "partitionKey": null,
-      "schemaVersion": 2,
       "x": 500,
       "y": 150
     },
     {
-      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
-      "name": "Prepare Meter Types",
-      "type": "transforms/script",
-      "params": {
-        "transform": "/*\nL1_Llama3_Requests\n\nL1_Gemini_Pro_Requests\n\nL1_Claude3_Sonnet_Requests\n\nL2_GPT4o_Requests\n\nL2_Gemini_Advanced_Requests\n\nL2_Claude3_Opus_Requests\n*/\n\nconst meterTypes = [\n  {\n    name: 'L1_Llama3_Requests',\n    description: \"L1 API requests using the Llama3 LLM\",\n    unit: 'API request',\n    category: 'L1_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n  {\n    name: 'L1_Gemini_Pro_Requests',\n    description: \"L1 API requests using the Gemini Pro LLM\",\n    unit: 'API request',\n    category: 'L1_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n  {\n    name: 'L1_Claude3_Sonnet_Requests',\n    description: \"L1 API requests using the Claude3 Sonnet LLM\",\n    unit: 'API request',\n    category: 'L1_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  },\n  {\n    name: 'L2_GPT4o_Requests',\n    description: \"L2 API requests using the GPT4o LLM\",\n    unit: 'API request',\n    category: 'L2_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  }, \n  {\n    name: 'L2_Gemini_Advanced_Requests',\n    description: \"L2 API requests using the Gemini Advanced LLM\",\n    unit: 'API request',\n    category: 'L2_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  }, \n  {\n    name: 'L2_Claude3_Opus_Requests',\n    description: \"L2 API requests using the Claude3 Opus LLM\",\n    unit: 'API request',\n    category: 'L2_API_Requests',\n    aggregation: {\n      type: 'sum',\n    },\n    resetSchedule: {\n      day: '1',\n      hour: '0',\n      minute: '0',\n      month: '*',\n      weekday: '*',\n    },\n    timezone: 'Etc/UTC',\n  }\n];\n\n\nfor(const meterType of meterTypes) {\n    await push({ meterType });\n}"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 700,
-      "y": 150
-    },
-    {
       "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
-      "name": "Meter Type API",
       "type": "transforms/http",
+      "schemaVersion": 11,
+      "name": "Meter Type API",
       "params": {
-        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
-        "errorMode": "defer",
+        "authentication": "password",
+        "authType": "oAuth2",
+        "body": "${payload.meterType}",
         "cacheSeconds": 300,
+        "errorMode": "defer",
+        "method": "POST",
+        "oAuth2Authentication": {
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/",
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer"
+        },
+        "retries": 1,
+        "shouldRetry": false,
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
         "useCache": false,
         "useMockData": true,
-        "method": "POST",
-        "authType": "oAuth2",
-        "shouldRetry": false,
-        "useResponseHeaderKey": true,
-        "oAuth2Authentication": {
-          "clientAuthentication": "sendInBody",
-          "headerPrefix": "Bearer",
-          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
-          "audience": "https://api.digitalroute.io/"
-        },
-        "body": "${payload.meterType}",
-        "retries": 1,
-        "authentication": "password",
-        "secretsWalletEntry": {
-          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
-          "secretType": "oauth2"
-        }
+        "useResponseHeaderKey": true
       },
-      "partitionKey": null,
-      "schemaVersion": 11,
       "x": 900,
       "y": 150
     },
     {
-      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
-      "name": "Log",
-      "type": "writers/log",
-      "params": {},
-      "partitionKey": null,
+      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "type": "transforms/script",
       "schemaVersion": 1,
+      "name": "Prepare Meter Types",
+      "params": {
+        "transform": "/*\nL1_Llama3_Requests\n\nL1_Gemini_Pro_Requests\n\nL1_Claude3_Sonnet_Requests\n\nL2_GPT4o_Requests\n\nL2_Gemini_Flash_Requests\n\nL2_Claude3_Opus_Requests\n*/\n\nconst meterTypes = [\n  {\n    name: \"L1_Llama3_Requests\",\n    description: \"L1 API requests using the Llama3 LLM\",\n    unit: \"API request\",\n    category: \"L1_API_Requests\",\n    aggregation: {\n      type: \"sum\",\n    },\n    resetSchedule: {\n      day: \"1\",\n      hour: \"0\",\n      minute: \"0\",\n      month: \"*\",\n      weekday: \"*\",\n    },\n    timezone: \"Etc/UTC\",\n    capacity: 10000,\n    thresholds: [\n      {\n        name: \"EMAIL\",\n        capacityPercentage: 90,\n        customFields: { action: \"EMAIL\" },\n      },\n      {\n        name: \"DEACTIVATE\",\n        absoluteValue: 10000,\n        customFields: { action: \"DEACTIVATE\" },\n      },\n    ],\n  },\n  {\n    name: \"L1_Gemini_Pro_Requests\",\n    description: \"L1 API requests using the Gemini Pro LLM\",\n    unit: \"API request\",\n    category: \"L1_API_Requests\",\n    aggregation: {\n      type: \"sum\",\n    },\n    resetSchedule: {\n      day: \"1\",\n      hour: \"0\",\n      minute: \"0\",\n      month: \"*\",\n      weekday: \"*\",\n    },\n    timezone: \"Etc/UTC\",\n    capacity: 5000,\n    thresholds: [\n      {\n        name: \"EMAIL\",\n        capacityPercentage: 90,\n        customFields: { action: \"EMAIL\" },\n      },\n      {\n        name: \"DEACTIVATE\",\n        absoluteValue: 5000,\n        customFields: { action: \"DEACTIVATE\" },\n      },\n    ],\n  },\n  {\n    name: \"L1_Claude3_Sonnet_Requests\",\n    description: \"L1 API requests using the Claude3 Sonnet LLM\",\n    unit: \"API request\",\n    category: \"L1_API_Requests\",\n    aggregation: {\n      type: \"sum\",\n    },\n    resetSchedule: {\n      day: \"1\",\n      hour: \"0\",\n      minute: \"0\",\n      month: \"*\",\n      weekday: \"*\",\n    },\n    timezone: \"Etc/UTC\",\n    capacity: 10000,\n    thresholds: [\n      {\n        name: \"EMAIL\",\n        capacityPercentage: 90,\n        customFields: { action: \"EMAIL\" },\n      },\n      {\n        name: \"DEACTIVATE\",\n        absoluteValue: 10000,\n        customFields: { action: \"DEACTIVATE\" },\n      },\n    ],\n  },\n  {\n    name: \"L2_GPT4o_Requests\",\n    description: \"L2 API requests using the GPT4o LLM\",\n    unit: \"API request\",\n    category: \"L2_API_Requests\",\n    aggregation: {\n      type: \"sum\",\n    },\n    resetSchedule: {\n      day: \"1\",\n      hour: \"0\",\n      minute: \"0\",\n      month: \"*\",\n      weekday: \"*\",\n    },\n    timezone: \"Etc/UTC\",\n    capacity: 20000,\n    thresholds: [\n      {\n        name: \"EMAIL\",\n        capacityPercentage: 90,\n        customFields: { action: \"EMAIL\" },\n      },\n      {\n        name: \"DEACTIVATE\",\n        absoluteValue: 20000,\n        customFields: { action: \"DEACTIVATE\" },\n      },\n    ],\n  },\n  {\n    name: \"L2_Gemini_Flash_Requests\",\n    description: \"L2 API requests using the Gemini Flash LLM\",\n    unit: \"API request\",\n    category: \"L2_API_Requests\",\n    aggregation: {\n      type: \"sum\",\n    },\n    resetSchedule: {\n      day: \"1\",\n      hour: \"0\",\n      minute: \"0\",\n      month: \"*\",\n      weekday: \"*\",\n    },\n    timezone: \"Etc/UTC\",\n    capacity: 20000,\n    thresholds: [\n      {\n        name: \"EMAIL\",\n        capacityPercentage: 90,\n        customFields: { action: \"EMAIL\" },\n      },\n      {\n        name: \"DEACTIVATE\",\n        absoluteValue: 20000,\n        customFields: { action: \"DEACTIVATE\" },\n      },\n    ],\n  },\n  {\n    name: \"L2_Claude3_Opus_Requests\",\n    description: \"L2 API requests using the Claude3 Opus LLM\",\n    unit: \"API request\",\n    category: \"L2_API_Requests\",\n    aggregation: {\n      type: \"sum\",\n    },\n    resetSchedule: {\n      day: \"1\",\n      hour: \"0\",\n      minute: \"0\",\n      month: \"*\",\n      weekday: \"*\",\n    },\n    timezone: \"Etc/UTC\",\n    capacity: 5000,\n    thresholds: [\n      {\n        name: \"EMAIL\",\n        capacityPercentage: 90,\n        customFields: { action: \"EMAIL\" },\n      },\n      {\n        name: \"DEACTIVATE\",\n        absoluteValue: 5000,\n        customFields: { action: \"DEACTIVATE\" },\n      },\n    ],\n  },\n];\n\nfor (const meterType of meterTypes) {\n  await push({ meterType });\n}\n"
+      },
+      "x": 700,
+      "y": 150
+    },
+    {
+      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Log",
+      "params": {},
       "x": 1100,
       "y": 150
     }
   ],
   "edges": [
-    {
-      "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
-      "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
-      "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
-      "config": {}
-    },
     {
       "id": "408efbb0-0ed5-11ef-a415-f705033d8568",
       "from": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
@@ -86,6 +72,12 @@
       "id": "62c07e20-0ed5-11ef-a415-f705033d8568",
       "from": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
       "to": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "config": {}
+    },
+    {
+      "id": "c899ddb0-0ed3-11ef-a415-f705033d8568",
+      "from": "c0d50910-0ed3-11ef-a415-f705033d8568",
+      "to": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
       "config": {}
     }
   ]

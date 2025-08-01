@@ -18,7 +18,7 @@
       "name": "Prepare Meter Types",
       "type": "transforms/script",
       "params": {
-        "transform": "const meterType = {\n  name: 'Pay-Per-Print',\n  description:\n    'This product charges customers based on total number of prints taken on a printer.',\n  unit: 'sheets',\n  category: 'Printing',\n  aggregation: {\n    type: 'sum',\n  },\n  resetSchedule: {\n    day: '1',\n    hour: '0',\n    minute: '0',\n    month: '*',\n    weekday: '*',\n  },\n  timezone: 'Etc/UTC',\n};\n\nawait push({ meterType });\n"
+        "transform": "const meterType = {\n  name: 'Pay-Per-Print',\n  description: 'This product charges customers based on total number of prints taken on a printer.',\n  unit: 'sheets',\n  category: 'Printing',\n  aggregation: {\n    type: 'sum',\n  },\n  resetSchedule: {\n    day: '1',\n    hour: '0',\n    minute: '0',\n    month: '*',\n    weekday: '*',\n  },\n  timezone: 'Etc/UTC',\n  capacity: 10000,\n  thresholds:[\n                { name:\"EMAIL_MAINTENANCE\", capacityPercentage:90, customFields:{ action:\"EMAIL_MAINTENANCE\" }},\n                { name:\"DEACTIVATE_PRINTER\", absoluteValue:10000, customFields:{ action:\"DEACTIVATE_PRINTER\" }}\n              ]\n};\n\nawait push({ meterType });\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,
