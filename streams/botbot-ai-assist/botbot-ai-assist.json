@@ -9,17 +9,11 @@
         "schema": {
           "properties": {
             "region": {
-              "enum": [
-                "APAC",
-                "EMEA",
-                "AMER"
-              ],
+              "enum": ["APAC", "EMEA", "AMER"],
               "description": "Region validation"
             }
           },
-          "required": [
-            "region"
-          ]
+          "required": ["region"]
         },
         "suspenseManagement": {
           "enabled": true,
@@ -48,13 +42,14 @@
     },
     {
       "id": "6363e5b0-ea18-11ee-b028-57e26d98119b",
-      "name": "Meter",
       "type": "transforms/meter",
+      "schemaVersion": 2,
+      "name": "Meter",
       "params": {
-        "meterKey": "17f05f60-5bd7-11ef-bc19-99d6414306ee",
+        "flushType": "TIMEOUT",
         "guidingRules": [
           {
-            "customName": "L1 API Requests",
+            "conditionRelation": "and",
             "conditions": [
               {
                 "customName": "",
@@ -62,21 +57,17 @@
                 "value": "L1"
               }
             ],
-            "conditionRelation": "and",
-            "ignoreCondition": false,
-            "matchCategory": "L1_API_Requests",
+            "customName": "L1 API Requests",
             "groupBy": [
               {
-                "fields": [
-                  "region"
-                ]
+                "fields": ["region"]
               },
               {
-                "fields": [
-                  "status"
-                ]
+                "fields": ["status"]
               }
             ],
+            "ignoreCondition": false,
+            "matchCategory": "L1_API_Requests",
             "otherOperations": [
               {
                 "field": "caseNumber",
@@ -97,7 +88,7 @@
             ]
           },
           {
-            "customName": "L2 API Requests",
+            "conditionRelation": "and",
             "conditions": [
               {
                 "customName": "",
@@ -105,21 +96,17 @@
                 "value": "L2"
               }
             ],
-            "conditionRelation": "and",
-            "ignoreCondition": false,
-            "matchCategory": "L2_API_Requests",
+            "customName": "L2 API Requests",
             "groupBy": [
               {
-                "fields": [
-                  "region"
-                ]
+                "fields": ["region"]
               },
               {
-                "fields": [
-                  "status"
-                ]
+                "fields": ["status"]
               }
             ],
+            "ignoreCondition": false,
+            "matchCategory": "L2_API_Requests",
             "otherOperations": [
               {
                 "field": "status",
@@ -140,17 +127,24 @@
             ]
           }
         ],
-        "suspenseManagement": {
-          "enabled": true,
-          "abortOnDisabled": false,
-          "resetOnValidEvent": true,
-          "eventThreshold": 10000,
-          "onThresholdExceeded": "ABORT"
+        "multiOutput": {
+          "fixed": {
+            "reset": {
+              "id": "6ae8069d-39e5-4400-96fd-71c77a67e328"
+            },
+            "threshold": {
+              "id": "2c3454c8-bf94-4f08-b479-9839854bc473"
+            }
+          }
         },
-        "flushType": "TIMEOUT"
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 10000,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
       },
-      "partitionKey": null,
-      "schemaVersion": 1,
       "x": 1100,
       "y": 200
     },
@@ -223,6 +217,67 @@
       "y": 200
     },
     {
+      "id": "eb7a0fb0-6eb0-11f0-92dc-0dafa1e48d46",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Format email",
+      "params": {
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"EMAIL\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" is close to the alloted token limit, \" + threshold.capacityPercentage + \"% of capacity is used.\"\n});"
+      },
+      "x": 1450,
+      "y": 350
+    },
+    {
+      "id": "eb7a36c0-6eb0-11f0-92dc-0dafa1e48d46",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Format deactivate",
+      "params": {
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"DEACTIVATE\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" has reached the maximum token limit. Tokens used: \" + threshold.absoluteValue\n});"
+      },
+      "x": 1450,
+      "y": 500
+    },
+    {
+      "id": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
+      "type": "transforms/split",
+      "schemaVersion": 3,
+      "name": "Route",
+      "params": {
+        "multiOutput": {
+          "configurable": {
+            "outputs": [
+              {
+                "id": "eb7a36c2-6eb0-11f0-92dc-0dafa1e48d46",
+                "name": "EMAIL"
+              },
+              {
+                "id": "eb7a36c3-6eb0-11f0-92dc-0dafa1e48d46",
+                "name": "DEACTIVATE"
+              }
+            ]
+          }
+        },
+        "onNoMatch": "discard",
+        "rules": [
+          {
+            "key": "@{payload.thresholdReached.customFields.action}",
+            "op": "eq",
+            "output": "eb7a36c2-6eb0-11f0-92dc-0dafa1e48d46",
+            "value": "EMAIL"
+          },
+          {
+            "key": "@{payload.thresholdReached.customFields.action}",
+            "op": "eq",
+            "output": "eb7a36c3-6eb0-11f0-92dc-0dafa1e48d46",
+            "value": "DEACTIVATE"
+          }
+        ]
+      },
+      "x": 1250,
+      "y": 380
+    },
+    {
       "id": "af86ba50-1392-11ef-aa40-3bc36eb7b565",
       "name": "Log",
       "type": "writers/log",
@@ -231,9 +286,33 @@
       "schemaVersion": 1,
       "x": 1250,
       "y": 200
+    },
+    {
+      "id": "eb7a36c4-6eb0-11f0-92dc-0dafa1e48d46",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Email",
+      "params": {},
+      "x": 1600,
+      "y": 350
+    },
+    {
+      "id": "eb7a36c5-6eb0-11f0-92dc-0dafa1e48d46",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Deactivate",
+      "params": {},
+      "x": 1600,
+      "y": 500
     }
   ],
   "edges": [
+    {
+      "id": "2e2ec160-138c-11ef-aa40-3bc36eb7b565",
+      "from": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
+      "to": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
+      "config": {}
+    },
     {
       "id": "524fe0c0-eab9-11ee-be5c-ed7b10940926",
       "from": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
@@ -243,14 +322,8 @@
     {
       "id": "5370e120-eab9-11ee-be5c-ed7b10940926",
       "from": "50920421-eab9-11ee-be5c-ed7b10940926",
-      "output": "50920420-eab9-11ee-be5c-ed7b10940926",
       "to": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
-      "config": {}
-    },
-    {
-      "id": "2e2ec160-138c-11ef-aa40-3bc36eb7b565",
-      "from": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
-      "to": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
+      "output": "50920420-eab9-11ee-be5c-ed7b10940926",
       "config": {}
     },
     {
@@ -269,6 +342,40 @@
       "id": "b1603540-1392-11ef-aa40-3bc36eb7b565",
       "from": "6363e5b0-ea18-11ee-b028-57e26d98119b",
       "to": "af86ba50-1392-11ef-aa40-3bc36eb7b565",
+      "output": "6ae8069d-39e5-4400-96fd-71c77a67e328",
+      "config": {}
+    },
+    {
+      "id": "eb7a36c6-6eb0-11f0-92dc-0dafa1e48d46",
+      "from": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
+      "to": "eb7a36c0-6eb0-11f0-92dc-0dafa1e48d46",
+      "output": "eb7a36c3-6eb0-11f0-92dc-0dafa1e48d46",
+      "config": {}
+    },
+    {
+      "id": "eb7a36c7-6eb0-11f0-92dc-0dafa1e48d46",
+      "from": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
+      "to": "eb7a0fb0-6eb0-11f0-92dc-0dafa1e48d46",
+      "output": "eb7a36c2-6eb0-11f0-92dc-0dafa1e48d46",
+      "config": {}
+    },
+    {
+      "id": "eb7a36c8-6eb0-11f0-92dc-0dafa1e48d46",
+      "from": "eb7a0fb0-6eb0-11f0-92dc-0dafa1e48d46",
+      "to": "eb7a36c4-6eb0-11f0-92dc-0dafa1e48d46",
+      "config": {}
+    },
+    {
+      "id": "eb7a36c9-6eb0-11f0-92dc-0dafa1e48d46",
+      "from": "eb7a36c0-6eb0-11f0-92dc-0dafa1e48d46",
+      "to": "eb7a36c5-6eb0-11f0-92dc-0dafa1e48d46",
+      "config": {}
+    },
+    {
+      "id": "f544ed80-6eb0-11f0-92dc-0dafa1e48d46",
+      "from": "6363e5b0-ea18-11ee-b028-57e26d98119b",
+      "to": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
+      "output": "2c3454c8-bf94-4f08-b479-9839854bc473",
       "config": {}
     }
   ]

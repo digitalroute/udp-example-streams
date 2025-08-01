@@ -3,116 +3,102 @@
   "nodes": [
     {
       "id": "c0d50910-0ed3-11ef-a415-f705033d8568",
-      "name": "Init",
       "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Init",
       "params": {
         "max": 1
       },
-      "partitionKey": null,
-      "schemaVersion": 2,
       "x": 400,
       "y": 150
     },
     {
-      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
-      "name": "Prepare Meters",
-      "type": "transforms/script",
-      "params": {
-        "transform": "/** REPLACE THIS VALUE **/\nconst METER_KEY = '2c834594-1205-43de-a232-659325162b6c';\n\n/***************************/\n\nfor(const userId of payload.userIds)\n    await push({\n        meter: {\n            userId,\n            meterKey: METER_KEY,\n            meterTypeId: payload.httpResponse.meterTypes[0].id,\n        },\n    });\n"
-      },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 850,
-      "y": 150
-    },
-    {
       "id": "3e5b2bc0-0ed5-11ef-a415-f705033d8568",
-      "name": "Meter API",
       "type": "transforms/http",
+      "schemaVersion": 11,
+      "name": "Meter API",
       "params": {
-        "uri": "https://api.digitalroute.io/usage-metering/v1/meters",
-        "errorMode": "defer",
+        "authentication": "password",
+        "authType": "oAuth2",
+        "body": "${payload.meter}",
         "cacheSeconds": 300,
+        "errorMode": "defer",
+        "method": "POST",
+        "oAuth2Authentication": {
+          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
+          "audience": "https://api.digitalroute.io/",
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer"
+        },
+        "retries": 1,
+        "shouldRetry": false,
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meters",
         "useCache": false,
         "useMockData": true,
-        "method": "POST",
-        "authType": "oAuth2",
-        "shouldRetry": false,
-        "useResponseHeaderKey": true,
-        "oAuth2Authentication": {
-          "clientAuthentication": "sendInBody",
-          "headerPrefix": "Bearer",
-          "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
-          "audience": "https://api.digitalroute.io/"
-        },
-        "body": "${payload.meter}",
-        "retries": 1,
-        "authentication": "password",
-        "secretsWalletEntry": {
-          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
-          "secretType": "oauth2"
-        }
+        "useResponseHeaderKey": true
       },
-      "partitionKey": null,
-      "schemaVersion": 11,
       "x": 1000,
       "y": 150
     },
     {
-      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
-      "name": "Log",
-      "type": "writers/log",
-      "params": {},
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 1150,
-      "y": 150
-    },
-    {
       "id": "7c162f70-594c-11ef-9cc5-9706c26757c6",
-      "name": "Find Meter Types",
       "type": "transforms/http",
+      "schemaVersion": 11,
+      "name": "Find Meter Types",
       "params": {
-        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
-        "errorMode": "defer",
-        "cacheSeconds": 300,
-        "useCache": false,
-        "useMockData": false,
-        "method": "GET",
+        "authentication": "password",
         "authType": "oAuth2",
-        "shouldRetry": false,
-        "retries": 1,
-        "useResponseHeaderKey": false,
+        "cacheSeconds": 300,
+        "errorMode": "defer",
+        "method": "GET",
         "oAuth2Authentication": {
-          "clientAuthentication": "sendInBody",
-          "headerPrefix": "Bearer",
           "accessTokenURL": "https://api.digitalroute.io/authentication/v1/oauth/token",
-          "audience": "https://api.digitalroute.io/"
+          "audience": "https://api.digitalroute.io/",
+          "clientAuthentication": "sendInBody",
+          "headerPrefix": "Bearer"
         },
         "qs": {
           "name": "${payload.meterTypeName}"
         },
-        "authentication": "password",
-        "secretsWalletEntry": {
-          "secretId": "9073c272-213a-4dbd-9d27-b45b98d0798e",
-          "secretType": "oauth2"
-        }
+        "retries": 1,
+        "shouldRetry": false,
+        "uri": "https://api.digitalroute.io/usage-metering/v1/meter-types",
+        "useCache": false,
+        "useMockData": false,
+        "useResponseHeaderKey": false
       },
-      "partitionKey": null,
-      "schemaVersion": 11,
       "x": 700,
       "y": 150
     },
     {
       "id": "86a0b3c0-594c-11ef-9cc5-9706c26757c6",
-      "name": "Meter Type FIlter",
       "type": "transforms/script",
-      "params": {
-        "transform": "await push({\n    userIds: ['Cloud AI', 'Machine Emotions'],\n    meterTypeName: 'L1_Claude3_Sonnet_Requests',\n});\nawait push({\n    userIds: ['Play-to-Earn', 'Android Sheep'],\n    meterTypeName: 'L1_Gemini_Pro_Requests',\n});\nawait push({\n    userIds: ['FinTech Lords', 'Metaverse Mages'],\n    meterTypeName: 'L1_Llama3_Requests',\n});\nawait push({\n    userIds: ['Cloud AI', 'Machine Emotions'],\n    meterTypeName: 'L2_Claude3_Opus_Requests',\n});\nawait push({\n    userIds: ['Play-to-Earn', 'Metaverse Mages'],\n    meterTypeName: 'L2_Gemini_Advanced_Requests',\n});\nawait push({\n    userIds: ['FinTech Lords', 'Android Sheep'],\n    meterTypeName: 'L2_GPT4o_Requests',\n});\n"
-      },
-      "partitionKey": null,
       "schemaVersion": 1,
+      "name": "Meter Type FIlter",
+      "params": {
+        "transform": "await push({\n    userIds: ['Cloud AI', 'Machine Emotions'],\n    meterTypeName: 'L1_Claude3_Sonnet_Requests',\n});\nawait push({\n    userIds: ['Play-to-Earn', 'Android Sheep'],\n    meterTypeName: 'L1_Gemini_Pro_Requests',\n});\nawait push({\n    userIds: ['FinTech Lords', 'Metaverse Mages'],\n    meterTypeName: 'L1_Llama3_Requests',\n});\nawait push({\n    userIds: ['Cloud AI', 'Machine Emotions'],\n    meterTypeName: 'L2_Claude3_Opus_Requests',\n});\nawait push({\n    userIds: ['Play-to-Earn', 'Metaverse Mages'],\n    meterTypeName: 'L2_Gemini_Flash_Requests',\n});\nawait push({\n    userIds: ['FinTech Lords', 'Android Sheep'],\n    meterTypeName: 'L2_GPT4o_Requests',\n});\n"
+      },
       "x": 550,
+      "y": 150
+    },
+    {
+      "id": "c5faa1c0-0ed3-11ef-a415-f705033d8568",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Prepare Meters",
+      "params": {
+        "transform": "/** REPLACE THIS VALUE **/\nconst METER_KEY = '2c834594-1205-43de-a232-659325162b6c';\n\n/***************************/\n\nfor(const userId of payload.userIds)\n    await push({\n        meter: {\n            userId,\n            meterKey: METER_KEY,\n            meterTypeId: payload.httpResponse.meterTypes[0].id,\n        },\n    });\n"
+      },
+      "x": 850,
+      "y": 150
+    },
+    {
+      "id": "607fb5e0-0ed5-11ef-a415-f705033d8568",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Log",
+      "params": {},
+      "x": 1150,
       "y": 150
     }
   ],

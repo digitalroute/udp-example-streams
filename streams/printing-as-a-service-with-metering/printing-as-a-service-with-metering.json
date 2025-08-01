@@ -243,12 +243,12 @@
     },
     {
       "id": "801f7090-48c6-11ea-934b-e7039b2101e2",
-      "name": "To Billing",
       "type": "writers/log",
-      "params": {},
       "schemaVersion": 1,
+      "name": "To Billing",
+      "params": {},
       "x": 1700,
-      "y": 100
+      "y": -200
     },
     {
       "id": "a41fbf90-48c6-11ea-934b-e7039b2101e2",
@@ -302,7 +302,7 @@
       },
       "schemaVersion": 2,
       "x": 1550,
-      "y": 100
+      "y": -200
     },
     {
       "id": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
@@ -368,12 +368,14 @@
     },
     {
       "id": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
-      "name": "Meter",
       "type": "transforms/meter",
+      "schemaVersion": 2,
+      "name": "Meter",
       "params": {
+        "flushType": "TIMEOUT",
         "guidingRules": [
           {
-            "customName": "Printing",
+            "conditionRelation": "and",
             "conditions": [
               {
                 "customName": "",
@@ -381,21 +383,90 @@
                 "value": ""
               }
             ],
-            "conditionRelation": "and",
-            "ignoreCondition": true,
+            "customName": "Printing",
             "groupBy": [],
-            "otherOperations": [],
-            "matchCategory": "Printing"
+            "ignoreCondition": true,
+            "matchCategory": "Printing",
+            "otherOperations": []
           }
         ],
-        "flushType": "TIMEOUT",
+        "multiOutput": {
+          "fixed": {
+            "reset": {
+              "id": "bb9f5508-c08e-4c1c-afd3-3d728826b9c5"
+            },
+            "threshold": {
+              "id": "0cf83693-cbe7-40fd-9015-e775d52de373"
+            }
+          }
+        },
         "suspenseManagement": {
           "enabled": true
         }
       },
-      "schemaVersion": 1,
       "x": 1250,
+      "y": -200
+    },
+    {
+      "id": "a55559b0-6e18-11f0-a4b5-ff17eb67b466",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Format email",
+      "params": {
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"EMAIL_MAINTENANCE\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" soon needs maintenance as it usage has reached \" + threshold.capacityPercentage + \". Kindly schedule the maintenance.\"\n});"
+      },
+      "x": 1550,
+      "y": -50
+    },
+    {
+      "id": "a922dc70-6e18-11f0-a4b5-ff17eb67b466",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Format deactivate",
+      "params": {
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"DEACTIVATE_PRINTER\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" has reached the maximum prints and must be deactivated. Prints taken: \" + threshold.absoluteValue\n});"
+      },
+      "x": 1550,
       "y": 100
+    },
+    {
+      "id": "32a526c0-6e18-11f0-a4b5-ff17eb67b466",
+      "type": "transforms/split",
+      "schemaVersion": 3,
+      "name": "Route",
+      "params": {
+        "multiOutput": {
+          "configurable": {
+            "outputs": [
+              {
+                "id": "358a9371-6e18-11f0-a4b5-ff17eb67b466",
+                "name": "EMAIL"
+              },
+              {
+                "id": "5c4324a1-6e18-11f0-a4b5-ff17eb67b466",
+                "name": "DEACTIVATE"
+              }
+            ]
+          }
+        },
+        "onNoMatch": "discard",
+        "rules": [
+          {
+            "key": "@{payload.thresholdReached.customFields.action}",
+            "op": "eq",
+            "output": "358a9371-6e18-11f0-a4b5-ff17eb67b466",
+            "value": "EMAIL_MAINTENANCE"
+          },
+          {
+            "key": "@{payload.thresholdReached.customFields.action}",
+            "op": "eq",
+            "output": "5c4324a1-6e18-11f0-a4b5-ff17eb67b466",
+            "value": "DEACTIVATE_PRINTER"
+          }
+        ]
+      },
+      "x": 1400,
+      "y": -20
     },
     {
       "id": "43a56110-1383-11ef-aa40-3bc36eb7b565",
@@ -435,13 +506,111 @@
       "schemaVersion": 2,
       "x": 1100,
       "y": 100
+    },
+    {
+      "id": "ad039910-6e18-11f0-a4b5-ff17eb67b466",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Email maintenance",
+      "params": {},
+      "x": 1700,
+      "y": -50
+    },
+    {
+      "id": "af095420-6e18-11f0-a4b5-ff17eb67b466",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Deactivate printer",
+      "params": {},
+      "x": 1700,
+      "y": 100
     }
   ],
   "edges": [
     {
+      "id": "15c447d0-4c49-11ea-9b57-69fd58765c81",
+      "from": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
+      "to": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
+      "config": {}
+    },
+    {
+      "id": "17ccc200-4c49-11ea-9b57-69fd58765c81",
+      "from": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
+      "to": "a41fbf90-48c6-11ea-934b-e7039b2101e2",
+      "config": {}
+    },
+    {
+      "id": "1a596e70-81f5-11e9-80f0-0bac64875d58",
+      "from": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
+      "to": "1155ff50-81f5-11e9-80f0-0bac64875d58",
+      "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
+      "config": {}
+    },
+    {
+      "id": "3424c1e0-6e18-11f0-a4b5-ff17eb67b466",
+      "from": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
+      "to": "32a526c0-6e18-11f0-a4b5-ff17eb67b466",
+      "output": "0cf83693-cbe7-40fd-9015-e775d52de373",
+      "config": {}
+    },
+    {
+      "id": "372f3b60-4c48-11ea-9b57-69fd58765c81",
+      "from": "30202230-4c48-11ea-9b57-69fd58765c81",
+      "to": "801f7090-48c6-11ea-934b-e7039b2101e2",
+      "config": {}
+    },
+    {
+      "id": "49119fb0-1383-11ef-aa40-3bc36eb7b565",
+      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
+      "to": "43a56110-1383-11ef-aa40-3bc36eb7b565",
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
+      "config": {}
+    },
+    {
+      "id": "4a5a2540-1383-11ef-aa40-3bc36eb7b565",
+      "from": "43a56110-1383-11ef-aa40-3bc36eb7b565",
+      "to": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
+      "config": {}
+    },
+    {
+      "id": "69458d80-81f4-11e9-80f0-0bac64875d58",
+      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
+      "to": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
+      "config": {}
+    },
+    {
+      "id": "79d7ccf0-4737-11e9-9166-6b7c69bb46fd",
+      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
+      "to": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
+      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
+      "config": {}
+    },
+    {
       "id": "9da35ab0-02b7-11e9-9f17-81651dddad53",
       "from": "5c32a5b0-02b5-11e9-9f17-81651dddad53",
       "to": "7f60b090-02b5-11e9-9f17-81651dddad53",
+      "config": {}
+    },
+    {
+      "id": "a4e7a6f0-4c49-11ea-9b57-69fd58765c81",
+      "from": "1155ff50-81f5-11e9-80f0-0bac64875d58",
+      "to": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
+      "output": "35fffde6-e496-421a-b938-cce97ac0bf60",
+      "config": {}
+    },
+    {
+      "id": "a60307c0-4769-11f0-af27-8fb7e3c00229",
+      "from": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
+      "to": "30202230-4c48-11ea-9b57-69fd58765c81",
+      "output": "bb9f5508-c08e-4c1c-afd3-3d728826b9c5",
+      "config": {}
+    },
+    {
+      "id": "b7dd11d0-4738-11e9-94cb-5b409f620cb7",
+      "from": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
+      "to": "529547b0-1fd9-11e9-b13d-6969f21433e0",
+      "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
       "config": {}
     },
     {
@@ -459,61 +628,8 @@
     {
       "id": "c2756680-1fe0-11e9-b333-8387e66c8bf7",
       "from": "529547b0-1fd9-11e9-b13d-6969f21433e0",
-      "output": "a573e9cf-84cb-4374-bf3e-d8a7d6cab8ef",
       "to": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
-      "config": {}
-    },
-    {
-      "id": "79d7ccf0-4737-11e9-9166-6b7c69bb46fd",
-      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
-      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
-      "to": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
-      "config": {}
-    },
-    {
-      "id": "b7dd11d0-4738-11e9-94cb-5b409f620cb7",
-      "from": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
-      "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
-      "to": "529547b0-1fd9-11e9-b13d-6969f21433e0",
-      "config": {}
-    },
-    {
-      "id": "69458d80-81f4-11e9-80f0-0bac64875d58",
-      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
-      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
-      "to": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
-      "config": {}
-    },
-    {
-      "id": "1a596e70-81f5-11e9-80f0-0bac64875d58",
-      "from": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
-      "output": "7a5d77b0-4737-11e9-9166-6b7c69bb46fd",
-      "to": "1155ff50-81f5-11e9-80f0-0bac64875d58",
-      "config": {}
-    },
-    {
-      "id": "372f3b60-4c48-11ea-9b57-69fd58765c81",
-      "from": "30202230-4c48-11ea-9b57-69fd58765c81",
-      "to": "801f7090-48c6-11ea-934b-e7039b2101e2",
-      "config": {}
-    },
-    {
-      "id": "15c447d0-4c49-11ea-9b57-69fd58765c81",
-      "from": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
-      "to": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
-      "config": {}
-    },
-    {
-      "id": "17ccc200-4c49-11ea-9b57-69fd58765c81",
-      "from": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
-      "to": "a41fbf90-48c6-11ea-934b-e7039b2101e2",
-      "config": {}
-    },
-    {
-      "id": "a4e7a6f0-4c49-11ea-9b57-69fd58765c81",
-      "from": "1155ff50-81f5-11e9-80f0-0bac64875d58",
-      "output": "35fffde6-e496-421a-b938-cce97ac0bf60",
-      "to": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
+      "output": "a573e9cf-84cb-4374-bf3e-d8a7d6cab8ef",
       "config": {}
     },
     {
@@ -523,28 +639,35 @@
       "config": {}
     },
     {
+      "id": "ce41e1e0-6e18-11f0-a4b5-ff17eb67b466",
+      "from": "32a526c0-6e18-11f0-a4b5-ff17eb67b466",
+      "to": "a922dc70-6e18-11f0-a4b5-ff17eb67b466",
+      "output": "5c4324a1-6e18-11f0-a4b5-ff17eb67b466",
+      "config": {}
+    },
+    {
+      "id": "cf8d4da0-6e18-11f0-a4b5-ff17eb67b466",
+      "from": "32a526c0-6e18-11f0-a4b5-ff17eb67b466",
+      "to": "a55559b0-6e18-11f0-a4b5-ff17eb67b466",
+      "output": "358a9371-6e18-11f0-a4b5-ff17eb67b466",
+      "config": {}
+    },
+    {
+      "id": "d1101d10-6e18-11f0-a4b5-ff17eb67b466",
+      "from": "a55559b0-6e18-11f0-a4b5-ff17eb67b466",
+      "to": "ad039910-6e18-11f0-a4b5-ff17eb67b466",
+      "config": {}
+    },
+    {
+      "id": "d229a360-6e18-11f0-a4b5-ff17eb67b466",
+      "from": "a922dc70-6e18-11f0-a4b5-ff17eb67b466",
+      "to": "af095420-6e18-11f0-a4b5-ff17eb67b466",
+      "config": {}
+    },
+    {
       "id": "d94060e0-4c49-11ea-9b57-69fd58765c81",
       "from": "c6098e20-4c49-11ea-9b57-69fd58765c81",
       "to": "79ad13a0-81f4-11e9-80f0-0bac64875d58",
-      "config": {}
-    },
-    {
-      "id": "49119fb0-1383-11ef-aa40-3bc36eb7b565",
-      "from": "5f5be970-02c6-11e9-abea-918bf71eccf8",
-      "output": "c113ae58-f9c6-4eb8-9773-8301046b219c",
-      "to": "43a56110-1383-11ef-aa40-3bc36eb7b565",
-      "config": {}
-    },
-    {
-      "id": "4a5a2540-1383-11ef-aa40-3bc36eb7b565",
-      "from": "43a56110-1383-11ef-aa40-3bc36eb7b565",
-      "to": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
-      "config": {}
-    },
-    {
-      "id": "a60307c0-4769-11f0-af27-8fb7e3c00229",
-      "from": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
-      "to": "30202230-4c48-11ea-9b57-69fd58765c81",
       "config": {}
     }
   ],
