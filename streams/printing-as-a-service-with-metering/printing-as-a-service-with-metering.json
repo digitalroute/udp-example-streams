@@ -413,7 +413,7 @@
       "schemaVersion": 1,
       "name": "Format email",
       "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"EMAIL_MAINTENANCE\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" soon needs maintenance as it usage has reached \" + threshold.capacityPercentage + \". Kindly schedule the maintenance.\"\n});"
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"EMAIL_MAINTENANCE\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" soon needs maintenance as it usage has reached \" + threshold?.capacityPercentage + \". Kindly schedule the maintenance.\"\n});"
       },
       "x": 1550,
       "y": -50
@@ -424,7 +424,7 @@
       "schemaVersion": 1,
       "name": "Format deactivate",
       "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"DEACTIVATE_PRINTER\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" has reached the maximum prints and must be deactivated. Prints taken: \" + threshold.absoluteValue\n});"
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"DEACTIVATE_PRINTER\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" has reached the maximum prints and must be deactivated. Prints taken: \" + threshold?.absoluteValue\n});"
       },
       "x": 1550,
       "y": 100

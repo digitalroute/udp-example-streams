@@ -154,7 +154,7 @@
       "name": "Meter Type Filter",
       "type": "transforms/script",
       "params": {
-        "transform": "const meterTypeNames = [\n    'L1_Claude3_Sonnet_Requests',\n    'L1_Gemini_Pro_Requests',\n    'L1_Llama3_Requests',\n    'L2_Claude3_Opus_Requests',\n    'L2_Gemini_Advanced_Requests',\n    'L2_GPT4o_Requests',\n];\n\nfor(const meterTypeName of meterTypeNames)\n    await push({ meterTypeName });\n"
+        "transform": "const meterTypeNames = [\n    'L1_Claude3_Sonnet_Requests',\n    'L1_Gemini_Pro_Requests',\n    'L1_Llama3_Requests',\n    'L2_Claude3_Opus_Requests',\n    'L2_Gemini_Flash_Requests',\n    'L2_GPT4o_Requests',\n];\n\nfor(const meterTypeName of meterTypeNames)\n    await push({ meterTypeName });\n"
       },
       "partitionKey": null,
       "schemaVersion": 1,

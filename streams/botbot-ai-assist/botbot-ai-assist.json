@@ -222,7 +222,7 @@
       "schemaVersion": 1,
       "name": "Format email",
       "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"EMAIL\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" is close to the alloted token limit, \" + threshold.capacityPercentage + \"% of capacity is used.\"\n});"
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"EMAIL\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" is close to the alloted token limit, \" + threshold?.capacityPercentage + \"% of capacity is used.\"\n});"
       },
       "x": 1450,
       "y": 350
@@ -233,7 +233,7 @@
       "schemaVersion": 1,
       "name": "Format deactivate",
       "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold.customField.action === \"DEACTIVATE\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" has reached the maximum token limit. Tokens used: \" + threshold.absoluteValue\n});"
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"DEACTIVATE\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" has reached the maximum token limit. Tokens used: \" + threshold?.absoluteValue\n});"
       },
       "x": 1450,
       "y": 500
