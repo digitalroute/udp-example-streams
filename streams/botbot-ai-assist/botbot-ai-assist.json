@@ -217,67 +217,6 @@
       "y": 200
     },
     {
-      "id": "eb7a0fb0-6eb0-11f0-92dc-0dafa1e48d46",
-      "type": "transforms/script",
-      "schemaVersion": 1,
-      "name": "Format email",
-      "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"EMAIL\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" is close to the alloted token limit, \" + threshold?.capacityPercentage + \"% of capacity is used.\"\n});"
-      },
-      "x": 1450,
-      "y": 350
-    },
-    {
-      "id": "eb7a36c0-6eb0-11f0-92dc-0dafa1e48d46",
-      "type": "transforms/script",
-      "schemaVersion": 1,
-      "name": "Format deactivate",
-      "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"DEACTIVATE\");\n\nawait push({\n    ...payload,\n    message: \"The user with id \" + payload.userId + \" has reached the maximum token limit. Tokens used: \" + threshold?.absoluteValue\n});"
-      },
-      "x": 1450,
-      "y": 500
-    },
-    {
-      "id": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
-      "type": "transforms/split",
-      "schemaVersion": 3,
-      "name": "Route",
-      "params": {
-        "multiOutput": {
-          "configurable": {
-            "outputs": [
-              {
-                "id": "eb7a36c2-6eb0-11f0-92dc-0dafa1e48d46",
-                "name": "EMAIL"
-              },
-              {
-                "id": "eb7a36c3-6eb0-11f0-92dc-0dafa1e48d46",
-                "name": "DEACTIVATE"
-              }
-            ]
-          }
-        },
-        "onNoMatch": "discard",
-        "rules": [
-          {
-            "key": "@{payload.thresholdReached.customFields.action}",
-            "op": "eq",
-            "output": "eb7a36c2-6eb0-11f0-92dc-0dafa1e48d46",
-            "value": "EMAIL"
-          },
-          {
-            "key": "@{payload.thresholdReached.customFields.action}",
-            "op": "eq",
-            "output": "eb7a36c3-6eb0-11f0-92dc-0dafa1e48d46",
-            "value": "DEACTIVATE"
-          }
-        ]
-      },
-      "x": 1250,
-      "y": 380
-    },
-    {
       "id": "af86ba50-1392-11ef-aa40-3bc36eb7b565",
       "name": "Log",
       "type": "writers/log",
@@ -288,22 +227,13 @@
       "y": 200
     },
     {
-      "id": "eb7a36c4-6eb0-11f0-92dc-0dafa1e48d46",
-      "type": "writers/log",
+      "id": "c7a25c70-71d3-11f0-9be6-2d4f827a0c8a",
+      "type": "writers/noop",
       "schemaVersion": 1,
-      "name": "Email",
+      "name": "No operation",
       "params": {},
-      "x": 1600,
+      "x": 1250,
       "y": 350
-    },
-    {
-      "id": "eb7a36c5-6eb0-11f0-92dc-0dafa1e48d46",
-      "type": "writers/log",
-      "schemaVersion": 1,
-      "name": "Deactivate",
-      "params": {},
-      "x": 1600,
-      "y": 500
     }
   ],
   "edges": [
@@ -346,35 +276,9 @@
       "config": {}
     },
     {
-      "id": "eb7a36c6-6eb0-11f0-92dc-0dafa1e48d46",
-      "from": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
-      "to": "eb7a36c0-6eb0-11f0-92dc-0dafa1e48d46",
-      "output": "eb7a36c3-6eb0-11f0-92dc-0dafa1e48d46",
-      "config": {}
-    },
-    {
-      "id": "eb7a36c7-6eb0-11f0-92dc-0dafa1e48d46",
-      "from": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
-      "to": "eb7a0fb0-6eb0-11f0-92dc-0dafa1e48d46",
-      "output": "eb7a36c2-6eb0-11f0-92dc-0dafa1e48d46",
-      "config": {}
-    },
-    {
-      "id": "eb7a36c8-6eb0-11f0-92dc-0dafa1e48d46",
-      "from": "eb7a0fb0-6eb0-11f0-92dc-0dafa1e48d46",
-      "to": "eb7a36c4-6eb0-11f0-92dc-0dafa1e48d46",
-      "config": {}
-    },
-    {
-      "id": "eb7a36c9-6eb0-11f0-92dc-0dafa1e48d46",
-      "from": "eb7a36c0-6eb0-11f0-92dc-0dafa1e48d46",
-      "to": "eb7a36c5-6eb0-11f0-92dc-0dafa1e48d46",
-      "config": {}
-    },
-    {
-      "id": "f544ed80-6eb0-11f0-92dc-0dafa1e48d46",
+      "id": "c9c93410-71d3-11f0-9be6-2d4f827a0c8a",
       "from": "6363e5b0-ea18-11ee-b028-57e26d98119b",
-      "to": "eb7a36c1-6eb0-11f0-92dc-0dafa1e48d46",
+      "to": "c7a25c70-71d3-11f0-9be6-2d4f827a0c8a",
       "output": "2c3454c8-bf94-4f08-b479-9839854bc473",
       "config": {}
     }
