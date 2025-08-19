@@ -1,88 +1,64 @@
 {
-  "schemaVersion": 1,
   "name": "Handling Erroneous And Duplicated Records",
+  "annotation": {
+    "text": "Collecting data from various sources can result in duplicate or erroneous records, which should be removed before processing the final data. In this stream, we use electricity usage data to demonstrate how to clean up such records using the Deduplicate and Validate functions, ensuring only accurate data is sent for billing purposes.\n\nFunctions used in this stream and their purpose:\n\nCount - Counter that triggers the stream to run for the defined number of times.\n\nSimulate Data (Script) - Simulates sample electricity usage data. This step substitutes real data input.\n\nDeduplicate - Filters out duplicated records.\n\nValidate - Filters out erroneous records.\nIn this example, it will filter out records that do not have the kWhCharged column or the invalid format of userTechnicalId.\n\nLog - Stores data in a log. This step substitutes data being sent for billing.\n\nValidate Function\n\nAll records filtered by the Validate Function can be further processed and corrected with Data Correction.\n\nThis example stream is explained in detail here: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/7842352/Handling+Erroneous+And+Duplicated+Records.",
+    "color": "blue"
+  },
   "nodes": [
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "20eee900-4cd3-11ea-9014-2b24e4165af9",
-      "name": "Count",
       "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Count",
       "params": {
         "max": 1
       },
       "x": 400,
-      "y": 200
+      "y": 250
     },
     {
-      "partitionKey": null,
+      "id": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+      "type": "transforms/validate",
       "schemaVersion": 1,
+      "name": "Validate",
+      "params": {
+        "schema": {
+          "properties": {
+            "userTechnicalId": {
+              "maxLength": 36,
+              "minLength": 36,
+              "type": "string"
+            }
+          },
+          "required": ["date", "userTechnicalId", "kWhCharged", "chargingPlace"]
+        },
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 10000,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
+      },
+      "x": 1150,
+      "y": 250
+    },
+    {
       "id": "269fd1c0-4cd3-11ea-9014-2b24e4165af9",
-      "name": "Simulate Data",
       "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Simulate Data",
       "params": {
         "transform": "const today = new Date();\n\n// Create sample data\nconst usageEvent = [\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"1c1877ed-eb81-4f3d-893d-c2b6d8f43c38\",\n    \"kWhCharged\": 31,\n    \"chargingPlace\": \"Sorbonne_01\"\n  }, \n  \n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n // Simulate duplicate data\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"f3946937-b6de-4631-9673-9b46e12855b0\",\n    \"kWhCharged\": 28,\n    \"chargingPlace\": \"Montmartre_02\"\n  },\n  \n  // Simulate invalid data with missing kWhCharged\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"9aa641a2-361e-4027-bd49-5c0c3de7f54e\",\n    //\"kWhCharged\": 48,\n    \"chargingPlace\": \"Sorbonne_02\"\n  },\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"48053017-07b5-4d3b-ade4-e1183423453b\",\n    \"kWhCharged\": 52,\n    \"chargingPlace\": \"Grand_Hotel_Paris_01\"\n  },\n\n// Simulate invalid data with wrong userTechnicalId\n  {\n    \"date\": today,\n    \"userTechnicalId\": \"45f2389b-f8f6-4d1b-960a-19ab82b15b34---\",\n    \"kWhCharged\": 20,\n    \"chargingPlace\": \"Rue_Morgue_01\"\n  }\n]\n\nfor (var key in usageEvent) {\n    await push(usageEvent[key]);\n}\n"
       },
-      "x": 600,
-      "y": 200
+      "x": 650,
+      "y": 250
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "id": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
-      "name": "Validate",
-      "type": "transforms/validate",
-      "params": {
-        "schema": {
-          "required": [
-            "date",
-            "userTechnicalId",
-            "kWhCharged",
-            "chargingPlace"
-          ],
-          "properties": {
-            "userTechnicalId": {
-              "type": "string",
-              "minLength": 36,
-              "maxLength": 36
-            },
-            "kWhCharged": {
-              "type": "number"
-            },
-            "date": {
-              "type": "string"
-            },
-            "chargingPlace": {
-              "type": "string"
-            }
-          }
-        },
-        "suspenseManagement": {
-          "enabled": true,
-          "resetOnValidEvent": true,
-          "eventThreshold": 10000,
-          "onThresholdExceeded": "ABORT"
-        }
-      },
-      "x": 1000,
-      "y": 200
-    },
-    {
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "id": "cae69bf0-4cd4-11ea-9014-2b24e4165af9",
-      "name": "Log",
-      "type": "writers/log",
-      "params": {},
-      "x": 1200,
-      "y": 200
-    },
-    {
-      "partitionKey": null,
-      "schemaVersion": 3,
       "id": "c5abf3a0-51c1-11ea-bec0-a7e1071491c2",
-      "name": "Deduplicate",
       "type": "transforms/deduplicate",
+      "schemaVersion": 4,
+      "name": "Deduplicate",
       "params": {
         "key": "${payload}",
         "lifeTimeDays": 1,
@@ -94,8 +70,17 @@
           }
         }
       },
-      "x": 800,
-      "y": 200
+      "x": 900,
+      "y": 250
+    },
+    {
+      "id": "cae69bf0-4cd4-11ea-9014-2b24e4165af9",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Log",
+      "params": {},
+      "x": 1400,
+      "y": 250
     }
   ],
   "edges": [
@@ -103,12 +88,6 @@
       "id": "27cc1cc0-4cd3-11ea-9014-2b24e4165af9",
       "from": "20eee900-4cd3-11ea-9014-2b24e4165af9",
       "to": "269fd1c0-4cd3-11ea-9014-2b24e4165af9",
-      "config": {}
-    },
-    {
-      "id": "cc732f60-4cd4-11ea-9014-2b24e4165af9",
-      "from": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
-      "to": "cae69bf0-4cd4-11ea-9014-2b24e4165af9",
       "config": {}
     },
     {
@@ -121,7 +100,49 @@
       "id": "ca28f040-51c1-11ea-bec0-a7e1071491c2",
       "from": "c5abf3a0-51c1-11ea-bec0-a7e1071491c2",
       "to": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+      "output": "3845df85-be64-46c6-a603-a953052fa3dc",
       "config": {}
+    },
+    {
+      "id": "cc732f60-4cd4-11ea-9014-2b24e4165af9",
+      "from": "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+      "to": "cae69bf0-4cd4-11ea-9014-2b24e4165af9",
+      "config": {}
+    }
+  ],
+  "nodeGroups": [
+    {
+      "id": "79e2fb40-3644-11f0-af1e-f1cd79e81557",
+      "name": "Generate sample data",
+      "nodeIds": [
+        "20eee900-4cd3-11ea-9014-2b24e4165af9",
+        "269fd1c0-4cd3-11ea-9014-2b24e4165af9"
+      ],
+      "annotation": {
+        "text": "Simulates a sample of electricity usage data. This step substitutes real data input.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "96048500-3644-11f0-af1e-f1cd79e81557",
+      "name": "Cleaning",
+      "nodeIds": [
+        "060f5fb0-4cd4-11ea-9014-2b24e4165af9",
+        "c5abf3a0-51c1-11ea-bec0-a7e1071491c2"
+      ],
+      "annotation": {
+        "text": "Filter out duplicate and erroneous records.\n\nIn this example, any records missing the kWhCharged column or containing an invalid userTechnicalId format will be filtered out.\n\nAll records that are filtered by the Validate function can be further processed and corrected with the help of Data Correction.",
+        "color": "green"
+      }
+    },
+    {
+      "id": "b9e0f850-3644-11f0-af1e-f1cd79e81557",
+      "name": "Forward",
+      "nodeIds": ["cae69bf0-4cd4-11ea-9014-2b24e4165af9"],
+      "annotation": {
+        "text": "Stores data in a log. This step substitutes data being sent for billing.",
+        "color": "gray"
+      }
     }
   ]
 }
