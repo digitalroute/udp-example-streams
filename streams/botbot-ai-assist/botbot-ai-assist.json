@@ -1,5 +1,9 @@
 {
   "name": "Botbot AI assist",
+  "annotation": {
+    "text": "This example stream demonstrates the use case of the company Botbot, which offers AI-enabled chatbots that can be embedded in websites and products to offer virtual assistance.\nBotbot wants to launch its new product offering, AI Assist, which comprises two models of chatbots. It wants to charge its customers based on the number of API calls made to each model type within a session.\nLevel 1 (L1): L1 is trained to answer basic questions from customers. It attempts to resolve the user's request as soon as a new session begins. If it is unable to solve the request, it will delegate the session to level 2. L1 is the cheaper of the two models.\nLevel 2 (L2): L2 is specially trained on Botbot's customer data. It can resolve business-specific support requests autonomously and is more expensive than L1.\nBotbot's customers can choose from various Large Learning Models (LLMs) to power the L1 and L2 chatbots. Customers can select one model for each level.\nIn the Botbot AI assist example stream, you will learn:\n- How to configure multiple products as meter types with the same category.\n- How to configure your stream using the Meter processor.\n- How to configure your Meter processor with multiple guiding rules.\n- How to create a meter when a customer activates an AI chatbot for their website.\n\nThis example stream is explained in detail here: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/220299265/Botbot+AI+assist.",
+    "color": "blue"
+  },
   "nodes": [
     {
       "id": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
@@ -25,8 +29,8 @@
       },
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 800,
-      "y": 200
+      "x": 850,
+      "y": 100
     },
     {
       "id": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
@@ -38,7 +42,7 @@
       "partitionKey": null,
       "schemaVersion": 1,
       "x": 500,
-      "y": 200
+      "y": 100
     },
     {
       "id": "6363e5b0-ea18-11ee-b028-57e26d98119b",
@@ -145,8 +149,8 @@
           "resetOnValidEvent": true
         }
       },
-      "x": 1100,
-      "y": 200
+      "x": 1200,
+      "y": 100
     },
     {
       "id": "50920421-eab9-11ee-be5c-ed7b10940926",
@@ -164,8 +168,8 @@
       },
       "partitionKey": null,
       "schemaVersion": 4,
-      "x": 650,
-      "y": 200
+      "x": 700,
+      "y": 100
     },
     {
       "id": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
@@ -177,7 +181,7 @@
       "partitionKey": null,
       "schemaVersion": 2,
       "x": 350,
-      "y": 200
+      "y": 100
     },
     {
       "id": "907b08f0-1392-11ef-aa40-3bc36eb7b565",
@@ -213,7 +217,7 @@
       },
       "partitionKey": null,
       "schemaVersion": 2,
-      "x": 950,
+      "x": 1050,
       "y": 200
     },
     {
@@ -223,8 +227,8 @@
       "params": {},
       "partitionKey": null,
       "schemaVersion": 1,
-      "x": 1250,
-      "y": 200
+      "x": 1400,
+      "y": 100
     },
     {
       "id": "c7a25c70-71d3-11f0-9be6-2d4f827a0c8a",
@@ -232,8 +236,8 @@
       "schemaVersion": 1,
       "name": "No operation",
       "params": {},
-      "x": 1250,
-      "y": 350
+      "x": 1400,
+      "y": 450
     }
   ],
   "edges": [
@@ -281,6 +285,62 @@
       "to": "c7a25c70-71d3-11f0-9be6-2d4f827a0c8a",
       "output": "2c3454c8-bf94-4f08-b479-9839854bc473",
       "config": {}
+    }
+  ],
+  "nodeGroups": [
+    {
+      "id": "190f8950-3644-11f0-af1e-f1cd79e81557",
+      "name": "Forward usage summaries",
+      "nodeIds": ["af86ba50-1392-11ef-aa40-3bc36eb7b565"],
+      "annotation": {
+        "text": "By replacing this Log forwarder, the data can be sent to an external system, for example, a billing system.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "62e8b9c0-7e83-11f0-a585-0be6841129a8",
+      "name": "Unused output",
+      "nodeIds": ["c7a25c70-71d3-11f0-9be6-2d4f827a0c8a"],
+      "annotation": {
+        "text": "The second Meter output must be linked to a function, even when it is not in use. In this example, it is linked to a 'No operation' function.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "9f1fb750-3643-11f0-af1e-f1cd79e81557",
+      "name": "Generate sample data",
+      "nodeIds": [
+        "13de6dd0-ea0e-11ee-b028-57e26d98119b",
+        "2bc05970-138c-11ef-aa40-3bc36eb7b565"
+      ],
+      "annotation": {
+        "text": "Generates sample data representing customer service bot interactions, indicating the number of API calls made to each bot type.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "da459f70-3643-11f0-af1e-f1cd79e81557",
+      "name": "Cleaning",
+      "nodeIds": [
+        "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
+        "50920421-eab9-11ee-be5c-ed7b10940926"
+      ],
+      "annotation": {
+        "text": "Ensures that no duplicate sessions are processed and that all regions are valid.",
+        "color": "green"
+      }
+    },
+    {
+      "id": "e795fa80-3643-11f0-af1e-f1cd79e81557",
+      "name": "Usage data metering",
+      "nodeIds": [
+        "6363e5b0-ea18-11ee-b028-57e26d98119b",
+        "907b08f0-1392-11ef-aa40-3bc36eb7b565"
+      ],
+      "annotation": {
+        "text": "Formats data for metering per user and month. L1 and L2 API calls are metered separately. These monthly summaries make for perfect invoice line items.",
+        "color": "yellow"
+      }
     }
   ]
 }

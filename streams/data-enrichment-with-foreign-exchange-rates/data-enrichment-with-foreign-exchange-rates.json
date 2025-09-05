@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
   "name": "Data Enrichment With Foreign Exchange Rates",
+  "annotation": {
+    "text": "Having an international business means dealing with different foreign exchange rates.\nThis stream uses an internal API and shows you how to enrich your data by converting different currencies to US Dollars (USD).\nYou can easily change the example to use an external API of your choice.\n\nFunctions used in this stream and their purpose:\n\nCount - Counter that triggers the stream to run for the defined number of times.\nSimulate Data (Script) - Provides sample data based on input values from the Count function.\n\nExchange Rate (HTTP Client) - Fetches exchange rates from an internal API.\n\nConvert Fees (Map) - Calculates the service fee in USD, and generates and organizes records according to business purposes.\n\nLog - Saves the result to a log file.\nThe data can be used for billing purposes by replacing the log with a forwarder function.\n\nThis example stream is explained in detail here: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/7853936/Data+Enrichment+With+Foreign+Exchange+Rates.",
+    "color": "blue"
+  },
   "nodes": [
     {
       "partitionKey": null,
@@ -11,7 +15,7 @@
       "params": {
         "max": 1
       },
-      "x": 450,
+      "x": 350,
       "y": 200
     },
     {
@@ -23,7 +27,7 @@
       "params": {
         "transform": "// Simulate sample data\n\nconst event = [\n    {\n        \"Name\": \"User-0\",\n        \"ServiceFee\": 25,\n        \"Currency\": \"SEK\"   \n    },\n    {\n        \"Name\": \"User-1\",\n        \"ServiceFee\": 10,\n        \"Currency\": \"EUR\"   \n    },\n    {\n        \"Name\": \"User-2\",\n        \"ServiceFee\": 4,\n        \"Currency\": \"GBP\"   \n    },\n    {\n        \"Name\": \"User-3\",\n        \"ServiceFee\": 7,\n        \"Currency\": \"AUD\"   \n    }\n]\n\n\nfor (var key in event) {\n    await push(event[key]);\n}"
       },
-      "x": 600,
+      "x": 650,
       "y": 200
     },
     {
@@ -51,7 +55,7 @@
           }
         }
       },
-      "x": 750,
+      "x": 900,
       "y": 200
     },
     {
@@ -61,7 +65,7 @@
       "name": "Log",
       "type": "writers/log",
       "params": {},
-      "x": 1050,
+      "x": 1500,
       "y": 200
     },
     {
@@ -73,18 +77,13 @@
       "params": {
         "keepFields": {
           "enabled": true,
-          "except": [
-            "httpResponse"
-          ]
+          "except": ["httpResponse"]
         },
         "mappings": [
           {
             "field": "USD Exchange Rate",
             "expression": "httpResponse.rates.USD",
-            "ast": [
-              "R",
-              "httpResponse.rates.USD"
-            ],
+            "ast": ["R", "httpResponse.rates.USD"],
             "errorMessage": null
           },
           {
@@ -95,10 +94,7 @@
               "/",
               [
                 "call",
-                [
-                  "R",
-                  "round"
-                ],
+                ["R", "round"],
                 [
                   [
                     "aop",
@@ -106,32 +102,20 @@
                     [
                       "aop",
                       "*",
-                      [
-                        "R",
-                        "ServiceFee"
-                      ],
-                      [
-                        "R",
-                        "httpResponse.rates.USD"
-                      ]
+                      ["R", "ServiceFee"],
+                      ["R", "httpResponse.rates.USD"]
                     ],
-                    [
-                      "N",
-                      10000
-                    ]
+                    ["N", 10000]
                   ]
                 ]
               ],
-              [
-                "N",
-                10000
-              ]
+              ["N", 10000]
             ],
             "errorMessage": null
           }
         ]
       },
-      "x": 900,
+      "x": 1200,
       "y": 200
     }
   ],
@@ -159,6 +143,47 @@
       "from": "6b1f6590-ba28-11eb-8ba4-7393f6d56d99",
       "to": "e1df0760-51b2-11ea-bec0-a7e1071491c2",
       "config": {}
+    }
+  ],
+  "nodeGroups": [
+    {
+      "id": "10779820-3642-11f0-af1e-f1cd79e81557",
+      "name": "Send downstream",
+      "nodeIds": ["e1df0760-51b2-11ea-bec0-a7e1071491c2"],
+      "annotation": {
+        "text": "Saves the result to a log file.\nThe data can be used for billing, reconciliation, or settlement purposes by replacing the log with a forwarder function.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "8a2e2720-3641-11f0-af1e-f1cd79e81557",
+      "name": "Generate sample usage data",
+      "nodeIds": [
+        "5198efa0-51b1-11ea-bec0-a7e1071491c2",
+        "59fe4a00-51b1-11ea-bec0-a7e1071491c2"
+      ],
+      "annotation": {
+        "text": "Generates records representing transactions in various currencies, each of which has a service fee.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "b7142410-3641-11f0-af1e-f1cd79e81557",
+      "name": "Get exchange rates",
+      "nodeIds": ["cff347b0-51b1-11ea-bec0-a7e1071491c2"],
+      "annotation": {
+        "text": "Looks up the exchange rates, in this case, from a DR-hosted API",
+        "color": "green"
+      }
+    },
+    {
+      "id": "c704f390-3641-11f0-af1e-f1cd79e81557",
+      "name": "Convert fees to USD",
+      "nodeIds": ["6b1f6590-ba28-11eb-8ba4-7393f6d56d99"],
+      "annotation": {
+        "text": "Converts the service fee amount to USD from the lookup data.",
+        "color": "yellow"
+      }
     }
   ]
 }
