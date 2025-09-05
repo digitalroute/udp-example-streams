@@ -1,5 +1,9 @@
 {
   "name": "Printing As A Service with Metering",
+  "annotation": {
+    "text": "This example stream showcases the Printing As A Service use case solution using the Usage metering extension.\nFor more information on Usage metering, see https://infozone.atlassian.net/wiki/spaces/DAZ/pages/79954163/Usage+metering.\n\nIn this use case, where instead of selling printers as products, AlphaPrint sells printing as a service and charges its customers based on actual usage.\nIn this example stream, you will learn:\n\nHow to configure your products as meter types.\n\nHow to configure your stream using meter processors.\n\nHow to create a meter when a customer installs a new printer.\n\nThis example stream also demonstrates how to collect different usage events such as the number of printed pages, ink level, and printer health status.\nAfter collecting the data, the stream shows how to meter the collected usage per printer, printer ink, and health status before sending it to its final destination, in this case, the Log function.\n\nThis example requires you to run Helper streams before running the main stream. \n\nSee the setup guide: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/228687874/Printing+as+a+Service+-+Metering+Setup+Guide",
+    "color": "blue"
+  },
   "nodes": [
     {
       "id": "5c32a5b0-02b5-11e9-9f17-81651dddad53",
@@ -9,8 +13,8 @@
         "max": 10
       },
       "schemaVersion": 2,
-      "x": 450,
-      "y": 100
+      "x": 350,
+      "y": -200
     },
     {
       "id": "7f60b090-02b5-11e9-9f17-81651dddad53",
@@ -20,8 +24,8 @@
         "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nconst timestamp = simDate();\nconst printerId = simPrinterId();\n\nconst simulatedPrinterEvent = {\n    eventId: (printerId + \"_\" + timestamp),\n    printerId,\n    paper: simPaper(),\n    sided: simSided(),\n    color: simColor(),\n    sheets: simSheets(),\n    inkLevel: simInkLevel(),\n    status: simStatus(),\n    timestamp,\n};\n\nstate.node.count++;\n\n// 20% duplicates\nif (state.node.count % 5 === 0) {\n    await push(simulatedPrinterEvent);\n}\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedPrinterEvent.printerId = \"invalidShouldBeInt\";\n    simulatedPrinterEvent.timestamp = \"UNKNOWN\";\n    simulatedPrinterEvent.paper = \"XYZ123\";\n}\n\nawait push(simulatedPrinterEvent);\n\n\nfunction simPaper() {\n    return state.node.count % 5 === 0 ? \"A4\" : \"A3\";\n}\n\nfunction simSided() {\n    return state.node.count % 3 === 0 ? \"Two\" : \"One\";\n}\n\nfunction simColor() {\n    return state.node.count % 2 === 0 ? \"No\" : \"Yes\";\n}\n\n// simulate timestamp to random time between now and 60 seconds ago\nfunction simDate() {\n    return new Date(Date.now() - Math.floor(Math.random() * 1000 * 60));\n}\n\nfunction simSheets() {\n    return Math.floor(payload.value * 3.55);\n}\n\n// simulate 5 unique printers\nfunction simPrinterId() {\n    return ((payload.value-1) % 5) + 101;\n}\n\nfunction simInkLevel() {\n    if (printerId % 4 === 0) {\n        return 15;\n    } if (printerId % 3 === 0) {\n        return 50;\n    } else {\n        return 45;\n    }\n}\n\nfunction simStatus() {\n    return printerId % 3 === 0 ? \"Needs service\" : \"Normal\";\n}"
       },
       "schemaVersion": 1,
-      "x": 600,
-      "y": 100
+      "x": 500,
+      "y": -200
     },
     {
       "id": "5f5be970-02c6-11e9-abea-918bf71eccf8",
@@ -39,8 +43,8 @@
         }
       },
       "schemaVersion": 4,
-      "x": 900,
-      "y": 100
+      "x": 850,
+      "y": -200
     },
     {
       "id": "1bb5e110-02c8-11e9-abea-918bf71eccf8",
@@ -122,8 +126,8 @@
         }
       },
       "schemaVersion": 1,
-      "x": 750,
-      "y": 100
+      "x": 700,
+      "y": -200
     },
     {
       "id": "529547b0-1fd9-11e9-b13d-6969f21433e0",
@@ -142,7 +146,7 @@
       },
       "schemaVersion": 4,
       "x": 1250,
-      "y": 250
+      "y": 200
     },
     {
       "id": "81a859a0-1fe0-11e9-b531-89d0b87fb667",
@@ -152,8 +156,8 @@
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
       },
       "schemaVersion": 1,
-      "x": 1400,
-      "y": 250
+      "x": 1500,
+      "y": 200
     },
     {
       "id": "76cf9600-4737-11e9-9166-6b7c69bb46fd",
@@ -182,7 +186,7 @@
       },
       "schemaVersion": 3,
       "x": 1100,
-      "y": 250
+      "y": 200
     },
     {
       "id": "4c852bb0-81f4-11e9-80f0-0bac64875d58",
@@ -211,7 +215,7 @@
       },
       "schemaVersion": 3,
       "x": 1100,
-      "y": 400
+      "y": 600
     },
     {
       "id": "79ad13a0-81f4-11e9-80f0-0bac64875d58",
@@ -219,8 +223,8 @@
       "type": "writers/log",
       "params": {},
       "schemaVersion": 1,
-      "x": 1700,
-      "y": 400
+      "x": 1900,
+      "y": 600
     },
     {
       "id": "1155ff50-81f5-11e9-80f0-0bac64875d58",
@@ -239,7 +243,7 @@
       },
       "schemaVersion": 4,
       "x": 1250,
-      "y": 400
+      "y": 600
     },
     {
       "id": "801f7090-48c6-11ea-934b-e7039b2101e2",
@@ -247,8 +251,8 @@
       "schemaVersion": 1,
       "name": "To Billing",
       "params": {},
-      "x": 1700,
-      "y": -200
+      "x": 1850,
+      "y": -550
     },
     {
       "id": "a41fbf90-48c6-11ea-934b-e7039b2101e2",
@@ -256,8 +260,8 @@
       "type": "writers/log",
       "params": {},
       "schemaVersion": 1,
-      "x": 1700,
-      "y": 250
+      "x": 1900,
+      "y": 200
     },
     {
       "id": "30202230-4c48-11ea-9b57-69fd58765c81",
@@ -301,8 +305,8 @@
         ]
       },
       "schemaVersion": 2,
-      "x": 1550,
-      "y": -200
+      "x": 1650,
+      "y": -550
     },
     {
       "id": "0bfa2d50-4c49-11ea-9b57-69fd58765c81",
@@ -325,8 +329,8 @@
         ]
       },
       "schemaVersion": 2,
-      "x": 1550,
-      "y": 250
+      "x": 1750,
+      "y": 200
     },
     {
       "id": "9d3dd460-4c49-11ea-9b57-69fd58765c81",
@@ -336,8 +340,8 @@
         "transform": "\n// Maps \"printerId\" to an owning company\nconst printerOwner = {\n    0: \"Foo Inc\",\n    1: \"Foo Inc\",\n    2: \"Foo Inc\",\n    3: \"Foo Inc\",\n    4: \"Bar Inc\",\n    5: \"Bar Inc\",\n    6: \"Baz Inc\",\n    7: \"Baz Inc\",\n    8: \"Baz Inc\",\n    9: \"Baz Inc\",\n    10: \"Baz Inc\",\n    100: \"Guz Inc\",\n    101: \"Guz Inc\",\n    102: \"Guz Inc\",\n    103: \"Guz Inc\",\n    104: \"Guz Inc\",\n    105: \"Guz Inc\",\n};\n\n// Maps \"printerId\" to an owning department\nconst printerDepartment = {\n    0: \"Finance\",\n    1: \"IT\",\n    2: \"Marketing\",\n    3: \"Marketing\",\n    4: \"Development\",\n    5: \"Finance\",\n    6: \"Finance\",\n    7: \"Finance\",\n    8: \"Finance\",\n    9: \"Sales\",\n    10: \"IT\",\n    100: \"Research\",\n    101: \"Research\",\n    102: \"Research\",\n    103: \"Special Ops\",\n    104: \"Special Ops\",\n    105: \"Special Ops\",\n};\n\nfunction crmCustomerLookup(printerId) {\n    return printerOwner[printerId];\n}\n\nfunction crmDepartmentLookup(printerId) {\n    return printerDepartment[printerId];\n}\n\npayload.customer = crmCustomerLookup(payload.printerId);\npayload.department = crmDepartmentLookup(payload.printerId);\nawait push(payload);\n"
       },
       "schemaVersion": 1,
-      "x": 1400,
-      "y": 400
+      "x": 1500,
+      "y": 600
     },
     {
       "id": "c6098e20-4c49-11ea-9b57-69fd58765c81",
@@ -363,8 +367,8 @@
         ]
       },
       "schemaVersion": 2,
-      "x": 1550,
-      "y": 400
+      "x": 1750,
+      "y": 600
     },
     {
       "id": "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
@@ -405,7 +409,7 @@
         }
       },
       "x": 1250,
-      "y": -200
+      "y": -400
     },
     {
       "id": "a55559b0-6e18-11f0-a4b5-ff17eb67b466",
@@ -415,8 +419,8 @@
       "params": {
         "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"EMAIL_MAINTENANCE\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" soon needs maintenance as it usage has reached \" + threshold?.capacityPercentage + \". Kindly schedule the maintenance.\"\n});"
       },
-      "x": 1550,
-      "y": -50
+      "x": 1650,
+      "y": -400
     },
     {
       "id": "a922dc70-6e18-11f0-a4b5-ff17eb67b466",
@@ -426,8 +430,8 @@
       "params": {
         "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"DEACTIVATE_PRINTER\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" has reached the maximum prints and must be deactivated. Prints taken: \" + threshold?.absoluteValue\n});"
       },
-      "x": 1550,
-      "y": 100
+      "x": 1650,
+      "y": -200
     },
     {
       "id": "32a526c0-6e18-11f0-a4b5-ff17eb67b466",
@@ -466,7 +470,7 @@
         ]
       },
       "x": 1400,
-      "y": -20
+      "y": -320
     },
     {
       "id": "43a56110-1383-11ef-aa40-3bc36eb7b565",
@@ -505,7 +509,7 @@
       },
       "schemaVersion": 2,
       "x": 1100,
-      "y": 100
+      "y": -300
     },
     {
       "id": "ad039910-6e18-11f0-a4b5-ff17eb67b466",
@@ -513,8 +517,8 @@
       "schemaVersion": 1,
       "name": "Email maintenance",
       "params": {},
-      "x": 1700,
-      "y": -50
+      "x": 1850,
+      "y": -400
     },
     {
       "id": "af095420-6e18-11f0-a4b5-ff17eb67b466",
@@ -522,8 +526,8 @@
       "schemaVersion": 1,
       "name": "Deactivate printer",
       "params": {},
-      "x": 1700,
-      "y": 100
+      "x": 1850,
+      "y": -200
     }
   ],
   "edges": [
@@ -671,5 +675,135 @@
       "config": {}
     }
   ],
-  "nodeGroups": []
+  "nodeGroups": [
+    {
+      "id": "14e78f90-7e87-11f0-a585-0be6841129a8",
+      "name": "Enrich",
+      "nodeIds": ["9d3dd460-4c49-11ea-9b57-69fd58765c81"],
+      "annotation": {
+        "text": "Simulates enriching the usage data summaries with the customer and product master data from an external system.",
+        "color": "purple"
+      }
+    },
+    {
+      "id": "382e2b80-7e87-11f0-a585-0be6841129a8",
+      "name": "Enrich",
+      "nodeIds": ["81a859a0-1fe0-11e9-b531-89d0b87fb667"],
+      "annotation": {
+        "text": "Simulates enriching the usage data summaries with the customer and product master data from an external system.",
+        "color": "purple"
+      }
+    },
+    {
+      "id": "4a87e7e0-7e8b-11f0-a585-0be6841129a8",
+      "name": "Forward to ink replenishment",
+      "nodeIds": [
+        "a41fbf90-48c6-11ea-934b-e7039b2101e2",
+        "0bfa2d50-4c49-11ea-9b57-69fd58765c81"
+      ],
+      "annotation": {
+        "text": "Renames the input data to match the format required by the downstream system. Then stores the data in a log. \n\nThis step substitutes data being sent to an ink replenishment ordering system.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "57ca1220-7e8b-11f0-a585-0be6841129a8",
+      "name": "Forward to printer servicing",
+      "nodeIds": [
+        "79ad13a0-81f4-11e9-80f0-0bac64875d58",
+        "c6098e20-4c49-11ea-9b57-69fd58765c81"
+      ],
+      "annotation": {
+        "text": "Renames the input data as desired. Then stores the data in a log. \n\nThis step substitutes for sending a maintenance service order.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "71e11b50-7e8a-11f0-a585-0be6841129a8",
+      "name": "Forward to billing or maintenance",
+      "nodeIds": [
+        "801f7090-48c6-11ea-934b-e7039b2101e2",
+        "ad039910-6e18-11f0-a4b5-ff17eb67b466",
+        "af095420-6e18-11f0-a4b5-ff17eb67b466"
+      ],
+      "annotation": {
+        "text": "usage data and notifications to the relevant external systems, including billing, maintenance, and printer deactivation.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "7b519660-7e85-11f0-a585-0be6841129a8",
+      "name": "Generate sample data",
+      "nodeIds": [
+        "5c32a5b0-02b5-11e9-9f17-81651dddad53",
+        "7f60b090-02b5-11e9-9f17-81651dddad53"
+      ],
+      "annotation": {
+        "text": "Generates sample records with printer data (printed pages, ink level, printer health status, etc.).\nThis step substitutes real data input.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "80178610-7e89-11f0-a585-0be6841129a8",
+      "name": "Enrich and filter",
+      "nodeIds": [
+        "30202230-4c48-11ea-9b57-69fd58765c81",
+        "a55559b0-6e18-11f0-a4b5-ff17eb67b466",
+        "a922dc70-6e18-11f0-a4b5-ff17eb67b466"
+      ],
+      "annotation": {
+        "text": "Prepares data for downstream processes by filtering and renaming fields for billing, and formatting notification and deactivation messages for delivery to external systems.",
+        "color": "purple"
+      }
+    },
+    {
+      "id": "b08f8030-7e85-11f0-a585-0be6841129a8",
+      "name": "Clean incoming usage data",
+      "nodeIds": [
+        "5f5be970-02c6-11e9-abea-918bf71eccf8",
+        "1bb5e110-02c8-11e9-abea-918bf71eccf8"
+      ],
+      "annotation": {
+        "text": "Filters out erroneous and duplicate records. \nAll records that are filtered by the Validate function can be further processed and corrected using Data Correction.",
+        "color": "green"
+      }
+    },
+    {
+      "id": "c10568c0-7e86-11f0-a585-0be6841129a8",
+      "name": "Check ink level",
+      "nodeIds": [
+        "529547b0-1fd9-11e9-b13d-6969f21433e0",
+        "76cf9600-4737-11e9-9166-6b7c69bb46fd"
+      ],
+      "annotation": {
+        "text": "This step checks the daily ink level per customer and triggers an ink order if needed.\n\nThe Route function checks the ink level. If the \"low ink\" threshold is reached, the Deduplicate function filters out any duplicated \"low ink alert\" records, ensuring that only one 'low ink' event is processed daily. ",
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "d3ec9f70-7e87-11f0-a585-0be6841129a8",
+      "name": "Meter usage",
+      "nodeIds": [
+        "d7a7ebf0-1381-11ef-9a8f-cdc91c56d42c",
+        "32a526c0-6e18-11f0-a4b5-ff17eb67b466",
+        "43a56110-1383-11ef-aa40-3bc36eb7b565"
+      ],
+      "annotation": {
+        "text": "Renames the input data fields to match those required by the Meter processor.\n\nThe Meter processor sums the monthly amount of printed paper sheets per printer. All records that are filtered by the Meter processor function can be further processed and corrected using Data Correction.",
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "f50f6670-7e86-11f0-a585-0be6841129a8",
+      "name": "Check printer status",
+      "nodeIds": [
+        "4c852bb0-81f4-11e9-80f0-0bac64875d58",
+        "1155ff50-81f5-11e9-80f0-0bac64875d58"
+      ],
+      "annotation": {
+        "text": "This part checks the printers' health status and sends a request for maintenance if needed.\n\nThe Route function checks the printer health status (normal or maintenance required). Then the Deduplicate function filters out duplicated records to ensure the 'health status check' event is only processed once per printer per day.",
+        "color": "yellow"
+      }
+    }
+  ]
 }
