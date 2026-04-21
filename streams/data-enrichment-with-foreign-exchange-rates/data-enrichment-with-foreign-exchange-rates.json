@@ -104,12 +104,11 @@
       "params": {
         "authType": "basic",
         "basicAuthentication": {
+          "username": "test",
           "password": {
-            "encryptedValue": "kms:AQICAHgmkWEN+gbMC4v32WaRttX6Ss3X3c62n8OQ92yRFRwWaAHytrKDDcdHmaJqujbYAcfRAAAAYjBgBgkqhkiG9w0BBwagUzBRAgEAMEwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMZjE6lFjw7ACt8M0gAgEQgB80M5aY2rxxhOgJWsa6D3toI3nnfz7z3o+v6wZH6rzr",
-            "maskedValue": "****",
-            "secret": true
-          },
-          "username": "test"
+            "secret": true,
+            "value": "test"
+          }
         },
         "cacheKey": "${payload.Base_Currency}",
         "cacheSeconds": 300,
@@ -130,7 +129,7 @@
         "retries": 1,
         "shouldRetry": false,
         "uri": "https://ingress.digitalroute.io/53d1b880-a9b5-11eb-903c-7f5f6b522c3e/rates",
-        "useCache": false
+        "useCache": true
       },
       "x": 900,
       "y": 200
