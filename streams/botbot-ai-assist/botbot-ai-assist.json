@@ -1,47 +1,80 @@
 {
   "name": "Botbot AI assist",
   "annotation": {
-    "text": "This example stream demonstrates the use case of the company Botbot, which offers AI-enabled chatbots that can be embedded in websites and products to offer virtual assistance.\nBotbot wants to launch its new product offering, AI Assist, which comprises two models of chatbots. It wants to charge its customers based on the number of API calls made to each model type within a session.\nLevel 1 (L1): L1 is trained to answer basic questions from customers. It attempts to resolve the user's request as soon as a new session begins. If it is unable to solve the request, it will delegate the session to level 2. L1 is the cheaper of the two models.\nLevel 2 (L2): L2 is specially trained on Botbot's customer data. It can resolve business-specific support requests autonomously and is more expensive than L1.\nBotbot's customers can choose from various Large Learning Models (LLMs) to power the L1 and L2 chatbots. Customers can select one model for each level.\nIn the Botbot AI assist example stream, you will learn:\n- How to configure multiple products as meter types with the same category.\n- How to configure your stream using the Meter processor.\n- How to configure your Meter processor with multiple guiding rules.\n- How to create a meter when a customer activates an AI chatbot for their website.\n\nThis example stream is explained in detail here: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/220299265/Botbot+AI+assist.",
+    "text": "This example stream demonstrates how the fictional company Botbot meters AI chatbot usage to bill customers per API call.\n\nBotbot's AI Assist product has two chatbot tiers: a cheaper L1 for basic questions and a more expensive L2 for business-specific support, and customers are charged for the API calls made to each tier per session.\n\nThe stream shows how to configure multiple meter types under shared categories, use the Meter processor with multiple guiding rules, and create meters when a customer activates a chatbot service.\n\nIn production, the meter types and meters would be set up via API; in this example, they are configured by helper streams you run alongside this stream.",
     "color": "blue"
   },
   "nodes": [
     {
-      "id": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
-      "name": "Validate",
-      "type": "transforms/validate",
+      "id": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
+      "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Count",
       "params": {
-        "schema": {
-          "properties": {
-            "region": {
-              "enum": ["APAC", "EMEA", "AMER"],
-              "description": "Region validation"
-            }
-          },
-          "required": ["region"]
-        },
-        "suspenseManagement": {
-          "enabled": true,
-          "resetOnValidEvent": true,
-          "eventThreshold": 10000,
-          "onThresholdExceeded": "ABORT",
-          "abortOnDisabled": false
-        }
+        "max": 1
       },
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "x": 850,
+      "x": 350,
       "y": 100
     },
     {
       "id": "13de6dd0-ea0e-11ee-b028-57e26d98119b",
-      "name": "Script",
       "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Script",
       "params": {
         "transform": "const orgs = {\n  'Cloud AI': {\n    emails: [\n      'noah@cloudai.foo', \n      'swan@cloudai.foo', \n      'elle@cloudai.foo', \n      'gia@cloudai.foo',\n      'tara@cloudai.foo',\n    ],\n  },\n  'Play-to-Earn': {\n    emails: [\n      'freppa@playtoearn.foo',\n      'chris@playtoearn.foo',\n      'lia@playtoearn.foo',\n      'kim@playtoearn.foo',\n    ]\n  },'FinTech Lords': {\n    emails: [\n      'johan@finlords.foo',\n      'cole@finlords.foo',\n      'jaira@finlords.foo',\n      'carboard@finlords.foo',\n    ]\n  },'Machine Emotions': {\n    emails: [\n      'hope@machineemotions.foo',\n      'joy@machineemotions.foo',\n      'sadie@machineemotions.foo',\n      'mercy@machineemotions.foo',\n    ]\n  },'Android Sheep': {\n    emails: [\n      'baah@androidsheep.foo',\n      'bee@androidsheep.foo',\n      'buuurh@androidsheep.foo',\n      'bro@androidsheep.foo',\n    ]\n  },'Metaverse Mages': {\n    emails: [\n      'gibson@metaversemages.foo',\n      'stevenson@metaversemages.foo',\n      'neo@metaversemages.foo',\n      'akira@metaversemages.foo',\n    ]\n  }\n} \nconst orgKeys = Object.keys(orgs);\nconst regions = ['EMEA', 'APAC', 'AMER', 'unknown'];\n\nconst serviceAgents = ['Apex', 'Carl', 'Tia'];\n\n\nlet duplicate;\nfor(let i = 0; i < 100; i++) {\n  if(duplicate) {\n    await push(duplicate);\n    duplicate = undefined;\n    continue;\n  }\n\n  const orgName = orgKeys[Math.floor(Math.random() * orgKeys.length)];\n  const status = getStatus();\n  const created = new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 5));\n  const apiCalls = 5 + Math.floor(Math.random() * 30 + Math.random() * 10 + Math.random());\n  const apiCallsType = Math.random() * 100 < 70 ? \"L1\" : \"L2\";\n  const data = {\n    userId: orgName,\n    customerEmail: orgs[orgName].emails[Math.floor(Math.random() * orgs[orgName].emails.length)],\n    sessionId: createRequestId(),\n    caseNumber: Math.floor(Math.random() * 9000000) + 1000000,\n    status: status,\n    apiCalls: apiCalls,\n    apiCallsType: apiCallsType,\n    region: regions[Math.floor(Math.random() * regions.length)],\n    sessionEndTime: created,\n  };\n  \n\n  /*\n  {\n    \"userId\": \"Play-to-Earn\",\n    \"customerEmail\": \"rope@shotmail.com\",\n    \"sessionId\": \"QTCFN7266\", // This is unique for every record and can used for de-duplication\n    \"caseNumber\": 5563879,    // This is the customer case number (can span multiple sessions), we don’t really use this\n    \"status\": \"Open\",   // Open, Resolved, HandedOverToOperator, Failed\n\n    “apiCalls“: 12 // Integer, >= 0\n\n    “apiCallsType”: “L1” // L1, L2\n\n    \"region\": \"EMEA\",\n    \"sessionEndTime\": \"2024-05-27T12:59:57.960Z\",\n}\n  */\n  \n\n  const shouldDuplicate = Math.random() * 100 < 10;\n  if(shouldDuplicate){\n    duplicate = data\n  }\n\n  await push(data);\n}\n\nfunction getStatus() {\n  const roll = Math.random() * 100;\n  if(roll < 50) {\n    return 'Resolved';\n  }\n\n  if(roll < 80) {\n    return 'Open';\n  }\n\n  if (roll < 90) {\n    return \"Failed\";\n  }\n\n  return 'HandedOverToOperator';\n}\n\nfunction createRequestId() {\n  let idPrefix = '';\n  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';\n  const charactersLength = characters.length;\n  for (let i = 0; i < 5; i++) {\n    idPrefix += characters.charAt(Math.floor(Math.random() * charactersLength));\n  }\n\n  // Generate a random number between 100 and 999\n  const randomNum = Math.floor(Math.random() * 9000) + 1000;\n\n  // Concatenate static characters with the random number\n  const shortId = `${idPrefix}${randomNum}`;\n\n  return shortId;\n}"
       },
-      "partitionKey": null,
-      "schemaVersion": 1,
       "x": 500,
+      "y": 100
+    },
+    {
+      "id": "44c146c0-b07a-11ee-b6af-9f45c2c2a7a8",
+      "type": "transforms/validate",
+      "schemaVersion": 1,
+      "name": "Validate",
+      "params": {
+        "schema": {
+          "properties": {
+            "region": {
+              "description": "Region validation",
+              "enum": [
+                "APAC",
+                "EMEA",
+                "AMER"
+              ]
+            }
+          },
+          "required": [
+            "region"
+          ]
+        },
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 10000,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
+      },
+      "x": 850,
+      "y": 100
+    },
+    {
+      "id": "50920421-eab9-11ee-be5c-ed7b10940926",
+      "type": "transforms/deduplicate",
+      "schemaVersion": 4,
+      "name": "Deduplicate",
+      "params": {
+        "key": "${payload.sessionId}",
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "50920420-eab9-11ee-be5c-ed7b10940926"
+            }
+          }
+        }
+      },
+      "x": 700,
       "y": 100
     },
     {
@@ -64,10 +97,14 @@
             "customName": "L1 API Requests",
             "groupBy": [
               {
-                "fields": ["region"]
+                "fields": [
+                  "region"
+                ]
               },
               {
-                "fields": ["status"]
+                "fields": [
+                  "status"
+                ]
               }
             ],
             "ignoreCondition": false,
@@ -103,10 +140,14 @@
             "customName": "L2 API Requests",
             "groupBy": [
               {
-                "fields": ["region"]
+                "fields": [
+                  "region"
+                ]
               },
               {
-                "fields": ["status"]
+                "fields": [
+                  "status"
+                ]
               }
             ],
             "ignoreCondition": false,
@@ -153,40 +194,10 @@
       "y": 100
     },
     {
-      "id": "50920421-eab9-11ee-be5c-ed7b10940926",
-      "name": "Deduplicate",
-      "type": "transforms/deduplicate",
-      "params": {
-        "multiOutput": {
-          "fixed": {
-            "unique": {
-              "id": "50920420-eab9-11ee-be5c-ed7b10940926"
-            }
-          }
-        },
-        "key": "${payload.sessionId}"
-      },
-      "partitionKey": null,
-      "schemaVersion": 4,
-      "x": 700,
-      "y": 100
-    },
-    {
-      "id": "2bc05970-138c-11ef-aa40-3bc36eb7b565",
-      "name": "Count",
-      "type": "readers/counter",
-      "params": {
-        "max": 1
-      },
-      "partitionKey": null,
-      "schemaVersion": 2,
-      "x": 350,
-      "y": 100
-    },
-    {
       "id": "907b08f0-1392-11ef-aa40-3bc36eb7b565",
-      "name": "Field organizer",
       "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Field organizer",
       "params": {
         "mappings": [
           {
@@ -215,18 +226,15 @@
           }
         ]
       },
-      "partitionKey": null,
-      "schemaVersion": 2,
       "x": 1050,
       "y": 200
     },
     {
       "id": "af86ba50-1392-11ef-aa40-3bc36eb7b565",
-      "name": "Log",
       "type": "writers/log",
-      "params": {},
-      "partitionKey": null,
       "schemaVersion": 1,
+      "name": "Log",
+      "params": {},
       "x": 1400,
       "y": 100
     },
@@ -290,19 +298,23 @@
   "nodeGroups": [
     {
       "id": "190f8950-3644-11f0-af1e-f1cd79e81557",
-      "name": "Forward usage summaries",
-      "nodeIds": ["af86ba50-1392-11ef-aa40-3bc36eb7b565"],
+      "name": "To billing",
+      "nodeIds": [
+        "af86ba50-1392-11ef-aa40-3bc36eb7b565"
+      ],
       "annotation": {
-        "text": "By replacing this Log forwarder, the data can be sent to an external system, for example, a billing system.",
+        "text": "Send the metered L1 and L2 API call summaries to a downstream billing system.",
         "color": "gray"
       }
     },
     {
       "id": "62e8b9c0-7e83-11f0-a585-0be6841129a8",
       "name": "Unused output",
-      "nodeIds": ["c7a25c70-71d3-11f0-9be6-2d4f827a0c8a"],
+      "nodeIds": [
+        "c7a25c70-71d3-11f0-9be6-2d4f827a0c8a"
+      ],
       "annotation": {
-        "text": "The second Meter output must be linked to a function, even when it is not in use. In this example, it is linked to a 'No operation' function.",
+        "text": "The Meter's threshold output is not used in this example.",
         "color": "gray"
       }
     },
@@ -314,7 +326,7 @@
         "2bc05970-138c-11ef-aa40-3bc36eb7b565"
       ],
       "annotation": {
-        "text": "Generates sample data representing customer service bot interactions, indicating the number of API calls made to each bot type.",
+        "text": "Generate sample data representing customer service bot interactions, indicating the number of API calls made to each bot type.",
         "color": "gray"
       }
     },
@@ -326,7 +338,7 @@
         "50920421-eab9-11ee-be5c-ed7b10940926"
       ],
       "annotation": {
-        "text": "Ensures that no duplicate sessions are processed and that all regions are valid.",
+        "text": "Ensure that no duplicate sessions are processed and that all regions are valid.",
         "color": "green"
       }
     },
@@ -338,7 +350,7 @@
         "907b08f0-1392-11ef-aa40-3bc36eb7b565"
       ],
       "annotation": {
-        "text": "Formats data for metering per user and month. L1 and L2 API calls are metered separately. These monthly summaries make for perfect invoice line items.",
+        "text": "Formats data for metering per user and month, with L1 and L2 API calls metered separately. These monthly summaries are ideal for invoice line items.",
         "color": "yellow"
       }
     }

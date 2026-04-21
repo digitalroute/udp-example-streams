@@ -1,17 +1,15 @@
 {
-  "schemaVersion": 1,
   "name": "Summarize Monthly Usage Data",
   "annotation": {
-    "text": "In this example, we build a simple stream that summarizes the number of games a user downloads each month and writes the results to a log.\n\nThis example stream is explained in detail here: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/7847667/Summarize+Monthly+Usage+Data.",
+    "text": "This example stream demonstrates how the fictional gaming platform Punk Games bills its users monthly based on the number of games they download.\n\nEach user's daily game-download counts are aggregated into a per-user monthly total, which is sent downstream to a simulated billing system.",
     "color": "blue"
   },
   "nodes": [
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
       "id": "df2d3300-4cbe-11ea-9014-2b24e4165af9",
-      "name": "Count",
       "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Count",
       "params": {
         "max": 5
       },
@@ -19,68 +17,75 @@
       "y": 200
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "id": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
-      "name": "Simulate Data",
-      "type": "transforms/script",
-      "params": {
-        "transform": "// This script simulate daily record for number of game downloaded by a user\n\n// Write the input record from previous function into log\nlog.info (\"Receive data: \" + JSON.stringify(payload));\n\n// Create sample daily record\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-1001\",\n    downloadedGame: 2 * payload.value,\n    dateTime: simDate(),\n}\n\n// Send the record to next function\nawait push(usageEvent)\n\n// Simulate different date for each record\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add(payload.value, 'days');\n    return date.format('YYYY-MM-DD');\n}"
-      },
-      "x": 550,
-      "y": 200
-    },
-    {
-      "partitionKey": null,
       "id": "31a45de0-80ba-11eb-b363-0dcbd0a358e8",
-      "name": "Data Aggregator",
       "type": "transforms/data_aggregate",
-      "schemaVersion": 1,
+      "schemaVersion": 3,
+      "name": "Data Aggregator",
       "params": {
         "flushType": "ALL_FILES",
         "groupKeys": [
-          { "field": "userId", "operationType": "NONE" },
-          { "field": "dateTime", "operationType": "MONTH" }
+          {
+            "field": "userId",
+            "operationType": "NONE"
+          },
+          {
+            "field": "dateTime",
+            "operationType": "MONTH"
+          }
         ],
-        "operations": [{ "field": "downloadedGame", "type": "NUMERIC_SUM" }]
+        "operations": [
+          {
+            "field": "downloadedGame",
+            "type": "NUMERIC_SUM"
+          }
+        ]
       },
       "x": 800,
       "y": 200
     },
     {
-      "partitionKey": null,
-      "schemaVersion": 1,
-      "id": "84b4dea0-51c3-11ea-bec0-a7e1071491c2",
-      "name": "Log",
-      "type": "writers/log",
-      "params": {},
-      "x": 1200,
+      "id": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
+      "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Monthly Record",
+      "params": {
+        "mappings": [
+          {
+            "Month": "month_dateTime"
+          },
+          {
+            "TotalDownload": "sum_downloadedGame"
+          },
+          {
+            "User": "userId"
+          }
+        ]
+      },
+      "x": 1050,
       "y": 200
     },
     {
-      "partitionKey": null,
+      "id": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
+      "type": "transforms/script",
       "schemaVersion": 1,
-      "id": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
-      "name": "Monthly Record",
-      "type": "transforms/map",
+      "name": "Simulate Data",
       "params": {
-        "mappings": {
-          "Month": "month_dateTime",
-          "TotalDownload": "sum_downloadedGame",
-          "User": "userId"
-        }
+        "transform": "// This script simulate daily record for number of games downloaded by a user\n\n// Write the input record from previous function into log\nlog.info (\"Receive data: \" + JSON.stringify(payload));\n\n// Create sample daily record\nvar usageEvent = {\n    eventId: payload.value,\n    userId: \"USER-1001\",\n    downloadedGame: 2 * payload.value,\n    dateTime: simDate(),\n}\n\n// Send the record to next function\nawait push(usageEvent)\n\n// Simulate different date for each record\nfunction simDate() {\n    var moment = require(\"moment\");\n    var date = moment().add(payload.value, 'days');\n    return date.format('YYYY-MM-DD');\n}"
       },
-      "x": 1050,
+      "x": 550,
+      "y": 200
+    },
+    {
+      "id": "84b4dea0-51c3-11ea-bec0-a7e1071491c2",
+      "type": "writers/log",
+      "schemaVersion": 1,
+      "name": "Log",
+      "params": {},
+      "x": 1200,
       "y": 200
     }
   ],
   "edges": [
-    {
-      "id": "afc74fb0-4cc3-11ea-9014-2b24e4165af9",
-      "from": "df2d3300-4cbe-11ea-9014-2b24e4165af9",
-      "to": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
-      "config": {}
-    },
     {
       "id": "1b293760-51c3-11ea-bec0-a7e1071491c2",
       "from": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
@@ -98,6 +103,12 @@
       "from": "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591",
       "to": "84b4dea0-51c3-11ea-bec0-a7e1071491c2",
       "config": {}
+    },
+    {
+      "id": "afc74fb0-4cc3-11ea-9014-2b24e4165af9",
+      "from": "df2d3300-4cbe-11ea-9014-2b24e4165af9",
+      "to": "ec556ca0-4cbe-11ea-9014-2b24e4165af9",
+      "config": {}
     }
   ],
   "nodeGroups": [
@@ -109,28 +120,30 @@
         "ec556ca0-4cbe-11ea-9014-2b24e4165af9"
       ],
       "annotation": {
-        "text": "Simulates data with a daily record of the number of games downloaded by a user. This step substitutes real data input.",
+        "text": "Simulate daily records of games downloaded by a user.",
         "color": "gray"
       }
     },
     {
       "id": "d597d100-3652-11f0-9089-5d4c63fdc2c8",
       "name": "Meter usage",
-      "nodeIds": ["31a45de0-80ba-11eb-b363-0dcbd0a358e8"],
+      "nodeIds": [
+        "31a45de0-80ba-11eb-b363-0dcbd0a358e8"
+      ],
       "annotation": {
-        "text": "Summarizes the monthly number of games downloaded.",
+        "text": "Summarize the monthly number of games downloaded.",
         "color": "yellow"
       }
     },
     {
       "id": "e57cb9a0-3652-11f0-9089-5d4c63fdc2c8",
-      "name": "Forward to billing",
+      "name": "To billing",
       "nodeIds": [
         "84b4dea0-51c3-11ea-bec0-a7e1071491c2",
         "5bef9e60-5ec5-11ea-8ba5-d5bb374ad591"
       ],
       "annotation": {
-        "text": "Filters the required data for business processing.\n\nWrites the received summary event to a log.\nThis step substitutes data being sent for billing.",
+        "text": "Send the per-user monthly download totals to the billing system.",
         "color": "gray"
       }
     }
