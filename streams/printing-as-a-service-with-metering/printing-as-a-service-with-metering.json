@@ -416,7 +416,7 @@
       "schemaVersion": 1,
       "name": "Format email",
       "params": {
-        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"EMAIL_MAINTENANCE\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" soon needs maintenance as it usage has reached \" + threshold?.capacityPercentage + \". Kindly schedule the maintenance.\"\n});"
+        "transform": "const threshold = payload.thresholds.find(threshold => threshold?.customFields?.action === \"EMAIL_MAINTENANCE\");\n\nawait push({\n    ...payload,\n    message: \"The printer with id \" + payload.userId + \" soon needs maintenance as its usage has reached \" + threshold?.capacityPercentage + \". Kindly schedule the maintenance.\"\n});"
       },
       "x": 1650,
       "y": -400
