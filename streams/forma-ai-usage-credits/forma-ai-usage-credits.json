@@ -1,0 +1,796 @@
+{
+  "name": "Forma AI usage credits",
+  "annotation": {
+    "text": "This example stream collects AI-backed usage events from the fictional company Forma's design-and-marketing SaaS.\n\nIt cleans invalid and duplicate data, enriches it with customer and outcome-based information from external systems, and assigns credit weights for use in Pricing. Invalid events are sent to Data Correction to prevent revenue leakage.\n\nIt also calculates a unit cost per AI usage event and aggregates those per customer and month, to track AI spending per customer for use in margin analytics.\n\nAll external integrations are simulated in this example stream so you can run it out of the box, but the flow and logic are similar to real-world use cases.",
+    "color": "blue"
+  },
+  "nodes": [
+    {
+      "id": "38450df0-a5eb-11ec-9235-0fb4c7e17e51",
+      "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Magic Design",
+      "params": {
+        "max": 20
+      },
+      "x": -400,
+      "y": 50
+    },
+    {
+      "id": "5b76c250-a5eb-11ec-9235-0fb4c7e17e51",
+      "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "AI copy",
+      "params": {
+        "max": 20
+      },
+      "x": -400,
+      "y": 300
+    },
+    {
+      "id": "5dd31e50-3277-11f1-a2d8-79e743140558",
+      "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Brand pack",
+      "params": {
+        "max": 20
+      },
+      "x": -400,
+      "y": 550
+    },
+    {
+      "id": "0292c860-3281-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Customer lookup",
+      "params": {
+        "transform": "// Simulate an external lookup to find the customer for this user and enrich our event with it. \n// Some users aren't found in the external system (master data sync issues). \nconst USER_TO_CUSTOMER = {\n    0: \"Cool Cats\",\n    1: \"Cool Cats\",\n    2: \"Cool Cats\",\n    3: \"Cool Cats\",\n    4: \"Nova Brands\",\n    5: \"Nova Brands\",\n    6: \"Nova Brands\",\n    7: \"Nova Brands\",\n    8: \"CUSTOMER_NOT_FOUND\",\n    9: \"Life-as-a-Service\",\n    10: \"Life-as-a-Service\",\n    11: \"Life-as-a-Service\"\n};\n\nfunction enrichWithCustomer(event) {\n    const customerId = USER_TO_CUSTOMER[event.userId] ?? \"CUSTOMER_NOT_FOUND\";\n    return {\n        customerId: customerId,\n        ...event\n    };\n}\n\nawait push(enrichWithCustomer(payload));"
+      },
+      "x": 1050,
+      "y": 300
+    },
+    {
+      "id": "0f8fbbf0-3334-11f1-86e1-352816b1a860",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Normalize",
+      "params": {
+        "transform": "// Normalize the input so it's easier to use downstream\npayload.serviceName = payload.actionType.split(\".\")[0];\npayload.operation = payload.actionType.split(\".\")[1];\ndelete payload.actionType;\n\nawait push(payload);"
+      },
+      "x": 850,
+      "y": 300
+    },
+    {
+      "id": "1ea6fac0-3278-11f1-a2d8-79e743140558",
+      "type": "transforms/deduplicate",
+      "schemaVersion": 4,
+      "name": "Dedup design",
+      "params": {
+        "key": "${payload.eventId}",
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "57cbb352-e783-441c-8df6-38043c415135"
+            }
+          }
+        }
+      },
+      "x": 400,
+      "y": 50
+    },
+    {
+      "id": "25056190-3278-11f1-a2d8-79e743140558",
+      "type": "transforms/deduplicate",
+      "schemaVersion": 4,
+      "name": "Dedup copy",
+      "params": {
+        "key": "${payload.eventId}",
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "25056191-3278-11f1-a2d8-79e743140558"
+            }
+          }
+        }
+      },
+      "x": 400,
+      "y": 300
+    },
+    {
+      "id": "2a44c3d0-3278-11f1-a2d8-79e743140558",
+      "type": "transforms/deduplicate",
+      "schemaVersion": 4,
+      "name": "Dedup brand",
+      "params": {
+        "key": "${payload.eventId}",
+        "multiOutput": {
+          "fixed": {
+            "unique": {
+              "id": "2a44c3d1-3278-11f1-a2d8-79e743140558"
+            }
+          }
+        }
+      },
+      "x": 400,
+      "y": 550
+    },
+    {
+      "id": "30118b30-3337-11f1-86e1-352816b1a860",
+      "type": "transforms/data_aggregate",
+      "schemaVersion": 3,
+      "name": "Cost per customer",
+      "params": {
+        "conditionalFlushConfig": [],
+        "flushType": "EACH_FILE",
+        "groupKeys": [
+          {
+            "alias": "usageMonth",
+            "field": "timestamp",
+            "operationType": "MONTH"
+          },
+          {
+            "alias": "",
+            "field": "customerId",
+            "operationType": "NONE"
+          }
+        ],
+        "operations": [
+          {
+            "alias": "monthlyAiCost",
+            "field": "aiUnitCost",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "alias": "currency",
+            "field": "currency",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "alias": "operationsCount",
+            "field": "customerId",
+            "type": "GENERAL_COUNT"
+          }
+        ]
+      },
+      "x": 1750,
+      "y": 550
+    },
+    {
+      "id": "4376d520-3280-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "AI unit cost",
+      "params": {
+        "transform": "// Calculate AI token usage unit cost per operation. \n// Simple case here, but could be fetched from an external system to enrich as well.\nfunction assignUnitCost() {\n    let cost = 0;\n    if (payload.serviceName == \"AICopyWriter\") {\n        cost = payload.tokensUsed * 0.0001; \n    } else if (payload.serviceName == \"MagicDesign\") {\n        if (payload.assetType == \"image\") {\n            cost = payload.tokensUsed * 0.0002;\n        } else if (payload.assetType == \"video\") {\n            cost = payload.tokensUsed * 0.0003;\n        }\n    } else if (payload.serviceName == \"AIBrandAgent\") {\n        cost = payload.tokensUsed * 0.0005;\n    } else {\n        payload.serviceName = \"UNKNOWN: \" + payload.ServiceName;\n    }\n\n    return Number(cost.toFixed(2)); // 2 decimals = Euro cents, for Previewability friendliness only - rounding should only be done on totals in production\n}\n\nawait push({\n    ...payload,\n    aiUnitCost: assignUnitCost(payload),\n    currency: \"EUR\",\n});"
+      },
+      "x": 1550,
+      "y": 550
+    },
+    {
+      "id": "7b7ecfc0-3412-11f1-8cf6-4d44b5e2de9c",
+      "type": "transforms/validate",
+      "schemaVersion": 1,
+      "name": "Validate customer",
+      "params": {
+        "multiOutput": {
+          "fixed": {
+            "valid": {
+              "id": "7b7ecfc1-3412-11f1-8cf6-4d44b5e2de9c"
+            }
+          }
+        },
+        "schema": {
+          "properties": {
+            "customerId": {
+              "pattern": "^(?!CUSTOMER_NOT_FOUND)"
+            }
+          },
+          "required": [
+            "customerId"
+          ]
+        },
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 100,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
+      },
+      "x": 1250,
+      "y": 300
+    },
+    {
+      "id": "7dc62270-3277-11f1-a2d8-79e743140558",
+      "type": "transforms/validate",
+      "schemaVersion": 1,
+      "name": "Validate brand",
+      "params": {
+        "multiOutput": {
+          "fixed": {
+            "valid": {
+              "id": "b13d2880-3333-11f1-86e1-352816b1a860"
+            }
+          }
+        },
+        "schema": {
+          "properties": {
+            "user": {
+              "pattern": "^(?!INVALID)"
+            }
+          },
+          "required": [
+            "user"
+          ]
+        },
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 100,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
+      },
+      "x": 200,
+      "y": 550
+    },
+    {
+      "id": "82432470-328a-11f1-af1a-a38913817674",
+      "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Map design fields",
+      "params": {
+        "mappings": [
+          {
+            "eventId": "eventId"
+          },
+          {
+            "userId": "userId"
+          },
+          {
+            "timestamp": "timestamp"
+          },
+          {
+            "actionType": "actionType"
+          },
+          {
+            "assetType": "assetType"
+          },
+          {
+            "assetId": "assetId"
+          },
+          {
+            "tokensUsed": "tokensUsed"
+          }
+        ]
+      },
+      "x": 650,
+      "y": 50
+    },
+    {
+      "id": "8a00cd20-328a-11f1-af1a-a38913817674",
+      "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Map copy fields",
+      "params": {
+        "mappings": [
+          {
+            "eventId": "eventId"
+          },
+          {
+            "userId": "userAccountId"
+          },
+          {
+            "timestamp": "tstamp"
+          },
+          {
+            "actionType": "userOperation"
+          },
+          {
+            "assetType": "assetType"
+          },
+          {
+            "assetId": "assetId"
+          },
+          {
+            "tokensUsed": "aiTokensUsed"
+          }
+        ]
+      },
+      "x": 650,
+      "y": 300
+    },
+    {
+      "id": "8a8120b0-328a-11f1-af1a-a38913817674",
+      "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Map brand fields",
+      "params": {
+        "mappings": [
+          {
+            "eventId": "eventId"
+          },
+          {
+            "userId": "user"
+          },
+          {
+            "timestamp": "eventTimestamp"
+          },
+          {
+            "actionType": "userAction"
+          },
+          {
+            "assetType": "assetType"
+          },
+          {
+            "assetId": "assetId"
+          },
+          {
+            "tokensUsed": "aiTokensUsed"
+          }
+        ]
+      },
+      "x": 650,
+      "y": 550
+    },
+    {
+      "id": "8ee1adf0-3285-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Sample brand data",
+      "params": {
+        "transform": "\nif (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nconst simulatedUserEvent = {\n    eventId: simEventId(),\n    user: simUserId(),\n    userAction: simActionType(),\n    assetType: simAssetType(),\n    assetId: simAssetId(),\n    aiTokensUsed: simAiTokensUsed(),\n    eventTimestamp: simDate()\n};\n\nstate.node.count++;\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedUserEvent.user = \"INVALID\";\n}\n\nawait push(simulatedUserEvent);\n\n// 20% of events are duplicates\nif (state.node.count % 5 === 0) {\n    simulatedUserEvent.userAction = \"DUPLICATE\";\n    await push(simulatedUserEvent);\n} \n\n\nfunction simUserId() {\n    return Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6);\n}\n\nfunction simEventId() {\n    return Math.floor(Math.random() * 1000000);\n}\n\nfunction simAssetId() {\n    return \"AICopyWriter-\" + state.node.count;\n}\n\nfunction simAiTokensUsed() {\n    return 2000 + 200 * [Math.floor(Math.random() * 100)];\n}\n\nfunction simActionType() {\n    switch (Math.floor(Math.random() * 10)) {\n        case 0: return \"AIBrandAgent.edit\";\n        case 1: return \"AIBrandAgent.edit\";\n        case 2: return \"AIBrandAgent.edit\";\n        case 3: return \"AIBrandAgent.re-channel\";\n        case 4: return \"AIBrandAgent.re-channel\";\n        case 5: return \"AIBrandAgent.compress\";\n        case 6: return \"AIBrandAgent.compress\";\n        case 7: return \"AIBrandAgent.generate\";\n        case 8: return \"AIBrandAgent.generate\";\n        case 9: return \"AIBrandAgent.generate\";\n        case 10: return \"AIBrandAgent.generate\";\n    }\n\n    return \"UNKNOWN\";\n}\n\nfunction simAssetType() {\n    return [\"core-campaign\", \"asset-library\", \"email-campaign\", \"landing-page\", \"billboard\"][Math.floor(Math.random() * 5)];\n}\n\nfunction simDate() {\n    const date = new Date();\n    date.setDate(Math.ceil(Math.random() * date.getDate()));\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}\n"
+      },
+      "x": -150,
+      "y": 550
+    },
+    {
+      "id": "9f2f9190-3285-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Sample AI copy data",
+      "params": {
+        "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nconst simulatedUserEvent = {\n    eventId: simEventId(),\n    userAccountId: simUserId(),\n    userOperation: simActionType(),\n    assetType: simAssetType(),\n    assetId: simAssetId(),\n    aiTokensUsed: simAiTokensUsed(),\n    tstamp: simDate()\n};\n\nstate.node.count++;\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedUserEvent.userAccountId = \"INVALID\";\n}\n\nawait push(simulatedUserEvent);\n\n// 20% of events are duplicates\nif (state.node.count % 5 === 4) {\n    simulatedUserEvent.userOperation = \"DUPLICATE\";\n    await push(simulatedUserEvent);\n} \n\n\nfunction simUserId() {\n    return Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6);\n}\n\nfunction simEventId() {\n    return Math.floor(Math.random() * 1000000);\n}\n\nfunction simAssetId() {\n    return \"AICopyWriter-\" + state.node.count;\n}\n\nfunction simAiTokensUsed() {\n    return 500 + 20 * [Math.floor(Math.random() * 100)];\n}\n\nfunction simActionType() {\n    switch (Math.floor(Math.random() * 10)) {\n        case 0: return \"AICopyWriter.edit\";\n        case 1: return \"AICopyWriter.edit\";\n        case 2: return \"AICopyWriter.edit\";\n        case 3: return \"AICopyWriter.changeVoice\";\n        case 4: return \"AICopyWriter.changeVoice\";\n        case 5: return \"AICopyWriter.generate\";\n        case 6: return \"AICopyWriter.generate\";\n        case 7: return \"AICopyWriter.generate\";\n        case 8: return \"AICopyWriter.generate\";\n        case 9: return \"AICopyWriter.generate\";\n        case 10: return \"AICopyWriter.generate\";\n    }\n\n    return \"UNKNOWN\";\n}\n\nfunction simAssetType() {\n    return [\"social-post\", \"banner\", \"email\", \"landing-page\", \"ad-creative\"][Math.floor(Math.random() * 5)];\n}\n\nfunction simDate() {\n    const date = new Date();\n    date.setDate(Math.ceil(Math.random() * date.getDate()));\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}\n"
+      },
+      "x": -150,
+      "y": 300
+    },
+    {
+      "id": "b485e8f0-3285-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Sample Magic Design",
+      "params": {
+        "transform": "if (state.node.count === undefined) {\n    state.node.count = 0;\n}\n\nconst simulatedUserEvent = {\n    eventId: simEventId(),\n    userId: simUserId(),\n    actionType: simActionType(),\n    assetType: simAssetType(),\n    assetId: simAssetId(),\n    tokensUsed: simAiTokensUsed(),\n    timestamp: simDate()\n};\n\nstate.node.count++;\n\n// Some events are invalid\nif (state.node.count % 10 === 3) {\n    simulatedUserEvent.userId = \"INVALID\";\n}\n\nawait push(simulatedUserEvent);\n\n// 20% of events are duplicates\nif (state.node.count % 5 === 0) {\n    simulatedUserEvent.actionType = \"DUPLICATE\";\n    await push(simulatedUserEvent);\n} \n\n\nfunction simUserId() {\n    if (state.node.count === 1) { // Used later for customer lookup simulation\n        return 8;\n    }\n    return Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6);\n}\n\nfunction simEventId() {\n    return Math.floor(Math.random() * 1000000);\n}\n\nfunction simAssetId() {\n    return \"MagicDesign-\" + state.node.count;\n}\n\nfunction simActionType() {\n    switch (Math.floor(Math.random() * 10)) {\n        case 0: return \"MagicDesign.edit\";\n        case 1: return \"MagicDesign.edit\";\n        case 2: return \"MagicDesign.edit\";\n        case 3: return \"MagicDesign.template\";\n        case 4: return \"MagicDesign.template\";\n        case 5: return \"MagicDesign.generate\";\n        case 6: return \"MagicDesign.generate\";\n        case 7: return \"MagicDesign.generate\";\n        case 8: return \"MagicDesign.generate\";\n        case 9: return \"MagicDesign.generate\";\n        case 10: return \"MagicDesign.generate\";\n    }\n\n    return \"UNKNOWN\";\n}\n\nfunction simAssetType() {\n    return [\"image\", \"video\" ][Math.floor(Math.random() * 2)];\n}\n\nfunction simAiTokensUsed() {\n    return 500 + 50 * [Math.floor(Math.random() * 100)];\n}\n\nfunction simDate() {\n    const date = new Date();\n    date.setDate(Math.ceil(Math.random() * date.getDate()));\n    date.setHours(Math.floor(Math.random() * 23));\n    date.setMinutes(Math.floor(Math.random() * 60));\n    date.setSeconds(Math.floor(Math.random() * 60));\n    return date.toISOString();\n}\n\n\n"
+      },
+      "x": -150,
+      "y": 50
+    },
+    {
+      "id": "bc169cf0-327f-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Published lookup",
+      "params": {
+        "transform": "// Simulate a lookup in an external publishing system\nconst publishedAssetIds = [\n  \"MagicDesign-0\",\n  \"MagicDesign-2\",\n  \"MagicDesign-5\",\n  \"AICopyWriter-1\",\n  \"AICopyWriter-3\",\n  \"AICopyWriter-5\",\n  \"AIBrandAgent-0\",\n  \"AIBrandAgent-3\",\n  \"AIBrandAgent-6\"\n];\n\n// Only price published AI-generated assets and user actions, other non-published events are filtered out here\nif (publishedAssetIds.includes(payload.assetId)) {\n  payload.published = true;\n  await push(payload);\n}"
+      },
+      "x": 1550,
+      "y": 50
+    },
+    {
+      "id": "bd63e800-3280-11f1-a2d8-79e743140558",
+      "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Map for analytics",
+      "params": {
+        "mappings": [
+          {
+            "accountName": "customerId"
+          },
+          {
+            "month": "usageMonth"
+          },
+          {
+            "eventCount": "count_customerId"
+          }
+        ]
+      },
+      "x": 2000,
+      "y": 550
+    },
+    {
+      "id": "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+      "type": "transforms/validate",
+      "schemaVersion": 1,
+      "name": "Validate copy",
+      "params": {
+        "multiOutput": {
+          "fixed": {
+            "valid": {
+              "id": "ad946bd0-3333-11f1-86e1-352816b1a860"
+            }
+          }
+        },
+        "schema": {
+          "properties": {
+            "userAccountId": {
+              "pattern": "^(?!INVALID)"
+            }
+          },
+          "required": [
+            "userAccountId"
+          ]
+        },
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 100,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
+      },
+      "x": 200,
+      "y": 300
+    },
+    {
+      "id": "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+      "type": "transforms/validate",
+      "schemaVersion": 1,
+      "name": "Validate design",
+      "params": {
+        "multiOutput": {
+          "fixed": {
+            "valid": {
+              "id": "ad86a7a0-331c-11f1-86e1-352816b1a860"
+            }
+          }
+        },
+        "schema": {
+          "properties": {
+            "userId": {
+              "pattern": "^(?!INVALID)"
+            }
+          }
+        },
+        "suspenseManagement": {
+          "abortOnDisabled": false,
+          "enabled": true,
+          "eventThreshold": 100,
+          "onThresholdExceeded": "ABORT",
+          "resetOnValidEvent": true
+        }
+      },
+      "x": 200,
+      "y": 50
+    },
+    {
+      "id": "ddaf3460-3277-11f1-a2d8-79e743140558",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Credit weighting",
+      "params": {
+        "transform": "// Assign credit weights depending on serviceName and assetType produced - some cost more than others. \n// This is a simple simulation, would be fetched from an cached reference data in production.\nfunction assignCreditWeights() {\n    let credits = 0;\n    if (payload.serviceName == \"AICopyWriter\") {\n        credits = 1;\n    } else if (payload.serviceName == \"MagicDesign\") {\n        if (payload.assetType == \"image\") {\n            credits = 3;\n        } else if (payload.assetType == \"video\") {\n            credits = 4;\n        }\n    } else if (payload.serviceName == \"AIBrandAgent\") {\n        credits = 5;\n    } else {\n        payload.serviceName = \"UNKNOWN\";\n    }\n\n    return credits;\n}\n\nawait push({\n    ...payload,\n    credits: assignCreditWeights(payload),\n    accountId: \"FORMA\",\n    eventType: \"aiUsageCredits\"\n});"
+      },
+      "x": 1750,
+      "y": 50
+    },
+    {
+      "id": "f08b6a60-327f-11f1-a2d8-79e743140558",
+      "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Map for pricing",
+      "params": {
+        "mappings": [
+          {
+            "accountId": "accountId"
+          },
+          {
+            "eventType": "eventType"
+          },
+          {
+            "idempotencyKey": "eventId"
+          },
+          {
+            "timestamp": "timestamp"
+          },
+          {
+            "fields.customerId": "customerId"
+          },
+          {
+            "fields.userId": "userId"
+          },
+          {
+            "fields.serviceName": "serviceName"
+          },
+          {
+            "fields.operation": "operation"
+          },
+          {
+            "fields.assetType": "assetType"
+          },
+          {
+            "fields.credits": "credits"
+          },
+          {
+            "fields.published": "published"
+          }
+        ]
+      },
+      "x": 2000,
+      "y": 50
+    },
+    {
+      "id": "1553af50-2d21-11ed-aafa-3f5ed9c4d03f",
+      "type": "writers/noop",
+      "schemaVersion": 1,
+      "name": "Pricing",
+      "params": {},
+      "x": 2200,
+      "y": 50
+    },
+    {
+      "id": "9a817e80-2d1e-11ed-aafa-3f5ed9c4d03f",
+      "type": "writers/noop",
+      "schemaVersion": 1,
+      "name": "Margin dashboard",
+      "params": {},
+      "x": 2200,
+      "y": 550
+    }
+  ],
+  "edges": [
+    {
+      "id": "0e49db40-3280-11f1-a2d8-79e743140558",
+      "from": "ddaf3460-3277-11f1-a2d8-79e743140558",
+      "to": "f08b6a60-327f-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "1a4fb3d0-3413-11f1-8cf6-4d44b5e2de9c",
+      "from": "7b7ecfc0-3412-11f1-8cf6-4d44b5e2de9c",
+      "to": "bc169cf0-327f-11f1-a2d8-79e743140558",
+      "output": "7b7ecfc1-3412-11f1-8cf6-4d44b5e2de9c",
+      "config": {}
+    },
+    {
+      "id": "1bb81d70-3413-11f1-8cf6-4d44b5e2de9c",
+      "from": "7b7ecfc0-3412-11f1-8cf6-4d44b5e2de9c",
+      "to": "4376d520-3280-11f1-a2d8-79e743140558",
+      "output": "7b7ecfc1-3412-11f1-8cf6-4d44b5e2de9c",
+      "config": {}
+    },
+    {
+      "id": "1fc47240-3334-11f1-86e1-352816b1a860",
+      "from": "82432470-328a-11f1-af1a-a38913817674",
+      "to": "0f8fbbf0-3334-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "2180ef50-3334-11f1-86e1-352816b1a860",
+      "from": "8a00cd20-328a-11f1-af1a-a38913817674",
+      "to": "0f8fbbf0-3334-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "234eaa70-3334-11f1-86e1-352816b1a860",
+      "from": "8a8120b0-328a-11f1-af1a-a38913817674",
+      "to": "0f8fbbf0-3334-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "255e5090-3334-11f1-86e1-352816b1a860",
+      "from": "0f8fbbf0-3334-11f1-86e1-352816b1a860",
+      "to": "0292c860-3281-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "301fa2c0-3278-11f1-a2d8-79e743140558",
+      "from": "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+      "to": "25056190-3278-11f1-a2d8-79e743140558",
+      "output": "ad946bd0-3333-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "31266460-3278-11f1-a2d8-79e743140558",
+      "from": "7dc62270-3277-11f1-a2d8-79e743140558",
+      "to": "2a44c3d0-3278-11f1-a2d8-79e743140558",
+      "output": "b13d2880-3333-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "3263a5b0-3280-11f1-a2d8-79e743140558",
+      "from": "f08b6a60-327f-11f1-a2d8-79e743140558",
+      "to": "1553af50-2d21-11ed-aafa-3f5ed9c4d03f",
+      "config": {}
+    },
+    {
+      "id": "33628af0-3337-11f1-86e1-352816b1a860",
+      "from": "4376d520-3280-11f1-a2d8-79e743140558",
+      "to": "30118b30-3337-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "3451dac0-3278-11f1-a2d8-79e743140558",
+      "from": "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+      "to": "1ea6fac0-3278-11f1-a2d8-79e743140558",
+      "output": "ad86a7a0-331c-11f1-86e1-352816b1a860",
+      "config": {}
+    },
+    {
+      "id": "35550c20-3337-11f1-86e1-352816b1a860",
+      "from": "30118b30-3337-11f1-86e1-352816b1a860",
+      "to": "bd63e800-3280-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "83bd8f50-3412-11f1-8cf6-4d44b5e2de9c",
+      "from": "0292c860-3281-11f1-a2d8-79e743140558",
+      "to": "7b7ecfc0-3412-11f1-8cf6-4d44b5e2de9c",
+      "config": {}
+    },
+    {
+      "id": "98562e60-3285-11f1-a2d8-79e743140558",
+      "from": "5dd31e50-3277-11f1-a2d8-79e743140558",
+      "to": "8ee1adf0-3285-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "99799fc0-3285-11f1-a2d8-79e743140558",
+      "from": "8ee1adf0-3285-11f1-a2d8-79e743140558",
+      "to": "7dc62270-3277-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "a216fa10-3285-11f1-a2d8-79e743140558",
+      "from": "5b76c250-a5eb-11ec-9235-0fb4c7e17e51",
+      "to": "9f2f9190-3285-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "a33fe9b0-3285-11f1-a2d8-79e743140558",
+      "from": "9f2f9190-3285-11f1-a2d8-79e743140558",
+      "to": "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+      "config": {}
+    },
+    {
+      "id": "b6b720d0-3285-11f1-a2d8-79e743140558",
+      "from": "38450df0-a5eb-11ec-9235-0fb4c7e17e51",
+      "to": "b485e8f0-3285-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "b80ec190-3285-11f1-a2d8-79e743140558",
+      "from": "b485e8f0-3285-11f1-a2d8-79e743140558",
+      "to": "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+      "config": {}
+    },
+    {
+      "id": "c1630210-3280-11f1-a2d8-79e743140558",
+      "from": "bd63e800-3280-11f1-a2d8-79e743140558",
+      "to": "9a817e80-2d1e-11ed-aafa-3f5ed9c4d03f",
+      "config": {}
+    },
+    {
+      "id": "da16f8d0-327f-11f1-a2d8-79e743140558",
+      "from": "bc169cf0-327f-11f1-a2d8-79e743140558",
+      "to": "ddaf3460-3277-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "f6541fe0-328a-11f1-af1a-a38913817674",
+      "from": "1ea6fac0-3278-11f1-a2d8-79e743140558",
+      "to": "82432470-328a-11f1-af1a-a38913817674",
+      "output": "57cbb352-e783-441c-8df6-38043c415135",
+      "config": {}
+    },
+    {
+      "id": "f7bd4cd0-328a-11f1-af1a-a38913817674",
+      "from": "25056190-3278-11f1-a2d8-79e743140558",
+      "to": "8a00cd20-328a-11f1-af1a-a38913817674",
+      "output": "25056191-3278-11f1-a2d8-79e743140558",
+      "config": {}
+    },
+    {
+      "id": "f91a44c0-328a-11f1-af1a-a38913817674",
+      "from": "2a44c3d0-3278-11f1-a2d8-79e743140558",
+      "to": "8a8120b0-328a-11f1-af1a-a38913817674",
+      "output": "2a44c3d1-3278-11f1-a2d8-79e743140558",
+      "config": {}
+    }
+  ],
+  "nodeGroups": [
+    {
+      "id": "04535230-3283-11f1-a2d8-79e743140558",
+      "name": "To Pricing",
+      "nodeIds": [
+        "1553af50-2d21-11ed-aafa-3f5ed9c4d03f",
+        "f08b6a60-327f-11f1-a2d8-79e743140558"
+      ],
+      "annotation": {
+        "text": "Send the clean, outcome-based, published-only, credith-weighted events for Pricing.",
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "15c124c0-3283-11f1-a2d8-79e743140558",
+      "name": "To Margin dashboard",
+      "nodeIds": [
+        "9a817e80-2d1e-11ed-aafa-3f5ed9c4d03f",
+        "bd63e800-3280-11f1-a2d8-79e743140558"
+      ],
+      "annotation": {
+        "text": "Send AI cost per customer data to an external BI dashboard showing revenue, cost and margin per customer and totals.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "26541d20-3282-11f1-a2d8-79e743140558",
+      "name": "Validate and deduplicate",
+      "nodeIds": [
+        "bfee1ed0-2d0a-11ed-aafa-3f5ed9c4d03f",
+        "cb4975c0-2d0c-11ed-aafa-3f5ed9c4d03f",
+        "7dc62270-3277-11f1-a2d8-79e743140558",
+        "1ea6fac0-3278-11f1-a2d8-79e743140558",
+        "25056190-3278-11f1-a2d8-79e743140558",
+        "2a44c3d0-3278-11f1-a2d8-79e743140558"
+      ],
+      "annotation": {
+        "text": "Invalid events go to Data Correction where they can be repaired and reprocessed. \n\nDuplicate events are discarded.",
+        "color": "green"
+      }
+    },
+    {
+      "id": "3aef2490-3413-11f1-8cf6-4d44b5e2de9c",
+      "name": "Normalize and enrich",
+      "nodeIds": [
+        "0292c860-3281-11f1-a2d8-79e743140558",
+        "82432470-328a-11f1-af1a-a38913817674",
+        "8a00cd20-328a-11f1-af1a-a38913817674",
+        "8a8120b0-328a-11f1-af1a-a38913817674",
+        "0f8fbbf0-3334-11f1-86e1-352816b1a860",
+        "7b7ecfc0-3412-11f1-8cf6-4d44b5e2de9c"
+      ],
+      "annotation": {
+        "text": "Normalize events into a standard format, and enrich events with customer ids.\n\nValidate that a user belongs to a valid customer. If not, events go to Data Correction where they can be repaired and reprocessed.",
+        "color": "blue"
+      }
+    },
+    {
+      "id": "4a8c8890-3281-11f1-a2d8-79e743140558",
+      "name": "Collect raw usage events",
+      "nodeIds": [
+        "38450df0-a5eb-11ec-9235-0fb4c7e17e51",
+        "5b76c250-a5eb-11ec-9235-0fb4c7e17e51",
+        "5dd31e50-3277-11f1-a2d8-79e743140558"
+      ],
+      "annotation": {
+        "text": "Three difference source systems, three different data formats.",
+        "color": "gray"
+      }
+    },
+    {
+      "id": "4b2ec450-3337-11f1-86e1-352816b1a860",
+      "name": "Cost calculation",
+      "nodeIds": [
+        "4376d520-3280-11f1-a2d8-79e743140558",
+        "30118b30-3337-11f1-86e1-352816b1a860"
+      ],
+      "annotation": {
+        "text": "Calculate AI vendor cost per customer based on per-event unit cost, for both publish and non-publish usage events.",
+        "color": "blue"
+      }
+    },
+    {
+      "id": "ab74c590-3282-11f1-a2d8-79e743140558",
+      "name": "Enrichment by outcome and credits",
+      "nodeIds": [
+        "ddaf3460-3277-11f1-a2d8-79e743140558",
+        "bc169cf0-327f-11f1-a2d8-79e743140558"
+      ],
+      "annotation": {
+        "text": "Successful outcomes = published assets.\n\nAssign credit cost per event based on the service used and asset type.",
+        "color": "purple"
+      }
+    }
+  ]
+}
