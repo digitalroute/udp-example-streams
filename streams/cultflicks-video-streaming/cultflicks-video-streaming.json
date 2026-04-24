@@ -1,58 +1,26 @@
 {
   "name": "Cultflicks video streaming",
   "annotation": {
-    "text": "Cultflicks is a SaaS based streaming platform that became popular for streaming unpopular movies.\nIt had sold subscriptions for a long time but eventually, the growth stalled.\nThe company wanted to improve its product offering for casual viewers by adding a pay-per-view subscription model.\nThis would mean that subscribers would only pay for the content that they watched and if they didn't watch anything, they wouldn't be charged for that month.\n\nAfter a successful advertising campaign, Cultflicks now has customers across two different subscription levels.\nPremium subscribers, who pay a standard monthly fee for all content, and pay-per-view subscribers whose monthly charge will vary depending on their consumption each month.\n\nThe Cultflicks example stream will provide a batch flow that records viewing statistics, classifies users according to their usage, and processes data into billable information.\nThis stream highlights:\n\nAn actual stream flow from raw data\n\nData enrichment\n\nUser classification to multiple use cases, like billing, notification, settlement and analytics\n\nA step-by-step preview of data transformation from \"raw usage data\" to data that the business can gain insight from, for example, data related to churn or upselling opportunities.\n\nThis example stream is explained in detail here: https://infozone.atlassian.net/wiki/spaces/DAZ/pages/7880549/Cultflicks+Video+Streaming.",
+    "text": "This example stream demonstrates how the fictional streaming platform Cultflicks records viewing data, classifies customers, and produces billing, settlement, and analytics outputs.\n\nCultflicks offers two subscription plans: Premium (a flat monthly fee) and pay-per-view (charged on consumption). The stream collects raw view events, enriches them with user and movie information, classifies users by viewing behaviour and churn risk, and routes aggregates to downstream billing, partner settlement, analytics, and personalised email nudges.\n\nAll external integrations are simulated with No-op forwarders so you can run the stream out of the box, but the flow and logic mirror real-world use cases.",
     "color": "blue"
   },
   "nodes": [
     {
       "id": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
-      "name": "Count",
       "type": "readers/counter",
+      "schemaVersion": 2,
+      "name": "Count",
       "params": {
         "max": 100
       },
-      "schemaVersion": 2,
       "x": 400,
       "y": 200
     },
     {
-      "id": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "name": "View simulator",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const view_array = \n[\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 6800,\n   \"view_duration\": 3000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-Jan-03\",\n   \"full_duration\": 5600,\n   \"view_duration\": 2600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6700,\n   \"view_duration\": 4000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-Jan-04\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-Jan-05\",\n   \"full_duration\": 10000,\n   \"view_duration\": 7750,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-Jan-06\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7460,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6400,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n  {\n   \"user_id\": 2,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 5250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6800,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-Jan-03\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6700,\n   \"view_duration\": 6600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7200,\n   \"view_duration\": 2200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-Jan-04\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-Jan-05\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6650,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-Jan-06\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7160,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n }\n];\n\nconst index = payload.value % 20;\nawait push(view_array[index]);"
-      },
-      "schemaVersion": 1,
-      "x": 600,
-      "y": 200
-    },
-    {
-      "id": "24681840-d750-11ec-9fd8-49df506d0834",
-      "name": "Enrich user info",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const user_db = {\n    1: {\n        name: \"John Doe\",\n        email: \"john@doe.com\",\n        birth_year: 1980,\n        country: \"Syldavia\",\n        plan: \"Standard\"\n    },\n    2: {\n        name: \"Penny Lane\",\n        email: \"penny@lane.com\",\n        birth_year: 1996,\n        country: \"Moldania\",\n        plan: \"Premium\"\n    },\n    3: {\n        name: \"Meng Chow\",\n        email: \"meng@chow.com\",\n        birth_year: 2002,\n        country: \"Chapon\",\n        plan: \"Standard\"\n    },\n    4: {\n        name: \"Sikis Vadikis\",\n        email: \"sikis@vadikis.com\",\n        birth_year: 1988,\n        country: \"Greecey\",\n        plan: \"Standard\"\n    },\n}\n\nconst user_info = user_db[payload.user_id];\n\nconst enriched_payload = {...payload, ...user_info};\n\naudit.count(\"count_views_in_\" + enriched_payload.country);\n\nawait push(enriched_payload);"
-      },
-      "schemaVersion": 1,
-      "x": 800,
-      "y": 200
-    },
-    {
-      "id": "6adbdf40-d751-11ec-9fd8-49df506d0834",
-      "name": "Enrich title info",
-      "type": "transforms/script",
-      "params": {
-        "transform": "const media_db = {\n    \"Murder Tomatoes\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Plan 9 From Outer Space\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1957,\n    },\n    \"Bad Taste\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Santa Clause Conquers the Martians\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"Howard the Duck\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1986,\n    },\n    \"Battlefield Earth\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2000,\n    },\n    \"Sex Lives of the Potato Men\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2004,\n    },\n    \"The Beast of Yucca Flats\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1961,\n    },\n    \"Kidnapping, Caucasian Style!\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2014,\n    },\n    \"They Saved Hitler's Brain\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"The Horror of of Party Beach\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n}\n\nconst media_info = media_db[payload.title];\n\nconst enriched_payload = {...payload, ...media_info};\n\nawait push(enriched_payload);"
-      },
-      "schemaVersion": 1,
-      "x": 1000,
-      "y": 200
-    },
-    {
       "id": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "name": "View completion check",
       "type": "transforms/split",
+      "schemaVersion": 3,
+      "name": "View completion check",
       "params": {
         "multiOutput": {
           "configurable": {
@@ -72,27 +40,273 @@
         "rules": [
           {
             "key": "@{payload.view_percent}",
-            "value": "90",
             "op": "gt",
-            "output": "132bb920-d754-11ec-9fd8-49df506d0834"
+            "output": "132bb920-d754-11ec-9fd8-49df506d0834",
+            "value": "90"
           },
           {
             "key": "@{payload.view_percent}",
-            "value": "91",
             "op": "lt",
-            "output": "2ae506c0-d754-11ec-9fd8-49df506d0834"
+            "output": "2ae506c0-d754-11ec-9fd8-49df506d0834",
+            "value": "91"
           }
         ]
       },
-      "schemaVersion": 3,
       "x": 1600,
       "y": 550
     },
     {
-      "id": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
-      "name": "Aggregate view time",
-      "type": "transforms/data_aggregate",
+      "id": "24681840-d750-11ec-9fd8-49df506d0834",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Enrich user info",
       "params": {
+        "transform": "const user_db = {\n    1: {\n        name: \"John Doe\",\n        email: \"john@doe.com\",\n        birth_year: 1980,\n        country: \"Syldavia\",\n        plan: \"Standard\"\n    },\n    2: {\n        name: \"Penny Lane\",\n        email: \"penny@lane.com\",\n        birth_year: 1996,\n        country: \"Moldania\",\n        plan: \"Premium\"\n    },\n    3: {\n        name: \"Meng Chow\",\n        email: \"meng@chow.com\",\n        birth_year: 2002,\n        country: \"Chapon\",\n        plan: \"Standard\"\n    },\n    4: {\n        name: \"Sikis Vadikis\",\n        email: \"sikis@vadikis.com\",\n        birth_year: 1988,\n        country: \"Greecey\",\n        plan: \"Standard\"\n    },\n}\n\nconst user_info = user_db[payload.user_id];\n\nconst enriched_payload = {...payload, ...user_info};\n\naudit.count(\"count_views_in_\" + enriched_payload.country);\n\nawait push(enriched_payload);"
+      },
+      "x": 800,
+      "y": 200
+    },
+    {
+      "id": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
+      "type": "transforms/date",
+      "schemaVersion": 1,
+      "name": "Date",
+      "params": {
+        "items": [
+          {
+            "field": "timestamp",
+            "inputFormat": "YYYY-MMM-DD",
+            "mode": "modify",
+            "operation": {
+              "hour": {
+                "mode": "set",
+                "value": 23
+              },
+              "minute": {
+                "mode": "set",
+                "value": 59
+              },
+              "second": {
+                "mode": "set",
+                "value": 59
+              }
+            },
+            "outputFormat": "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
+          }
+        ]
+      },
+      "x": 1200,
+      "y": 200
+    },
+    {
+      "id": "2faff4f0-d757-11ec-9fd8-49df506d0834",
+      "type": "transforms/data_aggregate",
+      "schemaVersion": 3,
+      "name": "Count completed",
+      "params": {
+        "flushType": "EACH_FILE",
+        "groupKeys": [
+          {
+            "alias": "month_timestamp",
+            "field": "timestamp",
+            "operationType": "MONTH"
+          },
+          {
+            "field": "title",
+            "operationType": "NONE"
+          }
+        ],
+        "operations": [
+          {
+            "field": "title",
+            "type": "GENERAL_COUNT"
+          },
+          {
+            "field": "view_duration",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "field": "revenue_sharing_model",
+            "type": "GENERAL_CARRY_LAST"
+          },
+          {
+            "field": "ip_owner",
+            "type": "GENERAL_CARRY_LAST"
+          }
+        ]
+      },
+      "x": 1950,
+      "y": 900
+    },
+    {
+      "id": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "View simulator",
+      "params": {
+        "transform": "const view_array = \n[\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 4250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 6800,\n   \"view_duration\": 3000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-Jan-03\",\n   \"full_duration\": 5600,\n   \"view_duration\": 2600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6700,\n   \"view_duration\": 4000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-Jan-04\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-Jan-05\",\n   \"full_duration\": 10000,\n   \"view_duration\": 7750,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-Jan-06\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7460,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6400,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n  {\n   \"user_id\": 2,\n   \"title\": \"Murder Tomatoes\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7300,\n   \"view_duration\": 5250,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Plan 9 From Outer Space\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6800,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 2,\n   \"title\": \"Bad Taste\",\n   \"timestamp\": \"2022-Jan-03\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Santa Clause Conquers the Martians\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6700,\n   \"view_duration\": 6600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 3,\n   \"title\": \"Howard the Duck\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 7200,\n   \"view_duration\": 2200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Battlefield Earth\",\n   \"timestamp\": \"2022-Jan-04\",\n   \"full_duration\": 7000,\n   \"view_duration\": 7000,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"ios\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"Sex Lives of the Potato Men\",\n   \"timestamp\": \"2022-Jan-05\",\n   \"full_duration\": 6800,\n   \"view_duration\": 6650,\n   \"device_type\": \"laptop\",\n   \"os_type\": \"windows\"\n },\n {\n   \"user_id\": 4,\n   \"title\": \"The Beast of Yucca Flats\",\n   \"timestamp\": \"2022-Jan-06\",\n   \"full_duration\": 5600,\n   \"view_duration\": 5600,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"Kidnapping, Caucasian Style!\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7500,\n   \"view_duration\": 7160,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"They Saved Hitler's Brain\",\n   \"timestamp\": \"2022-Jan-02\",\n   \"full_duration\": 7200,\n   \"view_duration\": 7200,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n },\n {\n   \"user_id\": 1,\n   \"title\": \"The Horror of of Party Beach\",\n   \"timestamp\": \"2022-Jan-01\",\n   \"full_duration\": 6400,\n   \"view_duration\": 6500,\n   \"device_type\": \"mobile\",\n   \"os_type\": \"android\"\n }\n];\n\nconst index = payload.value % 20;\nawait push(view_array[index]);"
+      },
+      "x": 600,
+      "y": 200
+    },
+    {
+      "id": "6adbdf40-d751-11ec-9fd8-49df506d0834",
+      "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Enrich title info",
+      "params": {
+        "transform": "const media_db = {\n    \"Murder Tomatoes\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Plan 9 From Outer Space\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1957,\n    },\n    \"Bad Taste\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1987,\n    },\n    \"Santa Clause Conquers the Martians\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"Howard the Duck\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1986,\n    },\n    \"Battlefield Earth\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2000,\n    },\n    \"Sex Lives of the Potato Men\": {\n        ip_owner: \"Colimbia\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2004,\n    },\n    \"The Beast of Yucca Flats\": {\n        ip_owner: \"Wisney\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1961,\n    },\n    \"Kidnapping, Caucasian Style!\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 2014,\n    },\n    \"They Saved Hitler's Brain\": {\n        ip_owner: \"Vox\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n    \"The Horror of of Party Beach\": {\n        ip_owner: \"MSM\",\n        revenue_sharing_model: \"view_time\",\n        year_made: 1964,\n    },\n}\n\nconst media_info = media_db[payload.title];\n\nconst enriched_payload = {...payload, ...media_info};\n\nawait push(enriched_payload);"
+      },
+      "x": 1000,
+      "y": 200
+    },
+    {
+      "id": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
+      "type": "transforms/xmap",
+      "schemaVersion": 3,
+      "name": "Format email message",
+      "params": {
+        "keepFields": {
+          "enabled": false
+        },
+        "mappings": [
+          {
+            "ast": [
+              "S",
+              "Thank you for using Cultflicks!"
+            ],
+            "errorMessage": null,
+            "expression": "\"Thank you for using Cultflicks!\"",
+            "field": "subject"
+          },
+          {
+            "ast": [
+              "aop",
+              "+",
+              [
+                "aop",
+                "+",
+                [
+                  "aop",
+                  "+",
+                  [
+                    "aop",
+                    "+",
+                    [
+                      "aop",
+                      "+",
+                      [
+                        "aop",
+                        "+",
+                        [
+                          "aop",
+                          "+",
+                          [
+                            "aop",
+                            "+",
+                            [
+                              "aop",
+                              "+",
+                              [
+                                "aop",
+                                "+",
+                                [
+                                  "aop",
+                                  "+",
+                                  [
+                                    "aop",
+                                    "+",
+                                    [
+                                      "S",
+                                      "Hi dear "
+                                    ],
+                                    [
+                                      "IP",
+                                      "@{payload.name}"
+                                    ]
+                                  ],
+                                  [
+                                    "S",
+                                    ", Your email is "
+                                  ]
+                                ],
+                                [
+                                  "IP",
+                                  "@{payload.email}"
+                                ]
+                              ],
+                              [
+                                "S",
+                                ", your country is "
+                              ]
+                            ],
+                            [
+                              "IP",
+                              "@{payload.country}"
+                            ]
+                          ],
+                          [
+                            "S",
+                            ", and you were born on "
+                          ]
+                        ],
+                        [
+                          "IP",
+                          "@{payload.birth_year}"
+                        ]
+                      ],
+                      [
+                        "S",
+                        ". "
+                      ]
+                    ],
+                    [
+                      "IP",
+                      "@{payload.nudge_msg}"
+                    ]
+                  ],
+                  [
+                    "S",
+                    " "
+                  ]
+                ],
+                [
+                  "IP",
+                  "@{payload.metrics_msg}"
+                ]
+              ],
+              [
+                "S",
+                "  Best regards, Cultflicks"
+              ]
+            ],
+            "errorMessage": null,
+            "expression": "\"Hi dear \" + @{payload.name} + \", Your email is \" + @{payload.email} + \", your country is \" + @{payload.country} + \", and you were born on \" + @{payload.birth_year} + \". \" + @{payload.nudge_msg} + \" \" + @{payload.metrics_msg} + \"  Best regards, Cultflicks\"",
+            "field": "message"
+          }
+        ]
+      },
+      "x": 2350,
+      "y": 550
+    },
+    {
+      "id": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
+      "type": "transforms/data_aggregate",
+      "schemaVersion": 3,
+      "name": "Aggregate view time",
+      "params": {
+        "flushType": "EACH_FILE",
+        "groupKeys": [
+          {
+            "field": "user_id",
+            "operationType": "NONE"
+          },
+          {
+            "alias": "month_timestamp",
+            "field": "timestamp",
+            "operationType": "MONTH"
+          }
+        ],
         "operations": [
           {
             "field": "view_duration",
@@ -130,145 +344,27 @@
             "field": "os_type",
             "type": "GENERAL_CARRY_LAST"
           }
-        ],
-        "groupKeys": [
-          {
-            "field": "user_id",
-            "operationType": "NONE"
-          },
-          {
-            "field": "timestamp",
-            "operationType": "MONTH",
-            "alias": "month_timestamp"
-          }
-        ],
-        "flushType": "EACH_FILE"
+        ]
       },
-      "schemaVersion": 3,
       "x": 1650,
       "y": 200
     },
     {
       "id": "9d5a1000-d755-11ec-9fd8-49df506d0834",
-      "name": "Classify user",
       "type": "transforms/script",
+      "schemaVersion": 1,
+      "name": "Classify user",
       "params": {
         "transform": "const sum_view_percent = Math.round(100 * payload.sum_view_duration / payload.sum_full_duration);\nconst user_churn_risk = (sum_view_percent < 76);\n\n\nlet user_category = \"standard\";\nif (payload.sum_view_duration > 200000) {\n    user_category = \"heavy_user\";\n} else if (payload.sum_view_duration < 100000) {\n    user_category = \"light_user\";\n} \n\n\nconst metrics_msg = \"You have watched a total of \" + payload.count_title + \" movies this month. You completed \" + sum_view_percent + \"% of the movies you started watching.\";\n\nlet nudge_msg;\nif (user_churn_risk) {\n    nudge_msg = \"Maybe you would be interested in our pay-per-view plan?\";\n    audit.count(\"pay_per_view_nudge_messages_sent\");\n} else if (user_category == \"heavy_user\" && payload.carry_last_plan != \"Premium\") {\n    nudge_msg = \"Sign up for our Premium plan and enjoy great movies at super high quality for 5 family members!\";\n    audit.count(\"premium_nudge_messages_sent\");\n} else {\n    nudge_msg = \"We are glad you're enjoying your Cultflicks experience.\";\n}\n\nconst enriched_payload = {...payload, sum_view_percent, user_category, user_churn_risk, metrics_msg, nudge_msg};\n\naudit.count(\"count_user_category_\" + user_category);\naudit.sum(\"sum_view_duration\", payload.sum_view_duration);\naudit.sum(\"sum_full_duration\", payload.sum_full_duration);\n\nif (user_churn_risk) {\n    audit.count(\"count_churn_risk\");     \n}\n\nawait push(enriched_payload);"
       },
-      "schemaVersion": 1,
       "x": 1800,
       "y": 200
-    },
-    {
-      "id": "f0da7250-d756-11ec-9fd8-49df506d0834",
-      "name": "Count not completed",
-      "type": "transforms/data_aggregate",
-      "params": {
-        "operations": [
-          {
-            "field": "title",
-            "type": "GENERAL_COUNT"
-          },
-          {
-            "field": "view_duration",
-            "type": "NUMERIC_SUM"
-          },
-          {
-            "field": "view_percent",
-            "type": "NUMERIC_AVERAGE"
-          },
-          {
-            "field": "revenue_sharing_model",
-            "type": "GENERAL_CARRY_LAST"
-          }
-        ],
-        "groupKeys": [
-          {
-            "field": "timestamp",
-            "operationType": "MONTH"
-          },
-          {
-            "field": "title",
-            "operationType": "NONE"
-          }
-        ],
-        "flushType": "EACH_FILE"
-      },
-      "schemaVersion": 3,
-      "x": 1800,
-      "y": 1250
-    },
-    {
-      "id": "2faff4f0-d757-11ec-9fd8-49df506d0834",
-      "name": "Count completed",
-      "type": "transforms/data_aggregate",
-      "params": {
-        "operations": [
-          {
-            "field": "title",
-            "type": "GENERAL_COUNT"
-          },
-          {
-            "field": "view_duration",
-            "type": "NUMERIC_SUM"
-          },
-          {
-            "field": "revenue_sharing_model",
-            "type": "GENERAL_CARRY_LAST"
-          },
-          {
-            "field": "ip_owner",
-            "type": "GENERAL_CARRY_LAST"
-          }
-        ],
-        "groupKeys": [
-          {
-            "field": "timestamp",
-            "operationType": "MONTH",
-            "alias": "month_timestamp"
-          },
-          {
-            "field": "title",
-            "operationType": "NONE"
-          }
-        ],
-        "flushType": "EACH_FILE"
-      },
-      "schemaVersion": 3,
-      "x": 1950,
-      "y": 900
-    },
-    {
-      "id": "4b22f260-d75b-11ec-9fd8-49df506d0834",
-      "name": "To Billing",
-      "type": "writers/noop",
-      "params": {},
-      "schemaVersion": 1,
-      "x": 2250,
-      "y": 200
-    },
-    {
-      "id": "555c4970-d75b-11ec-9fd8-49df506d0834",
-      "name": "To partner settlement",
-      "type": "writers/noop",
-      "params": {},
-      "schemaVersion": 1,
-      "x": 2350,
-      "y": 900
-    },
-    {
-      "id": "59850b90-d75b-11ec-9fd8-49df506d0834",
-      "name": "To analytics",
-      "type": "writers/noop",
-      "params": {},
-      "schemaVersion": 1,
-      "x": 2200,
-      "y": 1250
     },
     {
       "id": "bec8fa30-d75f-11ec-9fd8-49df506d0834",
-      "name": "Format for settlement",
       "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Format for settlement",
       "params": {
         "mappings": [
           {
@@ -291,14 +387,14 @@
           }
         ]
       },
-      "schemaVersion": 2,
       "x": 2150,
       "y": 900
     },
     {
       "id": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
-      "name": "Format for analytics",
       "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Format for analytics",
       "params": {
         "mappings": [
           {
@@ -324,14 +420,102 @@
           }
         ]
       },
-      "schemaVersion": 2,
       "x": 2000,
       "y": 1250
     },
     {
+      "id": "f0da7250-d756-11ec-9fd8-49df506d0834",
+      "type": "transforms/data_aggregate",
+      "schemaVersion": 3,
+      "name": "Count not completed",
+      "params": {
+        "flushType": "EACH_FILE",
+        "groupKeys": [
+          {
+            "field": "timestamp",
+            "operationType": "MONTH"
+          },
+          {
+            "field": "title",
+            "operationType": "NONE"
+          }
+        ],
+        "operations": [
+          {
+            "field": "title",
+            "type": "GENERAL_COUNT"
+          },
+          {
+            "field": "view_duration",
+            "type": "NUMERIC_SUM"
+          },
+          {
+            "field": "view_percent",
+            "type": "NUMERIC_AVERAGE"
+          },
+          {
+            "field": "revenue_sharing_model",
+            "type": "GENERAL_CARRY_LAST"
+          }
+        ]
+      },
+      "x": 1800,
+      "y": 1250
+    },
+    {
+      "id": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "type": "transforms/xmap",
+      "schemaVersion": 3,
+      "name": "Calculate view percent",
+      "params": {
+        "keepFields": {
+          "enabled": true
+        },
+        "mappings": [
+          {
+            "ast": [
+              "call",
+              [
+                "R",
+                "round"
+              ],
+              [
+                [
+                  "aop",
+                  "/",
+                  [
+                    "aop",
+                    "*",
+                    [
+                      "N",
+                      100
+                    ],
+                    [
+                      "IP",
+                      "@{payload.view_duration}"
+                    ]
+                  ],
+                  [
+                    "IP",
+                    "@{payload.full_duration}"
+                  ]
+                ]
+              ]
+            ],
+            "errorMessage": null,
+            "expression": "round(100 * @{payload.view_duration} / @{payload.full_duration})",
+            "field": "view_percent"
+          }
+        ]
+      },
+      "x": 1400,
+      "y": 200
+    },
+    {
       "id": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
-      "name": "Format for billing",
       "type": "transforms/map",
+      "schemaVersion": 2,
+      "name": "Format for billing",
       "params": {
         "mappings": [
           {
@@ -381,176 +565,70 @@
           }
         ]
       },
-      "schemaVersion": 2,
       "x": 2000,
       "y": 200
     },
     {
-      "id": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "name": "Calculate view percent",
-      "type": "transforms/xmap",
-      "params": {
-        "keepFields": {
-          "enabled": true
-        },
-        "mappings": [
-          {
-            "field": "view_percent",
-            "expression": "round(100 * @{payload.view_duration} / @{payload.full_duration})",
-            "ast": [
-              "call",
-              ["R", "round"],
-              [
-                [
-                  "aop",
-                  "/",
-                  ["aop", "*", ["N", 100], ["IP", "@{payload.view_duration}"]],
-                  ["IP", "@{payload.full_duration}"]
-                ]
-              ]
-            ],
-            "errorMessage": null
-          }
-        ]
-      },
-      "schemaVersion": 3,
-      "x": 1400,
+      "id": "4b22f260-d75b-11ec-9fd8-49df506d0834",
+      "type": "writers/noop",
+      "schemaVersion": 1,
+      "name": "To Billing",
+      "params": {},
+      "x": 2250,
       "y": 200
+    },
+    {
+      "id": "555c4970-d75b-11ec-9fd8-49df506d0834",
+      "type": "writers/noop",
+      "schemaVersion": 1,
+      "name": "To partner settlement",
+      "params": {},
+      "x": 2350,
+      "y": 900
+    },
+    {
+      "id": "59850b90-d75b-11ec-9fd8-49df506d0834",
+      "type": "writers/noop",
+      "schemaVersion": 1,
+      "name": "To analytics",
+      "params": {},
+      "x": 2200,
+      "y": 1250
     },
     {
       "id": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
-      "name": "Send email notification",
       "type": "writers/noop",
-      "params": {},
       "schemaVersion": 1,
+      "name": "Send email notification",
+      "params": {},
       "x": 2550,
       "y": 550
-    },
-    {
-      "id": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
-      "name": "Format email message",
-      "type": "transforms/xmap",
-      "params": {
-        "keepFields": {
-          "enabled": false
-        },
-        "mappings": [
-          {
-            "field": "subject",
-            "expression": "\"Thank you for using Cultflicks!\"",
-            "ast": ["S", "Thank you for using Cultflicks!"],
-            "errorMessage": null
-          },
-          {
-            "field": "message",
-            "expression": "\"Hi dear \" + @{payload.name} + \", Your email is \" + @{payload.email} + \", your country is \" + @{payload.country} + \", and you were born on \" + @{payload.birth_year} + \". \" + @{payload.nudge_msg} + \" \" + @{payload.metrics_msg} + \"  Best regards, Cultflicks\"",
-            "ast": [
-              "aop",
-              "+",
-              [
-                "aop",
-                "+",
-                [
-                  "aop",
-                  "+",
-                  [
-                    "aop",
-                    "+",
-                    [
-                      "aop",
-                      "+",
-                      [
-                        "aop",
-                        "+",
-                        [
-                          "aop",
-                          "+",
-                          [
-                            "aop",
-                            "+",
-                            [
-                              "aop",
-                              "+",
-                              [
-                                "aop",
-                                "+",
-                                [
-                                  "aop",
-                                  "+",
-                                  [
-                                    "aop",
-                                    "+",
-                                    ["S", "Hi dear "],
-                                    ["IP", "@{payload.name}"]
-                                  ],
-                                  ["S", ", Your email is "]
-                                ],
-                                ["IP", "@{payload.email}"]
-                              ],
-                              ["S", ", your country is "]
-                            ],
-                            ["IP", "@{payload.country}"]
-                          ],
-                          ["S", ", and you were born on "]
-                        ],
-                        ["IP", "@{payload.birth_year}"]
-                      ],
-                      ["S", ". "]
-                    ],
-                    ["IP", "@{payload.nudge_msg}"]
-                  ],
-                  ["S", " "]
-                ],
-                ["IP", "@{payload.metrics_msg}"]
-              ],
-              ["S", "  Best regards, Cultflicks"]
-            ],
-            "errorMessage": null
-          }
-        ]
-      },
-      "schemaVersion": 3,
-      "x": 2350,
-      "y": 550
-    },
-    {
-      "id": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
-      "name": "Date",
-      "type": "transforms/date",
-      "params": {
-        "items": [
-          {
-            "field": "timestamp",
-            "mode": "modify",
-            "inputFormat": "YYYY-MMM-DD",
-            "outputFormat": "YYYY-MM-DDTHH:mm:ss.SSS[Z]",
-            "operation": {
-              "hour": {
-                "value": 23,
-                "mode": "set"
-              },
-              "minute": {
-                "value": 59,
-                "mode": "set"
-              },
-              "second": {
-                "value": 59,
-                "mode": "set"
-              }
-            }
-          }
-        ]
-      },
-      "schemaVersion": 1,
-      "x": 1200,
-      "y": 200
     }
   ],
   "edges": [
     {
+      "id": "0c4bf5c0-25ad-11f0-945c-6fdaa4d53658",
+      "from": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "to": "24681840-d750-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "33134430-d757-11ec-9fd8-49df506d0834",
+      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
+      "to": "2faff4f0-d757-11ec-9fd8-49df506d0834",
+      "output": "132bb920-d754-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
       "id": "6840c960-d74e-11ec-9fd8-49df506d0834",
       "from": "5e4f02a0-d74e-11ec-9fd8-49df506d0834",
       "to": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "6e878190-e7f9-11ec-a1a1-9fde961a34eb",
+      "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
+      "to": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
       "config": {}
     },
     {
@@ -560,23 +638,27 @@
       "config": {}
     },
     {
+      "id": "7388c960-e7f9-11ec-a1a1-9fde961a34eb",
+      "from": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
+      "to": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
+      "config": {}
+    },
+    {
+      "id": "92652f00-25ad-11f0-945c-6fdaa4d53658",
+      "from": "6adbdf40-d751-11ec-9fd8-49df506d0834",
+      "to": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
+      "config": {}
+    },
+    {
+      "id": "93b5a3d0-25ad-11f0-945c-6fdaa4d53658",
+      "from": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
+      "to": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "config": {}
+    },
+    {
       "id": "a0389ee0-d755-11ec-9fd8-49df506d0834",
       "from": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
       "to": "9d5a1000-d755-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "f688ea10-d756-11ec-9fd8-49df506d0834",
-      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "output": "2ae506c0-d754-11ec-9fd8-49df506d0834",
-      "to": "f0da7250-d756-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "33134430-d757-11ec-9fd8-49df506d0834",
-      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "output": "132bb920-d754-11ec-9fd8-49df506d0834",
-      "to": "2faff4f0-d757-11ec-9fd8-49df506d0834",
       "config": {}
     },
     {
@@ -598,9 +680,28 @@
       "config": {}
     },
     {
+      "id": "df100a20-da72-11ec-8fb5-59ce769604a4",
+      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "to": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
       "id": "e052a3e0-d75f-11ec-9fd8-49df506d0834",
       "from": "db1f9db0-d75f-11ec-9fd8-49df506d0834",
       "to": "59850b90-d75b-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "f688ea10-d756-11ec-9fd8-49df506d0834",
+      "from": "132bb921-d754-11ec-9fd8-49df506d0834",
+      "to": "f0da7250-d756-11ec-9fd8-49df506d0834",
+      "output": "2ae506c0-d754-11ec-9fd8-49df506d0834",
+      "config": {}
+    },
+    {
+      "id": "f78ca7c0-da72-11ec-8fb5-59ce769604a4",
+      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
+      "to": "132bb921-d754-11ec-9fd8-49df506d0834",
       "config": {}
     },
     {
@@ -614,66 +715,28 @@
       "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
       "to": "4b22f260-d75b-11ec-9fd8-49df506d0834",
       "config": {}
-    },
-    {
-      "id": "df100a20-da72-11ec-8fb5-59ce769604a4",
-      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "to": "8dbc5f00-d754-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "f78ca7c0-da72-11ec-8fb5-59ce769604a4",
-      "from": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "to": "132bb921-d754-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "6e878190-e7f9-11ec-a1a1-9fde961a34eb",
-      "from": "f67c77e0-d75f-11ec-9fd8-49df506d0834",
-      "to": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
-      "config": {}
-    },
-    {
-      "id": "7388c960-e7f9-11ec-a1a1-9fde961a34eb",
-      "from": "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb",
-      "to": "fdd56890-e7f8-11ec-a1a1-9fde961a34eb",
-      "config": {}
-    },
-    {
-      "id": "0c4bf5c0-25ad-11f0-945c-6fdaa4d53658",
-      "from": "6671fcd0-d74e-11ec-9fd8-49df506d0834",
-      "to": "24681840-d750-11ec-9fd8-49df506d0834",
-      "config": {}
-    },
-    {
-      "id": "92652f00-25ad-11f0-945c-6fdaa4d53658",
-      "from": "6adbdf40-d751-11ec-9fd8-49df506d0834",
-      "to": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
-      "config": {}
-    },
-    {
-      "id": "93b5a3d0-25ad-11f0-945c-6fdaa4d53658",
-      "from": "271f4a10-25ac-11f0-945c-6fdaa4d53658",
-      "to": "f5f53450-da71-11ec-8fb5-59ce769604a4",
-      "config": {}
     }
   ],
   "nodeGroups": [
     {
       "id": "073bfdf0-8a34-11f0-b376-658db7198c53",
       "name": "Format date",
-      "nodeIds": ["271f4a10-25ac-11f0-945c-6fdaa4d53658"],
+      "nodeIds": [
+        "271f4a10-25ac-11f0-945c-6fdaa4d53658"
+      ],
       "annotation": {
-        "text": "Reformat the date field.\nFrom: YYYY-MMM-DD\nTo: YYYY-MM-DDTHH:mm:ss.SSS[Z]",
+        "text": "Normalize the timestamp format so downstream aggregators can group events by month.",
         "color": "purple"
       }
     },
     {
       "id": "211b9c10-8a36-11f0-b376-658db7198c53",
       "name": "Split complete and incomplete views",
-      "nodeIds": ["132bb921-d754-11ec-9fd8-49df506d0834"],
+      "nodeIds": [
+        "132bb921-d754-11ec-9fd8-49df506d0834"
+      ],
       "annotation": {
-        "text": "Split view events into completed or not completed based on the view percent value calculated in the previous function. \n\nWe use the Route function and its condition rules for this. Based on this classification, we send the completed view events to Settlement, and the not completed ones to Analytics.",
+        "text": "Route completed views (over 90% watched) to settlement, and incomplete views to analytics.",
         "color": "purple"
       }
     },
@@ -687,16 +750,18 @@
         "f67c77e0-d75f-11ec-9fd8-49df506d0834"
       ],
       "annotation": {
-        "text": "Use a Data Aggregator processor to group view events by user and by month. This aggregated data is then used to classify users based on their activity level: light, medium, or heavy usage. We also assess the risk of user churn. Based on these classifications, we generate relevant information and nudging messages, which can be sent to the user or included on their next invoice.\n\nIn this example, a Script Aggregator applies simple, rules-based classifications. In a real-world scenario, user classification would likely be performed by an external AI service using a machine learning model, accessed via an HTTP Client processor.\n\nFinally, the data is formatted for billing, and a No-op forwarder is used to simulate sending it to a billing system. In a production environment, this step would typically use a forwarder such as SAP Subscription Billing, Zuora Usage File, or an Email forwarder.",
+        "text": "Aggregate view events per user and month, classify each user by viewing behaviour and churn risk, and format the results for the billing system with personalised nudge messages.",
         "color": "yellow"
       }
     },
     {
       "id": "4e902f50-8a34-11f0-b376-658db7198c53",
       "name": "Calculate the view percent",
-      "nodeIds": ["f5f53450-da71-11ec-8fb5-59ce769604a4"],
+      "nodeIds": [
+        "f5f53450-da71-11ec-8fb5-59ce769604a4"
+      ],
       "annotation": {
-        "text": "Calculate the view percent per view event record, based on actual measured view duration (from the usage data), and maximum view duration (based on the product master data we looked up previously), so we can see how much of each movie was actually watched, and enrich them with this percentage. We use a Map processor for this, which has a simple formula language that can be used for simple calculations like this one. We then send the enriched view event records to two different places: to billing and to check view completions.",
+        "text": "Calculate what percentage of each movie the user watched. This percentage is used for billing aggregation and for the later split between completed and incomplete views.",
         "color": "purple"
       }
     },
@@ -708,7 +773,7 @@
         "6671fcd0-d74e-11ec-9fd8-49df506d0834"
       ],
       "annotation": {
-        "text": "Use Count and Script functions to generate simulated sample usage data representing views of really bad movies. In a real-world scenario, we would have collected this from video streaming server databases, using one or more, e.g., Amazon S3, Azure Blob Storage, Google Cloud Storage, HTTP Client, or SFTP collectors. In a real-world scenario, there would have been a validation step after collection to ensure data is correct and clean.",
+        "text": "Generate simulated view events from Cultflicks subscribers watching a library of cult films, including repeat views to exercise downstream logic.",
         "color": "gray"
       }
     },
@@ -721,7 +786,7 @@
         "bec8fa30-d75f-11ec-9fd8-49df506d0834"
       ],
       "annotation": {
-        "text": "Here, we prepare usage data summaries for settlement purposes. A Data Aggregator processor is used to group completed view events by movie (rather than by user) for each month. This allows downstream systems to calculate the royalties owed to each movie IP owner. The aggregated data is then formatted and, for demonstration purposes, sent to a simulated external system using a No-op forwarder. In a real-world scenario, this data would typically be sent to an ERP system for accounts payable or to a billing system for partner settlements, using the appropriate forwarder.",
+        "text": "Aggregate completed views per movie and month, then send the IP-owner royalties summary to partner settlement.",
         "color": "yellow"
       }
     },
@@ -733,7 +798,7 @@
         "6adbdf40-d751-11ec-9fd8-49df506d0834"
       ],
       "annotation": {
-        "text": "Simulate looking up the master data from external systems, then use it to enrich the usage data with user and product information. In this case, the product information is data about the movie, and the user information is, among other things, mapping a technical userId to a user email and other information we will need later in the stream. We use the Script processors for this here. In a real-world scenario, we would have used processors, for example, Database query, HTTP Client, Salesforce query, or SAP Subscription Billing query to do these lookups in external systems. In this simple example, we mock this using the Script functions instead.",
+        "text": "Look up each view event's user profile (plan, country, email) and movie metadata (IP owner, revenue-sharing model) from external systems, and attach them to the event.",
         "color": "green"
       }
     },
@@ -746,7 +811,7 @@
         "db1f9db0-d75f-11ec-9fd8-49df506d0834"
       ],
       "annotation": {
-        "text": "Here, we prepare usage data summaries for analytics purposes. A Data Aggregator processor is used to group incomplete view events by movie (rather than by user) for each month. This enables Cultflicks to analyze how their content is performing. The aggregated data is then formatted and, for demonstration purposes, sent to a simulated external system using a No-op forwarder. In a real-world scenario, this data would typically be sent to an analytics database using the appropriate forwarder, such as a Database forwarder.",
+        "text": "Aggregate incomplete views per movie and month so Cultflicks can analyse how content is performing, then send to analytics.",
         "color": "yellow"
       }
     },
@@ -758,7 +823,7 @@
         "6b3aeea0-e7f9-11ec-a1a1-9fde961a34eb"
       ],
       "annotation": {
-        "text": "Here we use a Script processor to format an email message to users with a friendly message, some usage statistics, and a nudge message, which we then simulate sending using a No-Op forwarder. In a real-life scenario, this would use an Email Notification forwarder.",
+        "text": "Send each user a personalised email with their monthly viewing stats and a nudge tailored to their classification.",
         "color": "gray"
       }
     }
